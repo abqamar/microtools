@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MicroTools — Fast, Private, Single-Purpose Developer Tools</title>
-  <meta name="description" content="Free, instant, privacy-first developer tools: Luhn validator, JSON formatter, password generator, UUID generator, Lorem Ipsum, Unix timestamp converter, Base64 and case converter. Everything runs locally in your browser.">
+  <meta name="description" content="Free, instant, privacy-first developer tools: Luhn validator, JSON formatter, JSON to Dart model generator, password generator, UUID generator, Lorem Ipsum, Unix timestamp converter, Base64 and case converter. Everything runs locally in your browser.">
   <meta name="theme-color" content="#09090b">
 
   <!-- Apply saved theme before first paint (default: dark) -->
@@ -65,6 +65,9 @@
       .nav-link[aria-current="page"] { @apply bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300; }
       .pill { @apply shrink-0 whitespace-nowrap rounded-full border border-zinc-300 px-3.5 py-1.5 text-xs font-medium text-zinc-600 transition dark:border-zinc-700 dark:text-zinc-300; }
       .pill[aria-current="page"] { @apply border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500; }
+      .seg { @apply rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:text-zinc-300 dark:hover:bg-zinc-800; }
+      .seg[aria-checked="true"] { @apply bg-indigo-600 text-white hover:bg-indigo-600 dark:bg-indigo-500 dark:text-white dark:hover:bg-indigo-500; }
+      .check:has(input:disabled) { @apply cursor-not-allowed opacity-50; }
       .check { @apply flex cursor-pointer select-none items-center gap-2.5 rounded-xl border border-zinc-200 px-3 py-2.5 text-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:hover:border-zinc-700; }
       .check input { @apply h-4 w-4 accent-indigo-600; }
       .j-key { @apply text-sky-700 dark:text-sky-300; }
@@ -217,6 +220,58 @@
               </div>
               <pre id="json-output" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Formatted JSON output"></pre>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== JSON → Dart ===================== -->
+      <section class="tool-panel" data-tool="dart" aria-labelledby="h-dart" hidden>
+        <header class="mb-5">
+          <h1 id="h-dart" class="text-2xl font-semibold tracking-tight">JSON to Dart Model Generator</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Turn a JSON response into null-safe Dart model classes for Flutter: plain, Equatable, json_serializable or freezed.</p>
+        </header>
+        <div class="card space-y-4">
+          <div class="flex flex-wrap items-end gap-3">
+            <div>
+              <label for="dart-class" class="label">Root class name</label>
+              <input id="dart-class" type="text" value="User" autocomplete="off" spellcheck="false" placeholder="Root" class="field w-44 font-mono">
+            </div>
+            <div>
+              <span class="label" id="dart-style-label">Style</span>
+              <div class="inline-flex flex-wrap gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-labelledby="dart-style-label">
+                <button type="button" role="radio" class="seg" data-dart-style="plain">Plain</button>
+                <button type="button" role="radio" class="seg" data-dart-style="equatable">Equatable</button>
+                <button type="button" role="radio" class="seg" data-dart-style="json_serializable">json_serializable</button>
+                <button type="button" role="radio" class="seg" data-dart-style="freezed">freezed</button>
+              </div>
+            </div>
+            <button id="dart-sample" type="button" class="btn btn-ghost ml-auto py-2">Load sample</button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <label class="check"><input id="dart-nullable" type="checkbox"> Make all fields nullable</label>
+            <label class="check" id="dart-copywith-wrap"><input id="dart-copywith" type="checkbox" checked> copyWith()</label>
+            <label class="check" id="dart-tostring-wrap"><input id="dart-tostring" type="checkbox"> <span id="dart-tostring-text">toString()</span></label>
+          </div>
+          <div id="dart-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a JSON object to generate Dart models.</div>
+          <div class="grid gap-4 xl:grid-cols-2">
+            <div>
+              <label for="dart-input" class="label">JSON</label>
+              <textarea id="dart-input" rows="20" spellcheck="false" autocomplete="off" placeholder='{"id": 1, "name": "Ada"}' class="field resize-y font-mono text-[13px] leading-6"></textarea>
+            </div>
+            <div class="min-w-0">
+              <div class="mb-1.5 flex items-center justify-between">
+                <span class="label mb-0">Dart <span id="dart-filename" class="normal-case tracking-normal text-zinc-400"></span></span>
+                <button type="button" data-copy="#dart-output"></button>
+              </div>
+              <pre id="dart-output" class="out h-[30.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Generated Dart code"></pre>
+            </div>
+          </div>
+          <div>
+            <div class="mb-1.5 flex items-center justify-between">
+              <span class="label mb-0">Setup</span>
+              <button type="button" data-copy="#dart-setup" id="dart-setup-copy"></button>
+            </div>
+            <pre id="dart-setup" class="out overflow-x-auto whitespace-pre text-xs leading-6"></pre>
           </div>
         </div>
       </section>
@@ -581,6 +636,7 @@
     const TOOLS = [
       { id: 'luhn', name: 'Luhn Validator', icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z' },
       { id: 'json', name: 'JSON Formatter', icon: 'M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5' },
+      { id: 'dart', name: 'JSON to Dart', icon: 'M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9' },
       { id: 'password', name: 'Password Generator', icon: 'M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z' },
       { id: 'uuid', name: 'UUID Generator', icon: 'M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5' },
       { id: 'lorem', name: 'Lorem Ipsum', icon: 'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12' },
@@ -944,6 +1000,357 @@
       const savedIndent = store.get('mt-json-indent');
       if (savedIndent && [...indentSel.options].some((o) => o.value === savedIndent)) indentSel.value = savedIndent;
       process();
+    }
+
+    /* =========================================================
+       JSON → Dart model generator
+       ========================================================= */
+    const DART_RESERVED = new Set(('assert await break case catch class const continue default do else enum extends false final finally for if in is ' +
+      'new null rethrow return super switch this throw true try var void while with yield hashCode runtimeType toString noSuchMethod ' +
+      'toJson fromJson copyWith props stringify').split(' '));
+    const DART_CORE_TYPES = new Set(('Object String List Map Set Iterable Iterator Type Function Symbol Null Never Future Stream DateTime Duration ' +
+      'Uri Error Exception Record Enum Pattern Match RegExp Comparable Sink BigInt StackTrace StringBuffer Equatable JsonKey').split(' '));
+    const DART_KEYWORDS = new Set('abstract class const extends factory final get import override part required return this null true false with dynamic bool int double num'.split(' '));
+
+    /** PascalCase restricted to ASCII letters/digits (valid Dart identifier characters). */
+    const dartPascal = (s) => splitWords(String(s))
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join('')
+      .replace(/[^A-Za-z0-9]/g, '');
+
+    function dartClassName(s) {
+      const p = dartPascal(s);
+      if (!p) return 'Model';
+      if (/^\d/.test(p)) return `Model${p}`;
+      return DART_CORE_TYPES.has(p) ? `${p}Model` : p;
+    }
+
+    function dartFieldName(key) {
+      const p = dartPascal(key);
+      if (!p) return 'field';
+      let name = /^\d/.test(p) ? `field${p}` : p.charAt(0).toLowerCase() + p.slice(1);
+      if (DART_RESERVED.has(name)) name += 'Value';
+      return name;
+    }
+
+    function singularize(w) {
+      if (/ies$/i.test(w) && w.length > 4) return w.slice(0, -3) + 'y';
+      if (/(ss|x|ch|sh)es$/i.test(w)) return w.slice(0, -2);
+      if (/[^sui]s$/i.test(w) && w.length > 3) return w.slice(0, -1);
+      return `${w}Item`;
+    }
+
+    const dartString = (s) => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}'`;
+
+    /** Describes the structure of a JSON value; arrays merge all elements into one shape. */
+    function shapeOf(v) {
+      if (v === null) return { t: 'null', nullable: true };
+      if (Array.isArray(v)) return { t: 'list', nullable: false, item: v.reduce((acc, x) => mergeShapes(acc, shapeOf(x)), null) };
+      if (typeof v === 'object') {
+        const fields = new Map();
+        for (const [k, x] of Object.entries(v)) fields.set(k, shapeOf(x));
+        return { t: 'object', nullable: false, fields };
+      }
+      if (typeof v === 'number') return { t: Number.isInteger(v) ? 'int' : 'double', nullable: false };
+      return { t: typeof v === 'boolean' ? 'bool' : 'String', nullable: false };
+    }
+
+    function mergeShapes(a, b) {
+      if (!a) return b;
+      if (!b) return a;
+      if (a.t === 'null') return { ...b, nullable: true };
+      if (b.t === 'null') return { ...a, nullable: true };
+      const nullable = a.nullable || b.nullable;
+      if (a.t === b.t) {
+        if (a.t === 'object') {
+          // A key missing from some objects becomes nullable.
+          const fields = new Map();
+          for (const k of new Set([...a.fields.keys(), ...b.fields.keys()])) {
+            const fa = a.fields.get(k), fb = b.fields.get(k);
+            fields.set(k, fa && fb ? mergeShapes(fa, fb) : { ...(fa || fb), nullable: true });
+          }
+          return { t: 'object', nullable, fields };
+        }
+        if (a.t === 'list') return { t: 'list', nullable, item: mergeShapes(a.item, b.item) };
+        return { t: a.t, nullable };
+      }
+      if ((a.t === 'int' && b.t === 'double') || (a.t === 'double' && b.t === 'int')) return { t: 'double', nullable };
+      return { t: 'dynamic', nullable: true };
+    }
+
+    /** Turns a root object shape into a flat list of class definitions (root first). */
+    function buildDartClasses(rootShape, rootName, allNullable) {
+      const classes = [];
+      const taken = new Set();
+      const uniqueName = (base) => { let n = base, i = 2; while (taken.has(n)) n = base + i++; taken.add(n); return n; };
+
+      function dartType(shape, hint) {
+        if (!shape || shape.t === 'null' || shape.t === 'dynamic') return { kind: 'prim', name: 'dynamic' };
+        if (shape.t === 'object') return { kind: 'obj', name: buildClass(shape, uniqueName(dartClassName(hint))) };
+        if (shape.t === 'list') return { kind: 'list', item: dartType(shape.item, singularize(hint)), itemNullable: !!shape.item && shape.item.nullable };
+        return { kind: 'prim', name: shape.t };
+      }
+
+      function buildClass(shape, name) {
+        const def = { name, fields: [] };
+        classes.push(def);
+        const used = new Set();
+        for (const [key, s] of shape.fields) {
+          let fname = dartFieldName(key);
+          const base = fname;
+          for (let i = 2; used.has(fname); i++) fname = base + i;
+          used.add(fname);
+          const type = dartType(s, key);
+          def.fields.push({ key, name: fname, type, nullable: isDartDynamic(type) || allNullable || s.nullable });
+        }
+        return name;
+      }
+
+      buildClass(rootShape, uniqueName(rootName));
+      return classes;
+    }
+
+    const isDartDynamic = (t) => t.kind === 'prim' && t.name === 'dynamic';
+    const dartTypeStr = (t) => t.kind === 'list'
+      ? `List<${dartTypeStr(t.item)}${t.itemNullable && !isDartDynamic(t.item) ? '?' : ''}>`
+      : t.name;
+    const dartDeclType = (t, nullable) => dartTypeStr(t) + (nullable && !isDartDynamic(t) ? '?' : '');
+    const dartNeedsConversion = (t) => t.kind === 'obj' || (t.kind === 'list' && dartNeedsConversion(t.item));
+    const dartHasNested = (c) => c.fields.some((f) => dartNeedsConversion(f.type));
+
+    function dartFromJsonExpr(t, nullable, src, depth) {
+      const q = nullable ? '?' : '';
+      if (t.kind === 'prim') {
+        if (t.name === 'dynamic') return src;
+        if (t.name === 'double') return `(${src} as num${q})${q}.toDouble()`;
+        return `${src} as ${t.name}${q}`;
+      }
+      if (t.kind === 'obj') {
+        const call = `${t.name}.fromJson(${src} as Map<String, dynamic>)`;
+        return nullable ? `${src} == null ? null : ${call}` : call;
+      }
+      if (isDartDynamic(t.item)) return `${src} as List<dynamic>${q}`;
+      const v = depth ? `e${depth + 1}` : 'e';
+      return `(${src} as List<dynamic>${q})${q}.map((${v}) => ${dartFromJsonExpr(t.item, t.itemNullable, v, depth + 1)}).toList()`;
+    }
+
+    function dartToJsonExpr(t, nullable, ref, depth) {
+      const q = nullable ? '?' : '';
+      if (t.kind === 'obj') return `${ref}${q}.toJson()`;
+      if (t.kind === 'prim' || !dartNeedsConversion(t.item)) return ref;
+      const v = depth ? `e${depth + 1}` : 'e';
+      return `${ref}${q}.map((${v}) => ${dartToJsonExpr(t.item, t.itemNullable, v, depth + 1)}).toList()`;
+    }
+
+    function genDartClass(c, opts) {
+      const I = '  ';
+      const { style } = opts;
+      const fields = c.fields;
+      const blocks = [];
+
+      blocks.push(fields.flatMap((f) => [
+        ...(style === 'json_serializable' && f.name !== f.key ? [`${I}@JsonKey(name: ${dartString(f.key)})`] : []),
+        `${I}final ${dartDeclType(f.type, f.nullable)} ${f.name};`
+      ]));
+
+      blocks.push(fields.length
+        ? [`${I}const ${c.name}({`, ...fields.map((f) => `${I}${I}${f.nullable ? '' : 'required '}this.${f.name},`), `${I}});`]
+        : [`${I}const ${c.name}();`]);
+
+      if (style === 'json_serializable') {
+        blocks.push([`${I}factory ${c.name}.fromJson(Map<String, dynamic> json) => _$${c.name}FromJson(json);`]);
+        blocks.push([`${I}Map<String, dynamic> toJson() => _$${c.name}ToJson(this);`]);
+      } else {
+        blocks.push(fields.length
+          ? [`${I}factory ${c.name}.fromJson(Map<String, dynamic> json) => ${c.name}(`,
+             ...fields.map((f) => `${I}${I}${I}${f.name}: ${dartFromJsonExpr(f.type, f.nullable, `json[${dartString(f.key)}]`, 0)},`),
+             `${I}${I});`]
+          : [`${I}factory ${c.name}.fromJson(Map<String, dynamic> json) => const ${c.name}();`]);
+        blocks.push(fields.length
+          ? [`${I}Map<String, dynamic> toJson() => {`,
+             ...fields.map((f) => `${I}${I}${I}${dartString(f.key)}: ${dartToJsonExpr(f.type, f.nullable, f.name, 0)},`),
+             `${I}${I}};`]
+          : [`${I}Map<String, dynamic> toJson() => {};`]);
+      }
+
+      if (opts.copyWith) {
+        blocks.push(fields.length
+          ? [`${I}${c.name} copyWith({`,
+             ...fields.map((f) => `${I}${I}${isDartDynamic(f.type) ? 'dynamic' : `${dartTypeStr(f.type)}?`} ${f.name},`),
+             `${I}}) =>`,
+             `${I}${I}${c.name}(`,
+             ...fields.map((f) => `${I}${I}${I}${f.name}: ${f.name} ?? this.${f.name},`),
+             `${I}${I});`]
+          : [`${I}${c.name} copyWith() => const ${c.name}();`]);
+      }
+
+      if (style === 'equatable') {
+        blocks.push([`${I}@override`, `${I}List<Object?> get props => [${fields.map((f) => f.name).join(', ')}];`]);
+        if (opts.toStr) blocks.push([`${I}@override`, `${I}bool get stringify => true;`]);
+      } else if (opts.toStr) {
+        blocks.push([`${I}@override`, `${I}String toString() => '${c.name}(${fields.map((f) => `${f.name}: $${f.name}`).join(', ')})';`]);
+      }
+
+      const annotation = style === 'json_serializable' ? [dartHasNested(c) ? '@JsonSerializable(explicitToJson: true)' : '@JsonSerializable()'] : [];
+      const head = `class ${c.name}${style === 'equatable' ? ' extends Equatable' : ''} {`;
+      const body = blocks.filter((b) => b.length).map((b) => b.join('\n')).join('\n\n');
+      return [...annotation, head, body, '}'].join('\n');
+    }
+
+    function genFreezedClass(c) {
+      const I = '  ';
+      const params = c.fields.map((f) =>
+        `${I}${I}${f.name !== f.key ? `@JsonKey(name: ${dartString(f.key)}) ` : ''}${f.nullable ? '' : 'required '}${dartDeclType(f.type, f.nullable)} ${f.name},`);
+      return [
+        '@freezed',
+        `abstract class ${c.name} with _$${c.name} {`,
+        ...(dartHasNested(c) ? [`${I}@JsonSerializable(explicitToJson: true)`] : []),
+        params.length ? `${I}const factory ${c.name}({\n${params.join('\n')}\n${I}}) = _${c.name};` : `${I}const factory ${c.name}() = _${c.name};`,
+        '',
+        `${I}factory ${c.name}.fromJson(Map<String, dynamic> json) => _$${c.name}FromJson(json);`,
+        '}'
+      ].join('\n');
+    }
+
+    function generateDart(classes, opts) {
+      const file = opts.fileBase;
+      const headers = {
+        plain: '',
+        equatable: "import 'package:equatable/equatable.dart';\n\n",
+        json_serializable: `import 'package:json_annotation/json_annotation.dart';\n\npart '${file}.g.dart';\n\n`,
+        // @JsonSerializable on a freezed factory works but trips the analyzer; freezed's docs recommend this ignore.
+        freezed: `${classes.some(dartHasNested) ? '// ignore_for_file: invalid_annotation_target\n\n' : ''}import 'package:freezed_annotation/freezed_annotation.dart';\n\npart '${file}.freezed.dart';\npart '${file}.g.dart';\n\n`
+      };
+      const code = classes.map((c) => (opts.style === 'freezed' ? genFreezedClass(c) : genDartClass(c, opts))).join('\n\n');
+      return `${headers[opts.style]}${code}\n`;
+    }
+
+    function highlightDart(code) {
+      const re = /(\/\/[^\n]*)|('(?:\\.|[^'\\\n])*')|(@\w+)|([A-Za-z_$][\w$]*)/g;
+      let out = '', last = 0, m;
+      while ((m = re.exec(code))) {
+        out += escapeText(code.slice(last, m.index));
+        let cls = null;
+        if (m[1]) cls = 'text-zinc-500 italic';
+        else if (m[2]) cls = 'j-str';
+        else if (m[3]) cls = 'j-num';
+        else if (DART_KEYWORDS.has(m[0])) cls = 'j-bool';
+        else if (/^_?\$?[A-Z]/.test(m[0])) cls = 'j-key';
+        out += cls ? `<span class="${cls}">${escapeText(m[0])}</span>` : escapeText(m[0]);
+        last = re.lastIndex;
+      }
+      return out + escapeText(code.slice(last));
+    }
+
+    const DART_SETUP = {
+      plain: '# No packages needed: plain Dart classes.',
+      equatable: 'flutter pub add equatable',
+      json_serializable: 'flutter pub add json_annotation dev:build_runner dev:json_serializable\ndart run build_runner build --delete-conflicting-outputs',
+      freezed: 'flutter pub add freezed_annotation json_annotation dev:build_runner dev:freezed dev:json_serializable\ndart run build_runner build --delete-conflicting-outputs'
+    };
+
+    function initDart() {
+      const input = $('#dart-input');
+      const output = $('#dart-output');
+      const status = $('#dart-status');
+      const classInput = $('#dart-class');
+      const nullableEl = $('#dart-nullable');
+      const copyWithEl = $('#dart-copywith');
+      const toStringEl = $('#dart-tostring');
+      const toStringText = $('#dart-tostring-text');
+      const styleBtns = $$('[data-dart-style]');
+      const setup = $('#dart-setup');
+      let style = 'plain';
+
+      const SAMPLE = JSON.stringify({
+        id: 1, first_name: 'Ada', email: 'ada@example.com', is_active: true, balance: 1520.75, avatar: null,
+        tags: ['admin', 'beta'],
+        address: { street: '12 Main St', city: 'Toronto', geo: { lat: 43.65, lng: -79.38 } },
+        orders: [{ order_id: 'A-100', total: 49.99, items: 3 }, { order_id: 'A-101', total: 12, items: 1, coupon: 'FALL10' }]
+      }, null, 2);
+
+      function saveOptions() {
+        store.set('mt-dart-options', JSON.stringify({
+          style, className: classInput.value, nullable: nullableEl.checked, copyWith: copyWithEl.checked, toStr: toStringEl.checked
+        }));
+      }
+
+      function syncControls() {
+        styleBtns.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.dartStyle === style)));
+        const freezed = style === 'freezed';
+        copyWithEl.disabled = toStringEl.disabled = freezed;
+        $('#dart-copywith-wrap').title = $('#dart-tostring-wrap').title = freezed ? 'freezed generates copyWith, toString, == and hashCode for you' : '';
+        toStringText.textContent = style === 'equatable' ? 'toString() (stringify)' : 'toString()';
+        setup.textContent = DART_SETUP[style];
+        setup.dataset.raw = style === 'plain' ? '' : DART_SETUP[style];
+      }
+
+      const setStatus = (state, html) => { status.dataset.state = state; input.dataset.state = state === 'idle' ? '' : state; status.innerHTML = html; };
+
+      function generate() {
+        const src = input.value;
+        const rootName = dartClassName(classInput.value.trim() || 'Root');
+        const fileBase = splitWords(rootName).map((w) => w.toLowerCase()).join('_');
+        $('#dart-filename').textContent = `· ${fileBase}.dart`;
+        output.dataset.raw = '';
+
+        if (!src.trim()) {
+          setStatus('idle', 'Paste a JSON object to generate Dart models.');
+          output.innerHTML = '';
+          return;
+        }
+
+        let parsed;
+        try {
+          parsed = JSON.parse(src);
+        } catch (nativeErr) {
+          const err = findJsonError(src) || { pos: src.length, msg: nativeErr.message };
+          const { line, col } = lineColAt(src, err.pos);
+          setStatus('invalid', `<span><strong>Invalid JSON</strong> — ${escapeText(err.msg)} <span class="whitespace-nowrap font-mono text-xs opacity-80">(line ${line}, column ${col})</span></span>`);
+          output.innerHTML = renderJsonErrorSnippet(src, err.pos);
+          return;
+        }
+
+        let shape = shapeOf(parsed);
+        if (shape.t === 'list') shape = shape.item;
+        if (!shape || shape.t !== 'object') {
+          setStatus('invalid', '<span><strong>Unsupported input</strong> — the root must be a JSON object or an array of objects.</span>');
+          output.innerHTML = '';
+          return;
+        }
+
+        const classes = buildDartClasses(shape, rootName, nullableEl.checked);
+        const freezed = style === 'freezed';
+        const code = generateDart(classes, {
+          style, fileBase, copyWith: !freezed && copyWithEl.checked, toStr: !freezed && toStringEl.checked
+        });
+        output.innerHTML = highlightDart(code);
+        output.dataset.raw = code;
+        const rootNote = Array.isArray(parsed) ? ' · root is an array, so parse it with <code class="font-mono">(json as List).map(…)</code>' : '';
+        setStatus('valid', `<span><strong>Generated ${classes.length} class${classes.length === 1 ? '' : 'es'}</strong>${rootNote}</span>`);
+      }
+
+      const generateDebounced = debounce(generate, 150);
+      input.addEventListener('input', generateDebounced);
+      classInput.addEventListener('input', () => { saveOptions(); generateDebounced(); });
+      [nullableEl, copyWithEl, toStringEl].forEach((el) => el.addEventListener('change', () => { saveOptions(); generate(); }));
+      styleBtns.forEach((b) => b.addEventListener('click', () => { style = b.dataset.dartStyle; syncControls(); saveOptions(); generate(); }));
+      $('#dart-sample').addEventListener('click', () => { input.value = SAMPLE; generate(); });
+
+      try {
+        const saved = JSON.parse(store.get('mt-dart-options') || 'null');
+        if (saved) {
+          if (DART_SETUP[saved.style]) style = saved.style;
+          if (typeof saved.className === 'string') classInput.value = saved.className;
+          nullableEl.checked = !!saved.nullable;
+          copyWithEl.checked = saved.copyWith !== false;
+          toStringEl.checked = !!saved.toStr;
+        }
+      } catch { /* ignore corrupt saved options */ }
+
+      input.value = SAMPLE;
+      syncControls();
+      generate();
     }
 
     /* =========================================================
@@ -1448,6 +1855,7 @@
       initTheme();
       initLuhn();
       initJson();
+      initDart();
       initPassword();
       initUuid();
       initLorem();
