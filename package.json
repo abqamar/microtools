@@ -1,0 +1,13 @@
+{
+  "name": "microtools",
+  "private": true,
+  "description": "Privacy-first single-purpose developer tools. Static site; npm is only used to build the CSS.",
+  "scripts": {
+    "build": "tailwindcss -i ./src/styles.css -o ./assets/css/styles.css --minify",
+    "watch": "tailwindcss -i ./src/styles.css -o ./assets/css/styles.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "0.5.20",
+    "tailwindcss": "3.4.17"
+  }
+}

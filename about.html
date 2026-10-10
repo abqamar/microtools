@@ -13,16 +13,7 @@
       } catch (e) {}
     })();
   </script>
-  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: { fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'] } } }
-    };
-  </script>
-  <style type="text/tailwindcss">
-    html.dark { color-scheme: dark; }
-  </style>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
@@ -70,6 +61,9 @@
       <ul>
         <li><a href="index.html#luhn">Luhn Validator</a> — check credit card and IMEI numbers as you type.</li>
         <li><a href="index.html#json">JSON Validator &amp; Formatter</a> — beautify, minify and pinpoint syntax errors by line and column.</li>
+        <li><a href="flutter/index.html#json-to-dart">JSON to Dart Model Generator</a> — null-safe Flutter models in plain, Equatable, json_serializable or freezed style.</li>
+        <li><a href="flutter/index.html#env-to-dart">.env to Dart Config Generator</a> — obfuscated config classes or a <code>--dart-define-from-file</code> setup.</li>
+        <li><a href="flutter/index.html#assets-to-dart">Assets to Dart Generator</a> — drop your assets folder to get an <code>assets.dart</code> class and pubspec.yaml entries.</li>
         <li><a href="index.html#password">Strong Password Generator</a> — cryptographically secure passwords with a strength meter.</li>
         <li><a href="index.html#uuid">UUID Generator</a> — RFC 4122 version 4 UUIDs, one or a thousand at a time.</li>
         <li><a href="index.html#lorem">Lorem Ipsum Generator</a> — placeholder text by paragraphs, sentences or words.</li>
@@ -91,6 +85,7 @@
       <p class="font-medium text-emerald-700 dark:text-emerald-400">🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.</p>
       <nav class="flex items-center gap-4" aria-label="Footer">
         <a href="index.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tools</a>
+        <a href="flutter/index.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">Flutter</a>
         <a href="about.html" class="hover:text-zinc-900 dark:hover:text-zinc-100" aria-current="page">About</a>
         <a href="privacy.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">Privacy</a>
         <span>&copy; <span id="year"></span> MicroTools</span>
