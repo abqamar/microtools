@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MicroTools — Fast, Private, Single-Purpose Developer Tools</title>
+  <meta name="description" content="Free, instant, privacy-first developer tools: Luhn validator, JSON formatter, password generator, UUID generator, Lorem Ipsum, Unix timestamp converter, Base64 and case converter. Everything runs locally in your browser.">
+  <meta name="theme-color" content="#09090b">
+
+  <!-- Apply saved theme before first paint (default: dark) -->
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('mt-theme') === 'light') document.documentElement.classList.remove('dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Tailwind CSS (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <style type="text/tailwindcss">
+    @layer base {
+      html.dark { color-scheme: dark; }
+      ::selection { @apply bg-indigo-500/30; }
+    }
+    @layer components {
+      .card { @apply rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none; }
+      .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400; }
+      .field { @apply w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder-zinc-600; }
+      .field[data-state="valid"] { @apply border-emerald-500 ring-2 ring-emerald-500/25 focus:border-emerald-500 focus:ring-emerald-500/40; }
+      .field[data-state="invalid"] { @apply border-rose-500 ring-2 ring-rose-500/25 focus:border-rose-500 focus:ring-rose-500/40; }
+      .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 disabled:cursor-not-allowed disabled:opacity-50; }
+      .btn-primary { @apply bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-700; }
+      .btn-ghost { @apply border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800; }
+      .chip { @apply rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition hover:border-indigo-500 hover:text-indigo-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300; }
+      .copy-btn { @apply inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-600 transition hover:border-indigo-500 hover:text-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300; }
+      .copy-btn[data-copied="true"] { @apply border-emerald-500 text-emerald-600 dark:border-emerald-500 dark:text-emerald-400; }
+      .copy-btn[data-copied="false"] { @apply border-rose-500 text-rose-600 dark:border-rose-500 dark:text-rose-400; }
+      .out { @apply w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 font-mono text-sm text-zinc-800 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200; }
+      .stat { @apply rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-950; }
+      .stat dt { @apply text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-500; }
+      .stat dd { @apply mt-0.5 truncate font-mono text-sm text-zinc-900 dark:text-zinc-100; }
+      .status { @apply flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition-colors; }
+      .status[data-state="idle"] { @apply border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400; }
+      .status[data-state="valid"] { @apply border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400; }
+      .status[data-state="invalid"] { @apply border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-400; }
+      .nav-link { @apply flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/70 dark:hover:text-zinc-100; }
+      .nav-link[aria-current="page"] { @apply bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300; }
+      .pill { @apply shrink-0 whitespace-nowrap rounded-full border border-zinc-300 px-3.5 py-1.5 text-xs font-medium text-zinc-600 transition dark:border-zinc-700 dark:text-zinc-300; }
+      .pill[aria-current="page"] { @apply border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500; }
+      .check { @apply flex cursor-pointer select-none items-center gap-2.5 rounded-xl border border-zinc-200 px-3 py-2.5 text-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:hover:border-zinc-700; }
+      .check input { @apply h-4 w-4 accent-indigo-600; }
+      .j-key { @apply text-sky-700 dark:text-sky-300; }
+      .j-str { @apply text-emerald-700 dark:text-emerald-300; }
+      .j-num { @apply text-amber-700 dark:text-amber-300; }
+      .j-bool { @apply text-violet-700 dark:text-violet-300; }
+      .j-null { @apply text-rose-600 dark:text-rose-300; }
+      .ln { @apply select-none pr-3 text-zinc-400 dark:text-zinc-600; }
+      .json-err-line { @apply -mx-4 bg-rose-500/15 px-4 text-rose-700 dark:text-rose-300; }
+      .json-caret { @apply font-bold text-rose-600 dark:text-rose-400; }
+    }
+
+    /* Ad slots: clean striped placeholder until AdSense fills the <ins> */
+    .ad-slot {
+      @apply relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700;
+      min-height: 90px;
+      background: repeating-linear-gradient(135deg, rgb(244 244 245) 0 12px, rgb(250 250 250) 12px 24px);
+    }
+    .dark .ad-slot { background: repeating-linear-gradient(135deg, rgb(24 24 27) 0 12px, rgb(19 19 22) 12px 24px); }
+    .ad-slot::before {
+      content: 'Advertisement';
+      @apply pointer-events-none absolute text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-600;
+    }
+    .ad-slot ins.adsbygoogle { position: relative; z-index: 1; width: 100%; }
+    .ad-slot:has(ins[data-ad-status="filled"]) { @apply border-transparent; background: none; }
+    .ad-slot:has(ins[data-ad-status="filled"])::before { display: none; }
+
+    .tool-panel[hidden] { display: none !important; }
+    .no-scrollbar { scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+  <noscript>
+    <div class="bg-amber-500 px-4 py-2 text-center text-sm font-medium text-black">MicroTools requires JavaScript. All processing is local — nothing is uploaded.</div>
+  </noscript>
+
+  <!-- ===================== Header ===================== -->
+  <header class="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
+    <div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <a href="#luhn" class="flex items-center gap-2.5" aria-label="MicroTools home">
+        <span class="grid h-8 w-8 place-items-center rounded-lg bg-indigo-600 text-white">
+          <svg class="h-[18px] w-[18px]" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085"/></svg>
+        </span>
+        <span class="text-base font-semibold tracking-tight">MicroTools</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700 md:inline-flex dark:text-emerald-400">🔒 Local-only processing</span>
+        <button id="theme-toggle" type="button" class="grid h-9 w-9 place-items-center rounded-lg border border-zinc-300 text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800" aria-label="Toggle dark mode">
+          <svg class="hidden h-4 w-4 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
+          <svg class="h-4 w-4 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== Privacy notice ===================== -->
+  <div class="border-b border-emerald-500/20 bg-emerald-500/10">
+    <p class="mx-auto max-w-7xl px-4 py-2.5 text-center text-xs font-medium text-emerald-800 sm:px-6 sm:text-sm dark:text-emerald-300">
+      🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.
+    </p>
+  </div>
+
+  <!-- Mobile tool switcher -->
+  <nav id="mobile-nav" class="no-scrollbar sticky top-14 z-20 flex gap-2 overflow-x-auto border-b border-zinc-200 bg-zinc-50/90 px-4 py-2.5 backdrop-blur lg:hidden dark:border-zinc-800 dark:bg-zinc-950/90" aria-label="Tools"></nav>
+
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-8 lg:py-8">
+    <!-- ===================== Sidebar ===================== -->
+    <aside class="hidden lg:block">
+      <nav class="sticky top-20 space-y-1" aria-label="Tools">
+        <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Tools</p>
+        <div id="sidebar-nav" class="space-y-1"></div>
+      </nav>
+    </aside>
+
+    <main id="main" class="min-w-0 space-y-6">
+      <!-- Top banner ad -->
+      <div class="ad-slot" aria-label="Advertisement">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1111111111" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- ===================== 1. Luhn ===================== -->
+      <section class="tool-panel" data-tool="luhn" aria-labelledby="h-luhn" hidden>
+        <header class="mb-5">
+          <h1 id="h-luhn" class="text-2xl font-semibold tracking-tight">Luhn Algorithm Validator</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Validate credit card, IMEI and other Luhn (mod 10) numbers as you type.</p>
+        </header>
+        <div class="card space-y-5">
+          <div>
+            <label for="luhn-input" class="label">Card or IMEI number</label>
+            <input id="luhn-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="40" placeholder="e.g. 4111 1111 1111 1111" class="field font-mono text-lg tracking-wider">
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+              <span>Try:</span>
+              <button type="button" class="chip" data-luhn-sample="4111111111111111">Visa</button>
+              <button type="button" class="chip" data-luhn-sample="5555555555554444">Mastercard</button>
+              <button type="button" class="chip" data-luhn-sample="378282246310005">Amex</button>
+              <button type="button" class="chip" data-luhn-sample="490154203237518">IMEI</button>
+              <button type="button" class="chip" data-luhn-sample="4111111111111112">Invalid</button>
+            </div>
+          </div>
+          <div id="luhn-status" class="status" data-state="idle" role="status" aria-live="polite">Start typing a number to validate it.</div>
+          <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div class="stat"><dt>Detected type</dt><dd id="luhn-type">—</dd></div>
+            <div class="stat"><dt>Digits</dt><dd id="luhn-length">0</dd></div>
+            <div class="stat"><dt>Check digit</dt><dd id="luhn-check">—</dd></div>
+            <div class="stat"><dt>Expected check digit</dt><dd id="luhn-expected">—</dd></div>
+          </dl>
+          <div>
+            <div class="mb-1.5 flex items-center justify-between">
+              <span class="label mb-0">Formatted</span>
+              <button type="button" data-copy="#luhn-formatted"></button>
+            </div>
+            <div id="luhn-formatted" class="out min-h-[2.75rem] break-all"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 2. JSON ===================== -->
+      <section class="tool-panel" data-tool="json" aria-labelledby="h-json" hidden>
+        <header class="mb-5">
+          <h1 id="h-json" class="text-2xl font-semibold tracking-tight">JSON Validator &amp; Formatter</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Paste messy JSON to validate, beautify or minify it. Errors are pinpointed to the exact line and column.</p>
+        </header>
+        <div class="card space-y-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <label for="json-indent" class="sr-only">Indentation</label>
+            <select id="json-indent" class="field w-auto py-2">
+              <option value="2">2 spaces</option>
+              <option value="4">4 spaces</option>
+              <option value="tab">Tabs</option>
+              <option value="min">Minified</option>
+            </select>
+            <button id="json-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+            <button id="json-clear" type="button" class="btn btn-ghost py-2">Clear</button>
+          </div>
+          <div id="json-status" class="status" data-state="idle" role="status" aria-live="polite">
+            <span id="json-status-text" class="flex-1">Paste or type JSON to validate it.</span>
+            <button id="json-goto" type="button" class="chip hidden">Go to error</button>
+          </div>
+          <div class="grid gap-4 xl:grid-cols-2">
+            <div>
+              <label for="json-input" class="label">Input</label>
+              <textarea id="json-input" rows="18" spellcheck="false" autocomplete="off" placeholder='{"paste": "your JSON here"}' class="field resize-y font-mono text-[13px] leading-6"></textarea>
+            </div>
+            <div class="min-w-0">
+              <div class="mb-1.5 flex items-center justify-between">
+                <span class="label mb-0">Output</span>
+                <button type="button" data-copy="#json-output"></button>
+              </div>
+              <pre id="json-output" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Formatted JSON output"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 3. Password ===================== -->
+      <section class="tool-panel" data-tool="password" aria-labelledby="h-password" hidden>
+        <header class="mb-5">
+          <h1 id="h-password" class="text-2xl font-semibold tracking-tight">Strong Password Generator</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Cryptographically secure passwords generated with the Web Crypto API.</p>
+        </header>
+        <div class="card space-y-6">
+          <div>
+            <div class="flex items-stretch gap-2">
+              <div id="pw-output" class="out flex min-h-[3.5rem] flex-1 items-center break-all text-lg tracking-wide" aria-live="polite"></div>
+              <div class="flex flex-col gap-2 sm:flex-row">
+                <button type="button" data-copy="#pw-output"></button>
+                <button id="pw-regen" type="button" class="copy-btn" aria-label="Generate new password">
+                  <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                  <span>New</span>
+                </button>
+              </div>
+            </div>
+            <div class="mt-3">
+              <div class="grid grid-cols-4 gap-1.5" aria-hidden="true">
+                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
+                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
+                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
+                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
+              </div>
+              <div class="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span>Strength: <strong id="pw-strength" class="font-semibold">—</strong></span>
+                <span id="pw-entropy" class="text-zinc-500 dark:text-zinc-400"></span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="mb-2 flex items-center justify-between">
+              <label for="pw-length" class="label mb-0">Length</label>
+              <span id="pw-length-value" class="rounded-md bg-indigo-600 px-2 py-0.5 font-mono text-xs font-semibold text-white">20</span>
+            </div>
+            <input id="pw-length" type="range" min="8" max="64" value="20" class="w-full accent-indigo-600">
+            <div class="mt-1 flex justify-between font-mono text-[11px] text-zinc-400"><span>8</span><span>64</span></div>
+          </div>
+          <fieldset>
+            <legend class="label">Character sets</legend>
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <label class="check"><input type="checkbox" data-pw-set="upper" checked> Uppercase <span class="ml-auto font-mono text-xs text-zinc-400">A–Z</span></label>
+              <label class="check"><input type="checkbox" data-pw-set="lower" checked> Lowercase <span class="ml-auto font-mono text-xs text-zinc-400">a–z</span></label>
+              <label class="check"><input type="checkbox" data-pw-set="numbers" checked> Numbers <span class="ml-auto font-mono text-xs text-zinc-400">0–9</span></label>
+              <label class="check"><input type="checkbox" data-pw-set="symbols" checked> Symbols <span class="ml-auto font-mono text-xs text-zinc-400">!@#$</span></label>
+            </div>
+            <p id="pw-hint" class="mt-2 hidden text-xs text-amber-600 dark:text-amber-400">At least one character set must stay selected.</p>
+          </fieldset>
+        </div>
+      </section>
+
+      <!-- ===================== 4. UUID ===================== -->
+      <section class="tool-panel" data-tool="uuid" aria-labelledby="h-uuid" hidden>
+        <header class="mb-5">
+          <h1 id="h-uuid" class="text-2xl font-semibold tracking-tight">UUID v4 Generator</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">RFC 4122 version 4 UUIDs from a cryptographically secure random source.</p>
+        </header>
+        <div class="card space-y-5">
+          <div class="flex flex-wrap items-end gap-3">
+            <div>
+              <label for="uuid-count" class="label">How many</label>
+              <input id="uuid-count" type="number" min="1" max="1000" value="5" class="field w-28 font-mono">
+            </div>
+            <div class="flex flex-wrap gap-2 pb-1">
+              <button type="button" class="chip" data-uuid-count="1">1</button>
+              <button type="button" class="chip" data-uuid-count="10">10</button>
+              <button type="button" class="chip" data-uuid-count="50">50</button>
+              <button type="button" class="chip" data-uuid-count="100">100</button>
+            </div>
+            <button id="uuid-generate" type="button" class="btn btn-primary ml-auto">Generate</button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <label class="check"><input id="uuid-upper" type="checkbox"> Uppercase</label>
+            <label class="check"><input id="uuid-hyphens" type="checkbox" checked> Hyphens</label>
+          </div>
+          <div>
+            <div class="mb-1.5 flex items-center justify-between">
+              <span class="label mb-0" id="uuid-summary">Output</span>
+              <button type="button" data-copy="#uuid-output" data-copy-label="Copy all"></button>
+            </div>
+            <textarea id="uuid-output" rows="10" readonly spellcheck="false" class="out resize-y leading-6" aria-labelledby="uuid-summary"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 5. Lorem ===================== -->
+      <section class="tool-panel" data-tool="lorem" aria-labelledby="h-lorem" hidden>
+        <header class="mb-5">
+          <h1 id="h-lorem" class="text-2xl font-semibold tracking-tight">Lorem Ipsum Generator</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Realistic placeholder text by paragraphs, sentences or words.</p>
+        </header>
+        <div class="card space-y-5">
+          <div class="flex flex-wrap items-end gap-3">
+            <div>
+              <label for="lorem-count" class="label">Amount</label>
+              <input id="lorem-count" type="number" min="1" max="50" value="3" class="field w-28 font-mono">
+            </div>
+            <div>
+              <label for="lorem-unit" class="label">Unit</label>
+              <select id="lorem-unit" class="field w-auto">
+                <option value="paragraphs">Paragraphs</option>
+                <option value="sentences">Sentences</option>
+                <option value="words">Words</option>
+              </select>
+            </div>
+            <label class="check"><input id="lorem-classic" type="checkbox" checked> Start with “Lorem ipsum…”</label>
+            <button id="lorem-generate" type="button" class="btn btn-primary ml-auto">Regenerate</button>
+          </div>
+          <div>
+            <div class="mb-1.5 flex items-center justify-between">
+              <span id="lorem-stats" class="label mb-0">Output</span>
+              <button type="button" data-copy="#lorem-output"></button>
+            </div>
+            <textarea id="lorem-output" rows="14" readonly class="out resize-y font-sans leading-relaxed" aria-labelledby="lorem-stats"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 6. Epoch ===================== -->
+      <section class="tool-panel" data-tool="epoch" aria-labelledby="h-epoch" hidden>
+        <header class="mb-5">
+          <h1 id="h-epoch" class="text-2xl font-semibold tracking-tight">Epoch / Unix Timestamp Converter</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Convert Unix timestamps to human-readable dates and back. Units are auto-detected.</p>
+        </header>
+        <div class="space-y-6">
+          <div class="card">
+            <span class="label">Current Unix time</span>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div class="flex items-center gap-2">
+                <div id="epoch-now-s" class="out flex-1 text-lg tabular-nums"></div>
+                <button type="button" data-copy="#epoch-now-s"></button>
+              </div>
+              <div class="flex items-center gap-2">
+                <div id="epoch-now-ms" class="out flex-1 text-lg tabular-nums"></div>
+                <button type="button" data-copy="#epoch-now-ms"></button>
+              </div>
+            </div>
+            <p class="mt-2 font-mono text-[11px] text-zinc-400">seconds · milliseconds</p>
+          </div>
+
+          <div class="card space-y-4">
+            <h2 class="text-base font-semibold">Timestamp → Date</h2>
+            <div class="flex flex-wrap gap-2">
+              <input id="epoch-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="e.g. 1700000000" class="field min-w-0 flex-1 font-mono">
+              <label for="epoch-unit" class="sr-only">Unit</label>
+              <select id="epoch-unit" class="field w-auto">
+                <option value="auto">Auto-detect</option>
+                <option value="s">Seconds</option>
+                <option value="ms">Milliseconds</option>
+                <option value="us">Microseconds</option>
+                <option value="ns">Nanoseconds</option>
+              </select>
+              <button id="epoch-use-now" type="button" class="btn btn-ghost">Now</button>
+            </div>
+            <p id="epoch-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
+            <div class="grid gap-3 md:grid-cols-2" id="epoch-results">
+              <div><span class="label">Local time</span><div class="flex items-center gap-2"><div id="epoch-local" class="out min-h-[2.75rem] flex-1 break-words"></div><button type="button" data-copy="#epoch-local"></button></div></div>
+              <div><span class="label">UTC</span><div class="flex items-center gap-2"><div id="epoch-utc" class="out min-h-[2.75rem] flex-1 break-words"></div><button type="button" data-copy="#epoch-utc"></button></div></div>
+              <div><span class="label">ISO 8601</span><div class="flex items-center gap-2"><div id="epoch-iso" class="out min-h-[2.75rem] flex-1 break-all"></div><button type="button" data-copy="#epoch-iso"></button></div></div>
+              <div><span class="label">Relative <span id="epoch-detected" class="normal-case tracking-normal text-zinc-400"></span></span><div class="flex items-center gap-2"><div id="epoch-relative" class="out min-h-[2.75rem] flex-1"></div><button type="button" data-copy="#epoch-relative"></button></div></div>
+            </div>
+          </div>
+
+          <div class="card space-y-4">
+            <h2 class="text-base font-semibold">Date → Timestamp</h2>
+            <div class="flex flex-wrap gap-2">
+              <label for="epoch-date" class="sr-only">Date and time</label>
+              <input id="epoch-date" type="datetime-local" step="1" class="field min-w-0 flex-1 font-mono">
+              <label for="epoch-tz" class="sr-only">Time zone</label>
+              <select id="epoch-tz" class="field w-auto">
+                <option value="local">Local time</option>
+                <option value="utc">UTC</option>
+              </select>
+              <button id="epoch-date-now" type="button" class="btn btn-ghost">Now</button>
+            </div>
+            <div class="grid gap-3 md:grid-cols-3">
+              <div><span class="label">Seconds</span><div class="flex items-center gap-2"><div id="epoch-out-s" class="out min-h-[2.75rem] flex-1 tabular-nums"></div><button type="button" data-copy="#epoch-out-s"></button></div></div>
+              <div><span class="label">Milliseconds</span><div class="flex items-center gap-2"><div id="epoch-out-ms" class="out min-h-[2.75rem] flex-1 tabular-nums"></div><button type="button" data-copy="#epoch-out-ms"></button></div></div>
+              <div><span class="label">ISO 8601 (UTC)</span><div class="flex items-center gap-2"><div id="epoch-out-iso" class="out min-h-[2.75rem] flex-1 break-all"></div><button type="button" data-copy="#epoch-out-iso"></button></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 7. Base64 ===================== -->
+      <section class="tool-panel" data-tool="base64" aria-labelledby="h-base64" hidden>
+        <header class="mb-5">
+          <h1 id="h-base64" class="text-2xl font-semibold tracking-tight">Base64 Encoder / Decoder</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Type in either box — the other updates instantly. Full UTF-8 support (emoji, accents, CJK).</p>
+        </header>
+        <div class="card space-y-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="check"><input id="b64-urlsafe" type="checkbox"> URL-safe (RFC 4648 §5, no padding)</label>
+            <button id="b64-clear" type="button" class="btn btn-ghost ml-auto py-2">Clear</button>
+          </div>
+          <div class="grid gap-4 lg:grid-cols-2">
+            <div>
+              <div class="mb-1.5 flex items-center justify-between">
+                <label for="b64-plain" class="label mb-0">Plain text <span id="b64-plain-stats" class="normal-case tracking-normal text-zinc-400"></span></label>
+                <button type="button" data-copy="#b64-plain"></button>
+              </div>
+              <textarea id="b64-plain" rows="12" spellcheck="false" placeholder="Hello, world! 👋" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+            </div>
+            <div>
+              <div class="mb-1.5 flex items-center justify-between">
+                <label for="b64-encoded" class="label mb-0">Base64 <span id="b64-encoded-stats" class="normal-case tracking-normal text-zinc-400"></span></label>
+                <button type="button" data-copy="#b64-encoded"></button>
+              </div>
+              <textarea id="b64-encoded" rows="12" spellcheck="false" placeholder="SGVsbG8sIHdvcmxkISDwn5GL" class="field resize-y break-all font-mono text-[13px] leading-6"></textarea>
+            </div>
+          </div>
+          <p id="b64-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
+        </div>
+      </section>
+
+      <!-- ===================== 8. Case ===================== -->
+      <section class="tool-panel" data-tool="case" aria-labelledby="h-case" hidden>
+        <header class="mb-5">
+          <h1 id="h-case" class="text-2xl font-semibold tracking-tight">Case Converter</h1>
+          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Every format updates live as you type. Click copy on the one you need.</p>
+        </header>
+        <div class="card space-y-5">
+          <div>
+            <div class="mb-1.5 flex items-center justify-between">
+              <label for="case-input" class="label mb-0">Input</label>
+              <span id="case-stats" class="font-mono text-[11px] text-zinc-400"></span>
+            </div>
+            <textarea id="case-input" rows="5" placeholder="Type or paste text here…" class="field resize-y leading-relaxed"></textarea>
+          </div>
+          <div id="case-outputs" class="grid gap-3 md:grid-cols-2"></div>
+        </div>
+      </section>
+
+      <!-- In-panel ad slot -->
+      <div class="ad-slot" style="min-height:250px" aria-label="Advertisement">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="2222222222" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===================== Footer ===================== -->
+  <footer class="border-t border-zinc-200 dark:border-zinc-800">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6">
+      <div class="ad-slot" aria-label="Advertisement">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="3333333333" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+      </div>
+      <div class="flex flex-col items-center justify-between gap-3 text-center text-xs text-zinc-500 sm:flex-row sm:text-left dark:text-zinc-400">
+        <p class="font-medium text-emerald-700 dark:text-emerald-400">🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.</p>
+        <nav class="flex items-center gap-4" aria-label="Footer">
+          <a href="about.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">About</a>
+          <a href="privacy.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">Privacy</a>
+          <span>&copy; <span id="year"></span> MicroTools</span>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <div id="sr-announcer" class="sr-only" aria-live="polite"></div>
+
+  <script>
+    'use strict';
+
+    /* =========================================================
+       Utilities
+       ========================================================= */
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const escapeText = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const debounce = (fn, ms) => { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); }; };
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+    const pad = (n, len = 2) => String(n).padStart(len, '0');
+    const store = {
+      get(key) { try { return localStorage.getItem(key); } catch { return null; } },
+      set(key, value) { try { localStorage.setItem(key, value); } catch { /* storage unavailable */ } }
+    };
+    const announce = (msg) => { const el = $('#sr-announcer'); el.textContent = ''; requestAnimationFrame(() => { el.textContent = msg; }); };
+    const formatBytes = (n) => n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(2)} MB`;
+
+    /** Unbiased secure random integer in [0, max). */
+    function secureRandomInt(max) {
+      const limit = Math.floor(0x100000000 / max) * max;
+      const buf = new Uint32Array(1);
+      let x;
+      do { crypto.getRandomValues(buf); x = buf[0]; } while (x >= limit);
+      return x % max;
+    }
+
+    /* =========================================================
+       Clipboard
+       ========================================================= */
+    const COPY_ICON = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"/></svg>';
+
+    function hydrateCopyButtons(root = document) {
+      $$('button[data-copy]', root).forEach((btn) => {
+        if (btn.dataset.hydrated) return;
+        const label = btn.dataset.copyLabel || 'Copy';
+        btn.classList.add('copy-btn');
+        btn.innerHTML = `${COPY_ICON}<span data-label="${label}">${label}</span>`;
+        btn.dataset.hydrated = '1';
+      });
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        try { await navigator.clipboard.writeText(text); return true; } catch { /* fall through */ }
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch { ok = false; }
+      ta.remove();
+      return ok;
+    }
+
+    function flashButton(btn, message, ok) {
+      const label = btn.querySelector('[data-label]');
+      if (!label) return;
+      clearTimeout(btn._flashTimer);
+      label.textContent = message;
+      btn.dataset.copied = String(ok);
+      btn._flashTimer = setTimeout(() => {
+        label.textContent = label.dataset.label;
+        delete btn.dataset.copied;
+      }, 1400);
+    }
+
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-copy]');
+      if (!btn) return;
+      const src = $(btn.dataset.copy);
+      if (!src) return;
+      const text = src.dataset.raw !== undefined ? src.dataset.raw : ('value' in src ? src.value : src.textContent);
+      if (!text || !text.trim()) { flashButton(btn, 'Empty', false); return; }
+      const ok = await copyText(text);
+      flashButton(btn, ok ? 'Copied!' : 'Failed', ok);
+      announce(ok ? 'Copied to clipboard' : 'Copy failed');
+    });
+
+    /* =========================================================
+       Theme
+       ========================================================= */
+    function initTheme() {
+      $('#theme-toggle').addEventListener('click', () => {
+        const dark = document.documentElement.classList.toggle('dark');
+        store.set('mt-theme', dark ? 'dark' : 'light');
+        $('meta[name="theme-color"]').setAttribute('content', dark ? '#09090b' : '#fafafa');
+      });
+    }
+
+    /* =========================================================
+       Router / navigation
+       ========================================================= */
+    const TOOLS = [
+      { id: 'luhn', name: 'Luhn Validator', icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z' },
+      { id: 'json', name: 'JSON Formatter', icon: 'M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5' },
+      { id: 'password', name: 'Password Generator', icon: 'M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z' },
+      { id: 'uuid', name: 'UUID Generator', icon: 'M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5' },
+      { id: 'lorem', name: 'Lorem Ipsum', icon: 'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12' },
+      { id: 'epoch', name: 'Epoch Converter', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
+      { id: 'base64', name: 'Base64 Encode/Decode', icon: 'M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5' },
+      { id: 'case', name: 'Case Converter', icon: 'M3 19.5L7.5 6l4.5 13.5M4.5 15h6m4.5-2.25c0-1.243 1.007-2.25 2.25-2.25s2.25 1.007 2.25 2.25v6.75m0-3.75h-2.625a1.875 1.875 0 100 3.75H19.5' }
+    ];
+    const TOOL_IDS = new Set(TOOLS.map((t) => t.id));
+    const appState = { active: null };
+    const onActivate = {}; // per-tool hooks fired when a tool becomes visible
+
+    function renderNav() {
+      const icon = (d) => `<svg class="h-[18px] w-[18px] shrink-0" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${d}"/></svg>`;
+      $('#sidebar-nav').innerHTML = TOOLS.map((t) => `<a href="#${t.id}" class="nav-link" data-nav="${t.id}">${icon(t.icon)}<span>${t.name}</span></a>`).join('');
+      $('#mobile-nav').innerHTML = TOOLS.map((t) => `<a href="#${t.id}" class="pill" data-nav="${t.id}">${t.name}</a>`).join('');
+    }
+
+    function activateTool(id) {
+      if (!TOOL_IDS.has(id)) id = TOOLS[0].id;
+      if (appState.active === id) return;
+      appState.active = id;
+      $$('.tool-panel').forEach((p) => { p.hidden = p.dataset.tool !== id; });
+      $$('[data-nav]').forEach((a) => {
+        if (a.dataset.nav === id) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+      const pill = $(`#mobile-nav [data-nav="${id}"]`);
+      if (pill && getComputedStyle($('#mobile-nav')).display !== 'none') {
+        pill.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+      }
+      document.title = `${TOOLS.find((t) => t.id === id).name} — MicroTools`;
+      store.set('mt-last-tool', id);
+      if (onActivate[id]) onActivate[id]();
+    }
+
+    function initRouter() {
+      renderNav();
+      window.addEventListener('hashchange', () => activateTool(location.hash.slice(1)));
+      const initial = location.hash.slice(1) || store.get('mt-last-tool') || TOOLS[0].id;
+      activateTool(initial);
+    }
+
+    /* =========================================================
+       1. Luhn validator
+       ========================================================= */
+    function luhnIsValid(digits) {
+      let sum = 0, dbl = false;
+      for (let i = digits.length - 1; i >= 0; i--) {
+        let d = digits.charCodeAt(i) - 48;
+        if (dbl) { d *= 2; if (d > 9) d -= 9; }
+        sum += d;
+        dbl = !dbl;
+      }
+      return sum % 10 === 0;
+    }
+
+    /** Check digit that should be appended to `payload` to make it Luhn-valid. */
+    function luhnCheckDigit(payload) {
+      let sum = 0, dbl = true;
+      for (let i = payload.length - 1; i >= 0; i--) {
+        let d = payload.charCodeAt(i) - 48;
+        if (dbl) { d *= 2; if (d > 9) d -= 9; }
+        sum += d;
+        dbl = !dbl;
+      }
+      return (10 - (sum % 10)) % 10;
+    }
+
+    const CARD_TYPES = [
+      { name: 'American Express', re: /^3[47]/, lengths: [15], groups: [4, 6, 5] },
+      { name: 'Visa', re: /^4/, lengths: [13, 16, 19] },
+      { name: 'Mastercard', re: /^(5[1-5]|222[1-9]|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)/, lengths: [16] },
+      { name: 'Discover', re: /^(6011|65|64[4-9])/, lengths: [16, 19] },
+      { name: 'JCB', re: /^35(2[89]|[3-8])/, lengths: [16, 17, 18, 19] },
+      { name: 'Diners Club', re: /^3(0[0-5]|[689])/, lengths: [14, 16, 19], groups: [4, 6, 4] },
+      { name: 'UnionPay', re: /^62/, lengths: [16, 17, 18, 19] }
+    ];
+
+    function detectLuhnType(digits) {
+      const card = CARD_TYPES.find((c) => c.re.test(digits));
+      // A 15-digit number is only a card if that issuer actually uses 15 digits (e.g. Amex); otherwise it's an IMEI.
+      if (card && !(digits.length === 15 && !card.lengths.includes(15))) return { name: card.name, lengths: card.lengths, groups: card.groups };
+      if (digits.length === 15) return { name: 'IMEI', lengths: [15], groups: [2, 6, 6, 1] };
+      return { name: digits.length > 15 ? 'Card (unknown issuer)' : 'Unknown', lengths: null };
+    }
+
+    function formatGroups(digits, groups) {
+      if (!groups) return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+      const out = [];
+      let i = 0;
+      for (const g of groups) { if (i >= digits.length) break; out.push(digits.slice(i, i + g)); i += g; }
+      if (i < digits.length) out.push(digits.slice(i));
+      return out.join(' ');
+    }
+
+    function initLuhn() {
+      const input = $('#luhn-input');
+      const status = $('#luhn-status');
+      const els = { type: $('#luhn-type'), length: $('#luhn-length'), check: $('#luhn-check'), expected: $('#luhn-expected'), formatted: $('#luhn-formatted') };
+
+      const setStatus = (state, html) => { status.dataset.state = state; input.dataset.state = state === 'idle' ? '' : state; status.innerHTML = html; };
+      const ICON_OK = '<svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+      const ICON_BAD = '<svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+
+      function update() {
+        const raw = input.value;
+        const digits = raw.replace(/[\s-]/g, '');
+        els.length.textContent = /^\d*$/.test(digits) ? digits.length : '—';
+
+        if (!raw.trim()) {
+          setStatus('idle', 'Start typing a number to validate it.');
+          Object.assign(els.type, { textContent: '—' });
+          els.check.textContent = '—'; els.expected.textContent = '—'; els.formatted.textContent = '';
+          return;
+        }
+        if (!/^\d+$/.test(digits)) {
+          setStatus('invalid', `${ICON_BAD}<span>Only digits, spaces and dashes are allowed.</span>`);
+          els.type.textContent = '—'; els.check.textContent = '—'; els.expected.textContent = '—'; els.formatted.textContent = '';
+          return;
+        }
+
+        const type = detectLuhnType(digits);
+        const expected = luhnCheckDigit(digits.slice(0, -1));
+        els.type.textContent = type.name;
+        els.check.textContent = digits.slice(-1);
+        els.expected.textContent = digits.length > 1 ? expected : '—';
+        els.formatted.textContent = formatGroups(digits, type.groups);
+
+        if (digits.length < 8) {
+          setStatus('invalid', `${ICON_BAD}<span>Too short — keep typing (${digits.length} digit${digits.length === 1 ? '' : 's'}).</span>`);
+          return;
+        }
+        if (luhnIsValid(digits)) {
+          const lengthWarn = type.lengths && !type.lengths.includes(digits.length)
+            ? ` <span class="font-normal opacity-80">(passes checksum, but ${type.name} numbers are usually ${type.lengths.join('/')} digits)</span>` : '';
+          setStatus('valid', `${ICON_OK}<span>Valid — passes the Luhn checksum.${lengthWarn}</span>`);
+        } else {
+          setStatus('invalid', `${ICON_BAD}<span>Invalid — fails the Luhn checksum. The last digit should be <strong class="font-mono">${expected}</strong>.</span>`);
+        }
+      }
+
+      input.addEventListener('input', update);
+      $$('[data-luhn-sample]').forEach((b) => b.addEventListener('click', () => { input.value = b.dataset.luhnSample; update(); input.focus(); }));
+      update();
+    }
+
+    /* =========================================================
+       2. JSON validator & formatter
+       ========================================================= */
+
+    /** Locates the first syntax error in `src`. Returns { pos, msg } or null if valid. */
+    function findJsonError(src) {
+      let i = 0;
+      const fail = (msg, at = i) => { throw { pos: at, msg }; };
+      const ws = () => { while (i < src.length && (src[i] === ' ' || src[i] === '\t' || src[i] === '\n' || src[i] === '\r')) i++; };
+      const found = () => (i >= src.length ? 'end of input' : `'${src[i]}'`);
+
+      function value() {
+        ws();
+        const c = src[i];
+        if (c === '{') return object();
+        if (c === '[') return array();
+        if (c === '"') return string();
+        if (c === '-' || (c >= '0' && c <= '9')) return number();
+        for (const lit of ['true', 'false', 'null']) if (src.startsWith(lit, i)) { i += lit.length; return; }
+        if (c === "'") fail('Strings must use double quotes, not single quotes');
+        fail(`Unexpected ${found()} — expected a value`);
+      }
+      function object() {
+        i++; ws();
+        if (src[i] === '}') { i++; return; }
+        for (;;) {
+          ws();
+          if (src[i] === '}') fail("Trailing comma before '}' is not allowed");
+          if (src[i] === "'") fail('Property names must use double quotes, not single quotes');
+          if (src[i] !== '"') fail(`Expected a double-quoted property name, found ${found()}`);
+          string(); ws();
+          if (src[i] !== ':') fail(`Expected ':' after property name, found ${found()}`);
+          i++; value(); ws();
+          if (src[i] === ',') { i++; continue; }
+          if (src[i] === '}') { i++; return; }
+          fail(`Expected ',' or '}' after property value, found ${found()}`);
+        }
+      }
+      function array() {
+        i++; ws();
+        if (src[i] === ']') { i++; return; }
+        for (;;) {
+          ws();
+          if (src[i] === ']') fail("Trailing comma before ']' is not allowed");
+          value(); ws();
+          if (src[i] === ',') { i++; continue; }
+          if (src[i] === ']') { i++; return; }
+          fail(`Expected ',' or ']' after array element, found ${found()}`);
+        }
+      }
+      function string() {
+        const start = i++;
+        while (i < src.length) {
+          const c = src[i];
+          if (c === '"') { i++; return; }
+          if (c === '\\') {
+            const n = src[i + 1];
+            if (n === 'u') {
+              if (!/^[0-9a-fA-F]{4}$/.test(src.substr(i + 2, 4))) fail('Invalid unicode escape — expected \\u followed by 4 hex digits');
+              i += 6; continue;
+            }
+            if (n === undefined || !'"\\/bfnrt'.includes(n)) fail(`Invalid escape sequence '\\${n ?? ''}'`);
+            i += 2; continue;
+          }
+          if (c < ' ') fail(c === '\n' ? 'Unterminated string — line breaks must be escaped as \\n' : 'Unescaped control character in string');
+          i++;
+        }
+        fail('Unterminated string', start);
+      }
+      function number() {
+        const re = /-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/y;
+        re.lastIndex = i;
+        if (!re.exec(src)) fail('Invalid number');
+        i = re.lastIndex;
+      }
+
+      try {
+        value(); ws();
+        if (i < src.length) fail(`Unexpected ${found()} after the end of the JSON value`);
+        return null;
+      } catch (e) {
+        if (e && typeof e.pos === 'number') return e;
+        return { pos: 0, msg: 'Input is too deeply nested to analyse' };
+      }
+    }
+
+    function highlightJson(json) {
+      return escapeText(json).replace(
+        /("(?:\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(?:true|false|null)\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
+        (m) => {
+          let cls = 'j-num';
+          if (m[0] === '"') cls = m.endsWith(':') ? 'j-key' : 'j-str';
+          else if (m === 'true' || m === 'false') cls = 'j-bool';
+          else if (m === 'null') cls = 'j-null';
+          return `<span class="${cls}">${m}</span>`;
+        }
+      );
+    }
+
+    function lineColAt(src, pos) {
+      const before = src.slice(0, pos);
+      const line = before.split('\n').length;
+      const col = pos - before.lastIndexOf('\n');
+      return { line, col };
+    }
+
+    function renderJsonErrorSnippet(src, pos) {
+      const { line, col } = lineColAt(src, pos);
+      const lines = src.split('\n');
+      const from = Math.max(0, line - 4);
+      const to = Math.min(lines.length, line + 2);
+      const width = String(to).length;
+      const WINDOW = 100;
+      let html = '';
+      for (let n = from; n < to; n++) {
+        let text = lines[n];
+        let caretCol = col;
+        if (n === line - 1 && text.length > WINDOW) {
+          // Keep very long (e.g. minified) lines readable by windowing around the error.
+          const start = Math.max(0, col - 1 - WINDOW / 2);
+          const prefix = start > 0 ? '…' : '';
+          text = prefix + text.slice(start, start + WINDOW) + (start + WINDOW < lines[n].length ? '…' : '');
+          caretCol = col - start + prefix.length;
+        } else if (text.length > WINDOW) {
+          text = text.slice(0, WINDOW) + '…';
+        }
+        const num = `<span class="ln">${String(n + 1).padStart(width)}</span>`;
+        if (n === line - 1) {
+          html += `<div class="json-err-line">${num}${escapeText(text) || ' '}</div>`;
+          const caretPad = text.slice(0, caretCol - 1).replace(/[^\t]/g, ' ');
+          html += `<div class="json-caret"><span class="ln">${' '.repeat(width)}</span>${caretPad}^</div>`;
+        } else {
+          html += `<div>${num}${escapeText(text) || ' '}</div>`;
+        }
+      }
+      return html;
+    }
+
+    function initJson() {
+      const input = $('#json-input');
+      const output = $('#json-output');
+      const indentSel = $('#json-indent');
+      const status = $('#json-status');
+      const statusText = $('#json-status-text');
+      const gotoBtn = $('#json-goto');
+      let errorPos = null;
+
+      const SAMPLE = '{"name":"MicroTools","version":2,"private":true,"rating":4.9,"tags":["json","formatter","validator"],"author":{"name":"Ada Lovelace","email":null},"features":[{"id":1,"enabled":true},{"id":2,"enabled":false}]}';
+
+      function process() {
+        const src = input.value;
+        errorPos = null;
+        gotoBtn.classList.add('hidden');
+
+        if (!src.trim()) {
+          status.dataset.state = 'idle';
+          input.dataset.state = '';
+          statusText.textContent = 'Paste or type JSON to validate it.';
+          output.innerHTML = '';
+          output.dataset.raw = '';
+          return;
+        }
+
+        let parsed;
+        try {
+          parsed = JSON.parse(src);
+        } catch (nativeErr) {
+          const err = findJsonError(src) || { pos: src.length, msg: nativeErr.message };
+          const { line, col } = lineColAt(src, err.pos);
+          errorPos = err.pos;
+          status.dataset.state = 'invalid';
+          input.dataset.state = 'invalid';
+          statusText.innerHTML = `<strong>Invalid JSON</strong> — ${escapeText(err.msg)} <span class="whitespace-nowrap font-mono text-xs opacity-80">(line ${line}, column ${col})</span>`;
+          gotoBtn.classList.remove('hidden');
+          output.innerHTML = renderJsonErrorSnippet(src, err.pos);
+          output.dataset.raw = '';
+          return;
+        }
+
+        const mode = indentSel.value;
+        const indent = mode === 'min' ? undefined : mode === 'tab' ? '\t' : Number(mode);
+        const pretty = JSON.stringify(parsed, null, indent);
+        const type = Array.isArray(parsed) ? `array · ${parsed.length} item${parsed.length === 1 ? '' : 's'}`
+          : parsed !== null && typeof parsed === 'object' ? `object · ${Object.keys(parsed).length} key${Object.keys(parsed).length === 1 ? '' : 's'}`
+          : typeof parsed;
+        status.dataset.state = 'valid';
+        input.dataset.state = 'valid';
+        statusText.innerHTML = `<strong>Valid JSON</strong> <span class="font-mono text-xs opacity-80">${type} · ${formatBytes(new Blob([pretty]).size)}</span>`;
+        output.innerHTML = highlightJson(pretty);
+        output.dataset.raw = pretty;
+      }
+
+      const processDebounced = debounce(process, 120);
+      input.addEventListener('input', processDebounced);
+      indentSel.addEventListener('change', () => { store.set('mt-json-indent', indentSel.value); process(); });
+      $('#json-sample').addEventListener('click', () => { input.value = SAMPLE; process(); });
+      $('#json-clear').addEventListener('click', () => { input.value = ''; process(); input.focus(); });
+      gotoBtn.addEventListener('click', () => {
+        if (errorPos === null) return;
+        const { line } = lineColAt(input.value, errorPos);
+        input.focus();
+        input.setSelectionRange(errorPos, Math.min(errorPos + 1, input.value.length));
+        const lh = parseFloat(getComputedStyle(input).lineHeight) || 24;
+        input.scrollTop = Math.max(0, (line - 4) * lh);
+      });
+      // Tab key inserts indentation inside the editor
+      input.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab' || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
+        e.preventDefault();
+        const { selectionStart: s, selectionEnd: end } = input;
+        input.setRangeText('  ', s, end, 'end');
+        processDebounced();
+      });
+
+      const savedIndent = store.get('mt-json-indent');
+      if (savedIndent && [...indentSel.options].some((o) => o.value === savedIndent)) indentSel.value = savedIndent;
+      process();
+    }
+
+    /* =========================================================
+       3. Password generator
+       ========================================================= */
+    const PW_SETS = {
+      upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      lower: 'abcdefghijklmnopqrstuvwxyz',
+      numbers: '0123456789',
+      symbols: '!@#$%^&*()-_=+[]{};:,.<>?/~|'
+    };
+
+    function generatePassword(length, setKeys) {
+      const sets = setKeys.map((k) => PW_SETS[k]);
+      const pool = sets.join('');
+      // Guarantee at least one character from every selected set.
+      const chars = sets.map((s) => s[secureRandomInt(s.length)]);
+      while (chars.length < length) chars.push(pool[secureRandomInt(pool.length)]);
+      for (let i = chars.length - 1; i > 0; i--) {
+        const j = secureRandomInt(i + 1);
+        [chars[i], chars[j]] = [chars[j], chars[i]];
+      }
+      return { password: chars.join(''), poolSize: pool.length };
+    }
+
+    function humanizeSeconds(sec) {
+      if (sec < 1) return 'instantly';
+      const units = [['year', 31557600], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
+      for (const [name, s] of units) {
+        if (sec >= s) {
+          const v = sec / s;
+          if (name === 'year' && v >= 1e6) {
+            const exp = Math.floor(Math.log10(v));
+            return exp > 15 ? 'longer than the age of the universe' : `~10^${exp} years`;
+          }
+          const n = Math.round(v);
+          return `~${n.toLocaleString()} ${name}${n === 1 ? '' : 's'}`;
+        }
+      }
+      return 'instantly';
+    }
+
+    function initPassword() {
+      const out = $('#pw-output');
+      const slider = $('#pw-length');
+      const lengthLabel = $('#pw-length-value');
+      const boxes = $$('[data-pw-set]');
+      const bars = $$('.pw-bar');
+      const strengthEl = $('#pw-strength');
+      const entropyEl = $('#pw-entropy');
+      const hint = $('#pw-hint');
+
+      const LEVELS = [
+        { max: 45, label: 'Weak', bars: 1, color: 'bg-rose-500', text: 'text-rose-600 dark:text-rose-400' },
+        { max: 64, label: 'Fair', bars: 2, color: 'bg-amber-500', text: 'text-amber-600 dark:text-amber-400' },
+        { max: 90, label: 'Strong', bars: 3, color: 'bg-lime-500', text: 'text-lime-600 dark:text-lime-400' },
+        { max: Infinity, label: 'Very strong', bars: 4, color: 'bg-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' }
+      ];
+      const BAR_COLORS = LEVELS.map((l) => l.color);
+      const IDLE_BAR = ['bg-zinc-200', 'dark:bg-zinc-800'];
+
+      function generate() {
+        const length = Number(slider.value);
+        const keys = boxes.filter((b) => b.checked).map((b) => b.dataset.pwSet);
+        lengthLabel.textContent = length;
+        const { password, poolSize } = generatePassword(length, keys);
+        out.textContent = password;
+
+        const bits = length * Math.log2(poolSize);
+        const level = LEVELS.find((l) => bits < l.max);
+        bars.forEach((bar, idx) => {
+          bar.classList.remove(...BAR_COLORS, ...IDLE_BAR);
+          if (idx < level.bars) bar.classList.add(level.color);
+          else bar.classList.add(...IDLE_BAR);
+        });
+        strengthEl.className = `font-semibold ${level.text}`;
+        strengthEl.textContent = level.label;
+        // Offline attack at 10 billion guesses/sec; on average half the keyspace is searched.
+        const crackSeconds = Math.pow(2, bits - 1) / 1e10;
+        entropyEl.textContent = `${Math.round(bits)} bits of entropy · cracked ${humanizeSeconds(crackSeconds)} at 10B guesses/s`;
+      }
+
+      slider.addEventListener('input', generate);
+      boxes.forEach((box) => box.addEventListener('change', () => {
+        if (!boxes.some((b) => b.checked)) {
+          box.checked = true;
+          hint.classList.remove('hidden');
+          setTimeout(() => hint.classList.add('hidden'), 2500);
+          return;
+        }
+        generate();
+      }));
+      $('#pw-regen').addEventListener('click', generate);
+      generate();
+    }
+
+    /* =========================================================
+       4. UUID generator
+       ========================================================= */
+    function uuidv4() {
+      if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+      const b = crypto.getRandomValues(new Uint8Array(16));
+      b[6] = (b[6] & 0x0f) | 0x40; // version 4
+      b[8] = (b[8] & 0x3f) | 0x80; // RFC 4122 variant
+      const h = Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
+      return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+    }
+
+    function initUuid() {
+      const countEl = $('#uuid-count');
+      const upperEl = $('#uuid-upper');
+      const hyphensEl = $('#uuid-hyphens');
+      const out = $('#uuid-output');
+      const summary = $('#uuid-summary');
+      let uuids = [];
+
+      function render() {
+        out.value = uuids.map((u) => {
+          let s = hyphensEl.checked ? u : u.replace(/-/g, '');
+          return upperEl.checked ? s.toUpperCase() : s;
+        }).join('\n');
+        summary.textContent = `${uuids.length} UUID${uuids.length === 1 ? '' : 's'}`;
+      }
+
+      function generate() {
+        const n = clamp(parseInt(countEl.value, 10) || 1, 1, 1000);
+        uuids = Array.from({ length: n }, uuidv4);
+        render();
+      }
+
+      countEl.addEventListener('input', debounce(generate, 150));
+      countEl.addEventListener('change', () => { countEl.value = clamp(parseInt(countEl.value, 10) || 1, 1, 1000); generate(); });
+      upperEl.addEventListener('change', render);
+      hyphensEl.addEventListener('change', render);
+      $('#uuid-generate').addEventListener('click', generate);
+      $$('[data-uuid-count]').forEach((b) => b.addEventListener('click', () => { countEl.value = b.dataset.uuidCount; generate(); }));
+      generate();
+    }
+
+    /* =========================================================
+       5. Lorem ipsum generator
+       ========================================================= */
+    const LOREM_WORDS = Array.from(new Set((
+      'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ' +
+      'enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in ' +
+      'reprehenderit voluptate velit esse cillum fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa ' +
+      'qui officia deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nunc pulvinar sapien ligula viverra ' +
+      'mauris fermentum vestibulum ante primis faucibus orci luctus ultrices posuere cubilia curae donec neque auctor aliquam ' +
+      'vel ullamcorper massa porta integer feugiat scelerisque varius morbi tristique senectus netus malesuada fames turpis ' +
+      'egestas pellentesque habitant leo sagittis purus semper lectus at volutpat diam venenatis tellus elementum blandit ' +
+      'cursus risus suscipit gravida dictum fusce placerat mattis nibh praesent sodales rhoncus quam nisl condimentum facilisis'
+    ).split(' ')));
+    const LOREM_OPENING = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+    const LOREM_LIMITS = { paragraphs: 50, sentences: 200, words: 2000 };
+
+    const randRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+    function loremWords(n) {
+      const words = [];
+      while (words.length < n) {
+        const w = LOREM_WORDS[Math.floor(Math.random() * LOREM_WORDS.length)];
+        if (w !== words[words.length - 1]) words.push(w);
+      }
+      return words;
+    }
+
+    function loremSentence() {
+      const words = loremWords(randRange(6, 15));
+      if (words.length > 8 && Math.random() < 0.6) {
+        const at = randRange(3, words.length - 4);
+        words[at] += ',';
+      }
+      return capitalize(words.join(' ')) + (Math.random() < 0.08 ? '?' : '.');
+    }
+
+    function loremParagraph(startClassic) {
+      const count = randRange(4, 7);
+      const sentences = Array.from({ length: count }, loremSentence);
+      if (startClassic) sentences[0] = LOREM_OPENING;
+      return sentences.join(' ');
+    }
+
+    function generateLorem(unit, count, classic) {
+      if (unit === 'words') {
+        const opening = LOREM_OPENING.replace(/[.,]/g, '').toLowerCase().split(' ');
+        const words = classic ? opening.slice(0, count).concat(loremWords(Math.max(0, count - opening.length))) : loremWords(count);
+        return capitalize(words.join(' ')) + '.';
+      }
+      if (unit === 'sentences') {
+        const sentences = Array.from({ length: count }, loremSentence);
+        if (classic) sentences[0] = LOREM_OPENING;
+        return sentences.join(' ');
+      }
+      return Array.from({ length: count }, (_, i) => loremParagraph(classic && i === 0)).join('\n\n');
+    }
+
+    function initLorem() {
+      const countEl = $('#lorem-count');
+      const unitEl = $('#lorem-unit');
+      const classicEl = $('#lorem-classic');
+      const out = $('#lorem-output');
+      const stats = $('#lorem-stats');
+
+      function generate() {
+        const max = LOREM_LIMITS[unitEl.value];
+        countEl.max = max;
+        const count = clamp(parseInt(countEl.value, 10) || 1, 1, max);
+        const text = generateLorem(unitEl.value, count, classicEl.checked);
+        out.value = text;
+        const words = text.split(/\s+/).filter(Boolean).length;
+        stats.textContent = `${words.toLocaleString()} words · ${text.length.toLocaleString()} characters`;
+      }
+
+      countEl.addEventListener('input', debounce(generate, 120));
+      countEl.addEventListener('change', () => { countEl.value = clamp(parseInt(countEl.value, 10) || 1, 1, LOREM_LIMITS[unitEl.value]); generate(); });
+      unitEl.addEventListener('change', () => {
+        const defaults = { paragraphs: 3, sentences: 5, words: 50 };
+        countEl.value = defaults[unitEl.value];
+        generate();
+      });
+      classicEl.addEventListener('change', generate);
+      $('#lorem-generate').addEventListener('click', generate);
+      generate();
+    }
+
+    /* =========================================================
+       6. Epoch / Unix timestamp converter
+       ========================================================= */
+    const UNIT_FACTORS = { s: 1000, ms: 1, us: 1e-3, ns: 1e-6 };
+    const UNIT_NAMES = { s: 'seconds', ms: 'milliseconds', us: 'microseconds', ns: 'nanoseconds' };
+    const MAX_DATE_MS = 8.64e15;
+    const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+
+    function detectTimestampUnit(str) {
+      const digits = str.replace(/^-/, '').split('.')[0].length;
+      if (digits <= 11) return 's';
+      if (digits <= 14) return 'ms';
+      if (digits <= 17) return 'us';
+      return 'ns';
+    }
+
+    function relativeTime(ms) {
+      const diff = (ms - Date.now()) / 1000;
+      const abs = Math.abs(diff);
+      const units = [['year', 31557600], ['month', 2629800], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
+      for (const [unit, sec] of units) {
+        if (abs >= sec || unit === 'second') return rtf.format(Math.round(diff / sec), unit);
+      }
+    }
+
+    function toDatetimeLocalValue(date, utc) {
+      const g = utc
+        ? [date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()]
+        : [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
+      return `${pad(g[0], 4)}-${pad(g[1])}-${pad(g[2])}T${pad(g[3])}:${pad(g[4])}:${pad(g[5])}`;
+    }
+
+    function initEpoch() {
+      const nowS = $('#epoch-now-s');
+      const nowMs = $('#epoch-now-ms');
+      const input = $('#epoch-input');
+      const unitSel = $('#epoch-unit');
+      const errorEl = $('#epoch-error');
+      const res = { local: $('#epoch-local'), utc: $('#epoch-utc'), iso: $('#epoch-iso'), relative: $('#epoch-relative'), detected: $('#epoch-detected') };
+      const dateInput = $('#epoch-date');
+      const tzSel = $('#epoch-tz');
+      const outS = $('#epoch-out-s');
+      const outMs = $('#epoch-out-ms');
+      const outIso = $('#epoch-out-iso');
+      const localFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'full', timeStyle: 'long' });
+      let lastMs = null;
+
+      function tick() {
+        const now = Date.now();
+        nowS.textContent = Math.floor(now / 1000);
+        nowMs.textContent = now;
+        if (lastMs !== null) res.relative.textContent = relativeTime(lastMs);
+      }
+
+      function clearResults() {
+        lastMs = null;
+        res.local.textContent = res.utc.textContent = res.iso.textContent = res.relative.textContent = res.detected.textContent = '';
+      }
+
+      function convertTimestamp() {
+        const raw = input.value.trim().replace(/[\s,_]/g, '');
+        errorEl.classList.add('hidden');
+        if (!raw) { input.dataset.state = ''; clearResults(); return; }
+        if (!/^-?\d+(\.\d+)?$/.test(raw)) {
+          input.dataset.state = 'invalid';
+          errorEl.textContent = 'Enter a numeric Unix timestamp (optionally negative or with decimals).';
+          errorEl.classList.remove('hidden');
+          clearResults();
+          return;
+        }
+        const unit = unitSel.value === 'auto' ? detectTimestampUnit(raw) : unitSel.value;
+        const ms = Number(raw) * UNIT_FACTORS[unit];
+        if (!Number.isFinite(ms) || Math.abs(ms) > MAX_DATE_MS) {
+          input.dataset.state = 'invalid';
+          errorEl.textContent = 'Timestamp is outside the supported date range (±275,760 years from 1970).';
+          errorEl.classList.remove('hidden');
+          clearResults();
+          return;
+        }
+        const date = new Date(ms);
+        lastMs = ms;
+        input.dataset.state = 'valid';
+        res.local.textContent = localFmt.format(date);
+        res.utc.textContent = date.toUTCString();
+        res.iso.textContent = date.toISOString();
+        res.relative.textContent = relativeTime(ms);
+        res.detected.textContent = `· as ${UNIT_NAMES[unit]}`;
+      }
+
+      function convertDate() {
+        const v = dateInput.value;
+        if (!v) { outS.textContent = outMs.textContent = outIso.textContent = ''; dateInput.dataset.state = ''; return; }
+        const iso = v.length === 16 ? `${v}:00` : v;
+        const date = new Date(tzSel.value === 'utc' ? `${iso}Z` : iso);
+        if (Number.isNaN(date.getTime())) { dateInput.dataset.state = 'invalid'; outS.textContent = outMs.textContent = outIso.textContent = ''; return; }
+        dateInput.dataset.state = '';
+        outMs.textContent = date.getTime();
+        outS.textContent = Math.floor(date.getTime() / 1000);
+        outIso.textContent = date.toISOString();
+      }
+
+      function setDateNow() { dateInput.value = toDatetimeLocalValue(new Date(), tzSel.value === 'utc'); convertDate(); }
+
+      input.addEventListener('input', convertTimestamp);
+      unitSel.addEventListener('change', convertTimestamp);
+      $('#epoch-use-now').addEventListener('click', () => { input.value = Math.floor(Date.now() / 1000); unitSel.value = 'auto'; convertTimestamp(); });
+      dateInput.addEventListener('input', convertDate);
+      tzSel.addEventListener('change', () => {
+        // Keep the same instant, re-expressed in the newly selected zone.
+        const ms = Number(outMs.textContent);
+        if (outMs.textContent && Number.isFinite(ms)) dateInput.value = toDatetimeLocalValue(new Date(ms), tzSel.value === 'utc');
+        convertDate();
+      });
+      $('#epoch-date-now').addEventListener('click', setDateNow);
+
+      let timer = null;
+      onActivate.epoch = () => {
+        tick();
+        if (!timer) timer = setInterval(() => { if (appState.active === 'epoch' && !document.hidden) tick(); }, 1000);
+      };
+
+      input.value = Math.floor(Date.now() / 1000);
+      convertTimestamp();
+      setDateNow();
+      tick();
+    }
+
+    /* =========================================================
+       7. Base64 encoder / decoder (UTF-8 safe)
+       ========================================================= */
+    const utf8Encoder = new TextEncoder();
+    const utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+
+    function base64Encode(text, urlSafe) {
+      const bytes = utf8Encoder.encode(text);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) {
+        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      }
+      const b64 = btoa(binary);
+      return urlSafe ? b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') : b64;
+    }
+
+    function base64Decode(input) {
+      let s = input.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+      if (!/^[A-Za-z0-9+/]*={0,2}$/.test(s)) throw new Error('Contains characters that are not valid Base64.');
+      s = s.replace(/=+$/, '');
+      if (s.length % 4 === 1) throw new Error('Invalid length — the Base64 string appears truncated.');
+      s += '='.repeat((4 - (s.length % 4)) % 4);
+      const binary = atob(s);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      try {
+        return { text: utf8Decoder.decode(bytes), bytes: bytes.length };
+      } catch {
+        throw new Error(`Decoded ${bytes.length} bytes, but they are binary data, not valid UTF-8 text.`);
+      }
+    }
+
+    function initBase64() {
+      const plain = $('#b64-plain');
+      const encoded = $('#b64-encoded');
+      const urlSafe = $('#b64-urlsafe');
+      const errorEl = $('#b64-error');
+      const plainStats = $('#b64-plain-stats');
+      const encodedStats = $('#b64-encoded-stats');
+
+      const setError = (msg) => {
+        errorEl.textContent = msg || '';
+        errorEl.classList.toggle('hidden', !msg);
+        encoded.dataset.state = msg ? 'invalid' : '';
+      };
+      const updateStats = () => {
+        plainStats.textContent = plain.value ? `· ${formatBytes(utf8Encoder.encode(plain.value).length)}` : '';
+        encodedStats.textContent = encoded.value ? `· ${encoded.value.replace(/\s/g, '').length.toLocaleString()} chars` : '';
+      };
+
+      function encode() {
+        setError('');
+        encoded.value = base64Encode(plain.value, urlSafe.checked);
+        updateStats();
+      }
+      function decode() {
+        if (!encoded.value.trim()) { setError(''); plain.value = ''; updateStats(); return; }
+        try {
+          plain.value = base64Decode(encoded.value).text;
+          setError('');
+        } catch (e) {
+          setError(e.message);
+        }
+        updateStats();
+      }
+
+      plain.addEventListener('input', encode);
+      encoded.addEventListener('input', decode);
+      urlSafe.addEventListener('change', () => { store.set('mt-b64-urlsafe', urlSafe.checked ? '1' : '0'); encode(); });
+      $('#b64-clear').addEventListener('click', () => { plain.value = ''; encoded.value = ''; setError(''); updateStats(); plain.focus(); });
+
+      urlSafe.checked = store.get('mt-b64-urlsafe') === '1';
+      updateStats();
+    }
+
+    /* =========================================================
+       8. Case converter
+       ========================================================= */
+    function splitWords(line) {
+      return line
+        .replace(/([\p{Ll}\p{N}])(\p{Lu})/gu, '$1 $2')
+        .replace(/(\p{Lu}+)(\p{Lu}\p{Ll})/gu, '$1 $2')
+        .split(/[^\p{L}\p{N}]+/u)
+        .filter(Boolean);
+    }
+
+    const CASES = [
+      { id: 'upper', label: 'UPPERCASE', fn: (s) => s.toUpperCase() },
+      { id: 'lower', label: 'lowercase', fn: (s) => s.toLowerCase() },
+      { id: 'title', label: 'Title Case', fn: (s) => s.toLowerCase().replace(/(^|[\s\-–—_(\[{"'“‘/])(\p{L})/gu, (m, p, c) => p + c.toUpperCase()) },
+      {
+        id: 'camel', label: 'camelCase',
+        fn: (s) => s.split('\n').map((line) => splitWords(line)
+          .map((w, i) => (i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+          .join('')).join('\n')
+      },
+      {
+        id: 'sentence', label: 'Sentence case',
+        fn: (s) => s.toLowerCase()
+          .replace(/(^\s*|[.!?]\s+|\n\s*)(\p{L})/gu, (m, p, c) => p + c.toUpperCase())
+          .replace(/\bi\b/g, 'I')
+      }
+    ];
+
+    function initCase() {
+      const input = $('#case-input');
+      const stats = $('#case-stats');
+      const container = $('#case-outputs');
+
+      container.innerHTML = CASES.map((c) => `
+        <div class="rounded-xl border border-zinc-200 p-3 dark:border-zinc-800 ${c.id === 'sentence' ? 'md:col-span-2' : ''}">
+          <div class="mb-2 flex items-center justify-between gap-2">
+            <span class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">${c.label}</span>
+            <button type="button" data-copy="#case-${c.id}"></button>
+          </div>
+          <div id="case-${c.id}" class="max-h-48 min-h-[1.5rem] overflow-auto whitespace-pre-wrap break-words font-mono text-sm text-zinc-800 dark:text-zinc-200"></div>
+        </div>`).join('');
+      hydrateCopyButtons(container);
+
+      function update() {
+        const text = input.value;
+        CASES.forEach((c) => { $(`#case-${c.id}`).textContent = text ? c.fn(text) : ''; });
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const lines = text ? text.split('\n').length : 0;
+        stats.textContent = `${text.length} chars · ${words} words · ${lines} lines`;
+      }
+
+      input.addEventListener('input', update);
+      update();
+    }
+
+    /* =========================================================
+       Google AdSense
+       ========================================================= */
+    function initAds() {
+      $$('ins.adsbygoogle').forEach((ins) => {
+        // Skip until a real publisher ID replaces the placeholder.
+        if (!ins.dataset.adClient || ins.dataset.adClient.includes('XXXX') || ins.dataset.adsbygoogleStatus) return;
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* ad blocked or not approved */ }
+      });
+    }
+
+    /* =========================================================
+       Boot
+       ========================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      $('#year').textContent = new Date().getFullYear();
+      hydrateCopyButtons();
+      initTheme();
+      initLuhn();
+      initJson();
+      initPassword();
+      initUuid();
+      initLorem();
+      initEpoch();
+      initBase64();
+      initCase();
+      initRouter();
+      initAds();
+    });
+  </script>
+</body>
+</html>
