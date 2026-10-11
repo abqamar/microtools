@@ -10,24 +10,24 @@ No accounts, no sign-ups, no frameworks. Results update as you type, and every o
 
 ### General tools (`index.html`)
 
-| Tool | What it does |
-|---|---|
-| **Luhn Validator** | Validates credit card and IMEI numbers as you type, detects the card type and shows the expected check digit. |
-| **JSON Formatter** | Validates, beautifies or minifies JSON. Syntax errors are pinpointed to the exact line and column. |
-| **Password Generator** | Cryptographically secure passwords (8–64 characters) with a strength meter and entropy estimate. |
-| **RSA Keys (PEM)** | Generates RSA key pairs (2048–4096-bit) in PEM format, or imports your own. Encrypt (RSA-OAEP) and verify signatures with the public key; decrypt and sign (PKCS#1 v1.5 or PSS) with the private key. Compatible with OpenSSL. |
-| **UUID Generator** | RFC 4122 version 4 UUIDs, one or up to 1,000 at a time. |
-| **Lorem Ipsum** | Placeholder text by paragraphs, sentences or words. |
-| **Epoch Converter** | Unix timestamps to readable dates and back, with automatic seconds/ms/µs/ns detection. |
-| **Base64 Encode/Decode** | Two-way, real-time conversion with full UTF-8 support and a URL-safe mode. |
-| **Case Converter** | UPPERCASE, lowercase, Title Case, camelCase and Sentence case, all at once. |
+| Tool                     | What it does                                                                                                                                                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Luhn Validator**       | Validates credit card and IMEI numbers as you type, detects the card type and shows the expected check digit.                                                                                                                  |
+| **JSON Formatter**       | Validates, beautifies or minifies JSON. Syntax errors are pinpointed to the exact line and column.                                                                                                                             |
+| **Password Generator**   | Cryptographically secure passwords (8–64 characters) with a strength meter and entropy estimate.                                                                                                                               |
+| **RSA Keys (PEM)**       | Generates RSA key pairs (2048–4096-bit) in PEM format, or imports your own. Encrypt (RSA-OAEP) and verify signatures with the public key; decrypt and sign (PKCS#1 v1.5 or PSS) with the private key. Compatible with OpenSSL. |
+| **UUID Generator**       | RFC 4122 version 4 UUIDs, one or up to 1,000 at a time.                                                                                                                                                                        |
+| **Lorem Ipsum**          | Placeholder text by paragraphs, sentences or words.                                                                                                                                                                            |
+| **Epoch Converter**      | Unix timestamps to readable dates and back, with automatic seconds/ms/µs/ns detection.                                                                                                                                         |
+| **Base64 Encode/Decode** | Two-way, real-time conversion with full UTF-8 support and a URL-safe mode.                                                                                                                                                     |
+| **Case Converter**       | UPPERCASE, lowercase, Title Case, camelCase and Sentence case, all at once.                                                                                                                                                    |
 
 ### Flutter tools (`flutter/index.html`)
 
-| Tool | What it does |
-|---|---|
-| **JSON to Dart** | Generates null-safe Dart model classes from JSON in four styles: plain, Equatable, json_serializable or freezed. Optional `copyWith()`, `toString()` and nullable fields. |
-| **.env to Dart** | Turns a `.env` file into an XOR-obfuscated Dart config class, or a `String.fromEnvironment` class plus a `dart_defines.json` for `--dart-define-from-file`. |
+| Tool               | What it does                                                                                                                                                                                 |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **JSON to Dart**   | Generates null-safe Dart model classes from JSON in four styles: plain, Equatable, json_serializable or freezed. Optional `copyWith()`, `toString()` and nullable fields.                    |
+| **.env to Dart**   | Turns a `.env` file into an XOR-obfuscated Dart config class, or a `String.fromEnvironment` class plus a `dart_defines.json` for `--dart-define-from-file`.                                  |
 | **Assets to Dart** | Drag and drop your `assets` folder to generate an `assets.dart` class (flat or nested by folder) and the matching `pubspec.yaml` entries. Only file names are read. Images are never opened. |
 
 > **Note on the .env tool:** obfuscation is not encryption, and values passed with `--dart-define` can be extracted from a compiled app. Both keep secrets out of plain sight and out of git, but real secrets belong on a server. The tool shows this warning too.
@@ -95,12 +95,6 @@ The site is fully static. Any static host works: GitHub Pages, Netlify, Cloudfla
 **GitHub Pages:** in the repository, go to **Settings → Pages**, choose **Deploy from a branch**, select `main` and `/ (root)`, and save.
 
 Folder drag and drop works best when the site is served over `https://`. When pages are opened from disk, it works in Chrome and Edge. Firefox and Safari users can use the "choose a folder" button instead.
-
-### Before going live
-
-- Replace the AdSense publisher ID `ca-pub-XXXXXXXXXXXXXXXX` and the slot IDs (`1111111111`, `2222222222`, `3333333333`) in `index.html` and `flutter/index.html`. No ad requests are made until you do.
-- Replace `contact@example.com` in `about.html` and `privacy.html`.
-- Review `privacy.html` for your jurisdiction. It's an accurate template, not legal advice.
 
 ## Privacy
 
