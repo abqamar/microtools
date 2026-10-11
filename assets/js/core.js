@@ -130,8 +130,13 @@ function initToolRouter(tools, { storageKey, redirects = {} }) {
     if (onActivate[id]) onActivate[id]();
   }
 
-  window.addEventListener('hashchange', () => activate(location.hash.slice(1), true));
-  const hash = location.hash.slice(1);
+  // AdSense vignette ads append #google_vignette to the URL; it is not a tool, so keep the current one.
+  const IGNORED_HASHES = new Set(['google_vignette']);
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.slice(1);
+    if (!IGNORED_HASHES.has(id)) activate(id, true);
+  });
+  const hash = IGNORED_HASHES.has(location.hash.slice(1)) ? '' : location.hash.slice(1);
   activate(hash || store.get(storageKey) || tools[0].id, !!hash);
 }
 
