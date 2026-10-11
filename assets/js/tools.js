@@ -12,7 +12,8 @@ const TOOLS = [
   { id: 'epoch', name: 'Epoch Converter', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
   { id: 'base64', name: 'Base64 Encode/Decode', icon: 'M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5' },
   { id: 'base64-image', name: 'Base64 Image Viewer', icon: 'M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z' },
-  { id: 'case', name: 'Case Converter', icon: 'M3 19.5L7.5 6l4.5 13.5M4.5 15h6m4.5-2.25c0-1.243 1.007-2.25 2.25-2.25s2.25 1.007 2.25 2.25v6.75m0-3.75h-2.625a1.875 1.875 0 100 3.75H19.5' }
+  { id: 'case', name: 'Case Converter', icon: 'M3 19.5L7.5 6l4.5 13.5M4.5 15h6m4.5-2.25c0-1.243 1.007-2.25 2.25-2.25s2.25 1.007 2.25 2.25v6.75m0-3.75h-2.625a1.875 1.875 0 100 3.75H19.5' },
+  { id: 'whitespace', name: 'Whitespace Remover', icon: 'M3.75 9h16.5m-16.5 6.75h16.5M8.25 4.5l-3 15m13.5-15l-3 15' }
 ];
 
 /* =========================================================
@@ -978,7 +979,7 @@ function sniffImageType(b) {
     if (/avi[fs]/.test(brands)) return IMG_TYPES.avif;
     if (/hei[cxms]|hev[cxms]|mif1|msf1/.test(brands)) return IMG_TYPES.heic;
   }
-  const head = new TextDecoder().decode(b.subarray(0, 4096)).replace(/^﻿/, '').trimStart();
+  const head = new TextDecoder().decode(b.subarray(0, 4096)).replace(/^\uFEFF/, '').trimStart();
   if (head.startsWith('<') && /<svg[\s>]/i.test(head)) return IMG_TYPES.svg;
   if (ascii(0, 4) === '%PDF') return { notImage: 'a PDF document' };
   if (hex(4) === '504b0304') return { notImage: 'a ZIP archive (or a .docx, .xlsx or .apk file)' };
@@ -1178,6 +1179,58 @@ function initCase() {
 }
 
 /* =========================================================
+   Whitespace remover
+   ========================================================= */
+const WS_PATTERNS = {
+  spaces: { label: 'space', re: / /g },
+  tabs: { label: 'tab', re: /\t/g },
+  breaks: { label: 'line break', re: /\r\n|[\n\r\u2028\u2029]/g }, // \r\n counts as one break
+  // Non-breaking and other Unicode spaces, zero-width characters, BOM, vertical tab and form feed.
+  invisible: { label: 'invisible character', re: /[\u00a0\u1680\u2000-\u200d\u202f\u205f\u2060\u3000\ufeff\v\f]/g }
+};
+
+/** Removes the selected whitespace kinds. Returns the cleaned text and how many of each kind were removed. */
+function removeWhitespace(text, kinds) {
+  const counts = {};
+  let out = text;
+  for (const kind of kinds) {
+    const { re } = WS_PATTERNS[kind];
+    counts[kind] = (out.match(re) || []).length;
+    out = out.replace(re, '');
+  }
+  return { text: out, counts };
+}
+
+function initWhitespace() {
+  const input = $('#ws-input');
+  const output = $('#ws-output');
+  const status = $('#ws-status');
+  const boxes = $$('[data-ws]');
+  const SAMPLE = 'MIIEvQIBADANBgkqhkiG\n9w0BAQEFAASCBKcwggSjAgEAAoIBAQDAwFTq3RqQ bw3p\npOgzm6I6EzBARXfHXkwI9/\nSceNthiJqhMTGrpauN Ao4QQ68/FU7C4DAyOjqTBDt2\nQSWVouM1jbhLqXFlJXQU9235F+hNk8KQpCAML2wq9+\nEmVMCGC1 EedbFVblCb/fQ5';
+
+  function update() {
+    const text = input.value;
+    const kinds = boxes.filter((b) => b.checked).map((b) => b.dataset.ws);
+    const { text: cleaned, counts } = removeWhitespace(text, kinds);
+    output.value = cleaned;
+    $('#ws-in-stats').textContent = text ? `${text.length.toLocaleString()} chars` : '';
+    $('#ws-out-stats').textContent = text ? `· ${cleaned.length.toLocaleString()} chars` : '';
+    if (!text) { status.dataset.state = 'idle'; status.textContent = 'Paste text to clean it.'; return; }
+    const parts = kinds.filter((k) => counts[k]).map((k) => `${counts[k].toLocaleString()} ${WS_PATTERNS[k].label}${counts[k] === 1 ? '' : 's'}`);
+    status.dataset.state = 'valid';
+    status.innerHTML = parts.length
+      ? `<span><strong>Removed ${(text.length - cleaned.length).toLocaleString()} characters</strong> · ${escapeText(parts.join(', '))}</span>`
+      : '<span><strong>Nothing to remove</strong> · no selected whitespace found.</span>';
+  }
+
+  input.addEventListener('input', update);
+  boxes.forEach((b) => b.addEventListener('change', update));
+  $('#ws-sample').addEventListener('click', () => { input.value = SAMPLE; update(); });
+  $('#ws-clear').addEventListener('click', () => { input.value = ''; update(); input.focus(); });
+  update();
+}
+
+/* =========================================================
    Boot
    ========================================================= */
 $('#year').textContent = new Date().getFullYear();
@@ -1194,6 +1247,7 @@ initEpoch();
 initBase64();
 initBase64Image();
 initCase();
+initWhitespace();
 // JSON to Dart moved to the Flutter section; keep old links working.
 initToolRouter(TOOLS, { storageKey: 'mt-last-tool', redirects: { dart: 'flutter/index.html#json-to-dart' } });
 initAds();

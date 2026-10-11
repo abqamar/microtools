@@ -18,7 +18,7 @@ const DART_CORE_TYPES = new Set(('Object String List Map Set Iterable Iterator T
 const DART_KEYWORDS = new Set('abstract class const extends factory final get import override part required return this null true false with dynamic bool int double num'.split(' '));
 
 /** PascalCase restricted to ASCII letters/digits (valid Dart identifier characters). */
-const dartPascal = (s) => splitWords(String(s).normalize('NFD').replace(/[̀-ͯ]/g, '')) // é → e
+const dartPascal = (s) => splitWords(String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '')) // é → e
   .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
   .join('')
   .replace(/[^A-Za-z0-9]/g, '');

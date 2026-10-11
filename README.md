@@ -23,6 +23,7 @@ No accounts, no sign-ups, no frameworks. Results update as you type, and every o
 | **Base64 Encode/Decode** | Two-way, real-time conversion with full UTF-8 support and a URL-safe mode.                                                                                                                                                     |
 | **Base64 Image Viewer**  | Previews a Base64 string or `data:` URI as an image. The format is detected from the bytes (PNG, JPEG, GIF, WebP, AVIF, BMP, ICO, SVG, plus TIFF/HEIC where the browser supports them). Images are shown in an `<img>`, so SVG scripts never run. |
 | **Case Converter**       | UPPERCASE, lowercase, Title Case, camelCase and Sentence case, all at once.                                                                                                                                                    |
+| **Whitespace Remover**   | Removes spaces, tabs, line breaks and invisible characters (non-breaking and zero-width spaces, BOM) from long text such as keys, tokens or Base64. Shows exactly what was removed. |
 
 ### Flutter tools (`flutter/index.html`)
 
