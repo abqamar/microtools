@@ -15,6 +15,7 @@ No accounts, no sign-ups, no frameworks. Results update as you type, and every o
 | **Luhn Validator** | Validates credit card and IMEI numbers as you type, detects the card type and shows the expected check digit. |
 | **JSON Formatter** | Validates, beautifies or minifies JSON. Syntax errors are pinpointed to the exact line and column. |
 | **Password Generator** | Cryptographically secure passwords (8–64 characters) with a strength meter and entropy estimate. |
+| **RSA Keys (PEM)** | Generates RSA key pairs (2048–4096-bit) in PEM format, or imports your own. Encrypt (RSA-OAEP) and verify signatures with the public key; decrypt and sign (PKCS#1 v1.5 or PSS) with the private key. Compatible with OpenSSL. |
 | **UUID Generator** | RFC 4122 version 4 UUIDs, one or up to 1,000 at a time. |
 | **Lorem Ipsum** | Placeholder text by paragraphs, sentences or words. |
 | **Epoch Converter** | Unix timestamps to readable dates and back, with automatic seconds/ms/µs/ns detection. |
@@ -35,7 +36,7 @@ No accounts, no sign-ups, no frameworks. Results update as you type, and every o
 
 - **HTML + vanilla JavaScript.** No framework and no bundler. Pages load with plain `<script>` tags, so they work when opened directly from disk.
 - **Tailwind CSS v3.4** compiled to a single static stylesheet with the Tailwind CLI.
-- **Web Crypto API** for passwords, UUIDs and obfuscation keys.
+- **Web Crypto API** for passwords, UUIDs, RSA keys and obfuscation keys.
 - **Google AdSense** slots, which stay as styled placeholders until a real publisher ID is configured.
 
 Node.js is only needed to rebuild the CSS. The site itself has no runtime dependencies.
