@@ -3,6 +3,7 @@
 
 const TOOLS = [
   { id: 'luhn', name: 'Luhn Validator', icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z' },
+  { id: 'card-generator', name: 'Test Card Generator', icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zM16.5 12.75h1.5' },
   { id: 'json', name: 'JSON Formatter', icon: 'M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5' },
   { id: 'password', name: 'Password Generator', icon: 'M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z' },
   { id: 'rsa', name: 'RSA Keys (PEM)', icon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
@@ -10,6 +11,7 @@ const TOOLS = [
   { id: 'lorem', name: 'Lorem Ipsum', icon: 'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12' },
   { id: 'epoch', name: 'Epoch Converter', icon: 'M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' },
   { id: 'base64', name: 'Base64 Encode/Decode', icon: 'M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5' },
+  { id: 'base64-image', name: 'Base64 Image Viewer', icon: 'M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z' },
   { id: 'case', name: 'Case Converter', icon: 'M3 19.5L7.5 6l4.5 13.5M4.5 15h6m4.5-2.25c0-1.243 1.007-2.25 2.25-2.25s2.25 1.007 2.25 2.25v6.75m0-3.75h-2.625a1.875 1.875 0 100 3.75H19.5' }
 ];
 
@@ -115,6 +117,73 @@ function initLuhn() {
   input.addEventListener('input', update);
   $$('[data-luhn-sample]').forEach((b) => b.addEventListener('click', () => { input.value = b.dataset.luhnSample; update(); input.focus(); }));
   update();
+}
+
+/* =========================================================
+   Test card number generator
+   ========================================================= */
+// Issuer prefix ranges (inclusive, equal-length strings) and card length per brand.
+const TEST_CARD_BRANDS = {
+  visa: { name: 'Visa', ranges: [['4', '4']], length: 16 },
+  mastercard: { name: 'Mastercard', ranges: [['51', '55'], ['2221', '2720']], length: 16 },
+  amex: { name: 'American Express', ranges: [['34', '34'], ['37', '37']], length: 15 },
+  discover: { name: 'Discover', ranges: [['6011', '6011'], ['65', '65'], ['644', '649']], length: 16 },
+  jcb: { name: 'JCB', ranges: [['3528', '3589']], length: 16 },
+  diners: { name: 'Diners Club', ranges: [['300', '305'], ['36', '36'], ['38', '39']], length: 14 },
+  unionpay: { name: 'UnionPay', ranges: [['62', '62']], length: 16 }
+};
+
+function generateTestCard(brandKey) {
+  const brand = TEST_CARD_BRANDS[brandKey];
+  const [lo, hi] = brand.ranges[secureRandomInt(brand.ranges.length)];
+  const prefix = String(Number(lo) + secureRandomInt(Number(hi) - Number(lo) + 1)).padStart(lo.length, '0');
+  let body = prefix;
+  while (body.length < brand.length - 1) body += secureRandomInt(10);
+  const number = body + luhnCheckDigit(body);
+  const now = new Date();
+  const expiry = new Date(now.getFullYear(), now.getMonth() + 1 + secureRandomInt(60), 1); // 1–60 months ahead
+  const cvvLength = brandKey === 'amex' ? 4 : 3;
+  const cvv = Array.from({ length: cvvLength }, () => secureRandomInt(10)).join('');
+  return { brand: brand.name, number, expiry: `${pad(expiry.getMonth() + 1)}/${String(expiry.getFullYear()).slice(-2)}`, cvv };
+}
+
+function formatTestCards(cards, { format, spaced, extras }) {
+  const num = (c) => (spaced ? formatGroups(c.number, detectLuhnType(c.number).groups) : c.number);
+  if (format === 'json') {
+    return JSON.stringify(cards.map((c) => (extras ? { brand: c.brand, number: num(c), expiry: c.expiry, cvv: c.cvv } : { brand: c.brand, number: num(c) })), null, 2);
+  }
+  if (format === 'csv') {
+    const quote = (v) => `"${v}"`;
+    return [extras ? 'brand,number,expiry,cvv' : 'brand,number',
+      ...cards.map((c) => [c.brand, num(c), ...(extras ? [c.expiry, c.cvv] : [])].map(quote).join(','))].join('\n');
+  }
+  const width = Math.max(...cards.map((c) => num(c).length));
+  return cards.map((c) => (extras ? `${num(c).padEnd(width)}  ${c.expiry}  ${c.cvv.padEnd(4)}  ${c.brand}` : num(c))).join('\n');
+}
+
+function initCardGenerator() {
+  const el = (id) => $(`#cardgen-${id}`);
+  let cards = [];
+
+  function render() {
+    el('output').value = cards.length ? formatTestCards(cards, { format: el('format').value, spaced: el('spaced').checked, extras: el('extras').checked }) : '';
+    el('summary').textContent = `${cards.length} test card${cards.length === 1 ? '' : 's'}`;
+  }
+
+  function generate() {
+    const n = clamp(parseInt(el('count').value, 10) || 1, 1, 100);
+    const keys = Object.keys(TEST_CARD_BRANDS);
+    const brand = el('brand').value;
+    cards = Array.from({ length: n }, () => generateTestCard(brand === 'mix' ? keys[secureRandomInt(keys.length)] : brand));
+    render();
+  }
+
+  el('generate').addEventListener('click', generate);
+  el('brand').addEventListener('change', generate);
+  el('count').addEventListener('input', debounce(generate, 150));
+  el('count').addEventListener('change', () => { el('count').value = clamp(parseInt(el('count').value, 10) || 1, 1, 100); generate(); });
+  ['format', 'spaced', 'extras'].forEach((id) => el(id).addEventListener('change', render));
+  generate();
 }
 
 /* =========================================================
@@ -876,6 +945,191 @@ function initBase64() {
 }
 
 /* =========================================================
+   Base64 image viewer
+   ========================================================= */
+const IMG_TYPES = {
+  png: { name: 'PNG', mime: 'image/png', ext: 'png' },
+  jpeg: { name: 'JPEG', mime: 'image/jpeg', ext: 'jpg' },
+  gif: { name: 'GIF', mime: 'image/gif', ext: 'gif' },
+  webp: { name: 'WebP', mime: 'image/webp', ext: 'webp' },
+  bmp: { name: 'BMP', mime: 'image/bmp', ext: 'bmp' },
+  ico: { name: 'ICO', mime: 'image/x-icon', ext: 'ico' },
+  tiff: { name: 'TIFF', mime: 'image/tiff', ext: 'tiff' },
+  avif: { name: 'AVIF', mime: 'image/avif', ext: 'avif' },
+  heic: { name: 'HEIC', mime: 'image/heic', ext: 'heic' },
+  svg: { name: 'SVG', mime: 'image/svg+xml', ext: 'svg' }
+};
+
+/** Identifies the format from the file's own bytes (magic numbers), never from what the input claims. */
+function sniffImageType(b) {
+  const hex = (n) => Array.from(b.subarray(0, n), (x) => x.toString(16).padStart(2, '0')).join('');
+  const ascii = (start, end) => String.fromCharCode(...b.subarray(start, end));
+  if (hex(8) === '89504e470d0a1a0a') return IMG_TYPES.png;
+  if (hex(3) === 'ffd8ff') return IMG_TYPES.jpeg;
+  if (/^GIF8[79]a$/.test(ascii(0, 6))) return IMG_TYPES.gif;
+  if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP') return IMG_TYPES.webp;
+  if (ascii(0, 2) === 'BM' && b.length > 26) return IMG_TYPES.bmp;
+  if (hex(4) === '00000100') return IMG_TYPES.ico;
+  if (hex(4) === '49492a00' || hex(4) === '4d4d002a') return IMG_TYPES.tiff;
+  if (ascii(4, 8) === 'ftyp') {
+    // ISO base media file: the ftyp box lists the major and compatible brands.
+    const boxSize = ((b[0] << 24) | (b[1] << 16) | (b[2] << 8) | b[3]) >>> 0;
+    const brands = ascii(8, Math.min(b.length, Math.max(16, boxSize), 256)); // capped: the size field is untrusted
+    if (/avi[fs]/.test(brands)) return IMG_TYPES.avif;
+    if (/hei[cxms]|hev[cxms]|mif1|msf1/.test(brands)) return IMG_TYPES.heic;
+  }
+  const head = new TextDecoder().decode(b.subarray(0, 4096)).replace(/^﻿/, '').trimStart();
+  if (head.startsWith('<') && /<svg[\s>]/i.test(head)) return IMG_TYPES.svg;
+  if (ascii(0, 4) === '%PDF') return { notImage: 'a PDF document' };
+  if (hex(4) === '504b0304') return { notImage: 'a ZIP archive (or a .docx, .xlsx or .apk file)' };
+  return null;
+}
+
+/** Accepts raw Base64 (standard or URL-safe) or a data: URI. Returns the bytes and the declared MIME type, if any. */
+function parseImageInput(text) {
+  const s = text.trim();
+  const m = s.match(/^data:([^;,]*)((?:;[^;,]*)*),([\s\S]*)$/i);
+  if (!m) return { bytes: base64ToBytes(s), declared: null };
+  const declared = m[1].trim().toLowerCase() || null;
+  if (/;base64/i.test(m[2])) return { bytes: base64ToBytes(m[3]), declared };
+  return { bytes: utf8Encoder.encode(decodeURIComponent(m[3])), declared }; // e.g. data:image/svg+xml,%3Csvg…
+}
+
+function initBase64Image() {
+  const el = (id) => $(`#b64img-${id}`);
+  const img = el('img');
+  const stage = el('stage');
+  const download = el('download');
+  let objectUrl = null;
+  let token = 0;
+
+  const setStatus = (state, html) => { el('status').dataset.state = state; el('status').innerHTML = `<span>${html}</span>`; };
+  const setStats = (format = '—', dims = '—', size = '—', mime = '—') => {
+    el('format').textContent = format; el('dims').textContent = dims; el('size').textContent = size; el('mime').textContent = mime;
+  };
+
+  function reset() {
+    token++;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = null;
+    img.removeAttribute('src');
+    img.classList.add('hidden');
+    el('empty').classList.remove('hidden');
+    download.removeAttribute('href');
+    download.removeAttribute('download');
+    download.classList.add('pointer-events-none', 'opacity-50');
+    download.setAttribute('aria-disabled', 'true');
+    el('input').dataset.state = '';
+    setStats();
+  }
+
+  function fail(html) {
+    reset();
+    el('input').dataset.state = 'invalid';
+    setStatus('invalid', html);
+  }
+
+  function render() {
+    const text = el('input').value;
+    el('length').textContent = text.trim() ? `· ${text.trim().length.toLocaleString()} chars` : '';
+    if (!text.trim()) { reset(); setStatus('idle', 'Paste a Base64 image to preview it.'); return; }
+
+    let parsed;
+    try { parsed = parseImageInput(text); } catch {
+      fail('<strong>Not valid Base64.</strong> Check that the whole string was copied.');
+      return;
+    }
+    const type = sniffImageType(parsed.bytes);
+    if (!type) { fail('<strong>Not a recognised image.</strong> The decoded bytes do not match any image format.'); return; }
+    if (type.notImage) { fail(`<strong>Not an image.</strong> The data looks like ${escapeText(type.notImage)}.`); return; }
+
+    reset();
+    const my = token;
+    const notes = [];
+    if (parsed.declared && parsed.declared !== type.mime && !(parsed.declared === 'image/jpg' && type === IMG_TYPES.jpeg)) {
+      notes.push(`The data URI says ${parsed.declared}, but the bytes are ${type.name}. Showing it as ${type.name}.`);
+    }
+    // Browsers draw whatever part of a cut-off PNG/JPEG they can decode, so check for the end marker explicitly.
+    const tail = parsed.bytes.subarray(-12);
+    const pngEnd = [0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82].every((x, i) => tail[tail.length - 8 + i] === x); // IEND chunk
+    const jpegEnd = tail.length >= 2 && Array.from(tail).some((x, i) => x === 0xff && tail[i + 1] === 0xd9); // EOI (padding allowed)
+    if ((type === IMG_TYPES.png && !pngEnd) || (type === IMG_TYPES.jpeg && !jpegEnd)) {
+      notes.push('The data looks truncated (no end-of-image marker), so part of the image may be missing. Check that the whole string was copied.');
+    }
+    if (type === IMG_TYPES.svg) {
+      const svgText = new TextDecoder().decode(parsed.bytes);
+      if (/<script|\son[a-z]+\s*=|javascript:/i.test(svgText)) {
+        notes.push('This SVG contains script code. It is blocked in this preview, but be careful opening the downloaded file directly in a browser.');
+      }
+    }
+
+    // A Blob URL shown in <img>: images rendered this way cannot run scripts or load external resources.
+    objectUrl = URL.createObjectURL(new Blob([parsed.bytes], { type: type.mime }));
+    const size = formatBytes(parsed.bytes.length);
+    setStats(type.name, '…', size, type.mime);
+    setStatus('idle', 'Decoding…');
+
+    img.onload = () => {
+      if (my !== token) return;
+      img.classList.remove('hidden');
+      el('empty').classList.add('hidden');
+      el('input').dataset.state = 'valid';
+      el('dims').textContent = img.naturalWidth ? `${img.naturalWidth} × ${img.naturalHeight}` : 'scalable';
+      download.href = objectUrl;
+      download.download = `image.${type.ext}`;
+      download.classList.remove('pointer-events-none', 'opacity-50');
+      download.removeAttribute('aria-disabled');
+      const noteHtml = notes.length ? ` · <span class="font-normal">${notes.map(escapeText).join(' ')}</span>` : '';
+      setStatus('valid', `<strong>${type.name} image · ${size}</strong>${noteHtml}`);
+    };
+    img.onerror = () => {
+      if (my !== token) return;
+      el('input').dataset.state = 'invalid';
+      setStatus('invalid', `<strong>This is a ${type.name} image, but your browser can't display it.</strong> ${
+        type === IMG_TYPES.heic || type === IMG_TYPES.tiff ? `${type.name} is mainly supported in Safari.` : 'The data may be corrupted or truncated.'}`);
+    };
+    img.src = objectUrl;
+  }
+
+  function makeSample() {
+    const c = document.createElement('canvas');
+    c.width = 360; c.height = 180;
+    const g = c.getContext('2d');
+    const grad = g.createLinearGradient(0, 0, 360, 180);
+    grad.addColorStop(0, '#4f46e5'); grad.addColorStop(1, '#10b981');
+    g.fillStyle = grad;
+    g.beginPath(); g.roundRect(10, 10, 340, 160, 24); g.fill();
+    g.fillStyle = '#ffffff';
+    g.font = '600 30px system-ui, sans-serif';
+    g.textAlign = 'center';
+    g.fillText('MicroTools', 180, 98);
+    g.font = '15px system-ui, sans-serif';
+    g.fillText('Decoded locally in your browser', 180, 128);
+    return c.toDataURL('image/png');
+  }
+
+  const bgClasses = { checker: 'checker', light: 'light', dark: 'dark-bg' };
+  const segs = (attr) => $$(`[data-b64img-${attr}]`);
+  function setBg(bg) {
+    Object.values(bgClasses).forEach((c) => stage.classList.remove(c));
+    stage.classList.add(bgClasses[bg]);
+    segs('bg').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.b64imgBg === bg)));
+  }
+  function setFit(fit) {
+    img.className = `${img.classList.contains('hidden') ? 'hidden ' : ''}${fit === 'fit' ? 'max-h-[32rem] max-w-full object-contain' : 'max-w-none'}`;
+    segs('fit').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.b64imgFit === fit)));
+  }
+
+  el('input').addEventListener('input', debounce(render, 250));
+  el('sample').addEventListener('click', () => { el('input').value = makeSample(); render(); });
+  el('clear').addEventListener('click', () => { el('input').value = ''; render(); el('input').focus(); });
+  segs('bg').forEach((b) => b.addEventListener('click', () => setBg(b.dataset.b64imgBg)));
+  segs('fit').forEach((b) => b.addEventListener('click', () => setFit(b.dataset.b64imgFit)));
+  setBg('checker');
+  setFit('fit');
+}
+
+/* =========================================================
    8. Case converter
    ========================================================= */
 const CASES = [
@@ -930,6 +1184,7 @@ $('#year').textContent = new Date().getFullYear();
 hydrateCopyButtons();
 initTheme();
 initLuhn();
+initCardGenerator();
 initJson();
 initPassword();
 initRsa();
@@ -937,6 +1192,7 @@ initUuid();
 initLorem();
 initEpoch();
 initBase64();
+initBase64Image();
 initCase();
 // JSON to Dart moved to the Flutter section; keep old links working.
 initToolRouter(TOOLS, { storageKey: 'mt-last-tool', redirects: { dart: 'flutter/index.html#json-to-dart' } });
