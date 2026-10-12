@@ -1,0 +1,25 @@
+<div class="card space-y-5">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <label for="lorem-count" class="label">Amount</label>
+      <input id="lorem-count" type="number" min="1" max="50" value="3" class="field w-28 font-mono">
+    </div>
+    <div>
+      <label for="lorem-unit" class="label">Unit</label>
+      <select id="lorem-unit" class="field w-auto">
+        <option value="paragraphs">Paragraphs</option>
+        <option value="sentences">Sentences</option>
+        <option value="words">Words</option>
+      </select>
+    </div>
+    <label class="check"><input id="lorem-classic" type="checkbox" checked> Start with “Lorem ipsum…”</label>
+    <button id="lorem-generate" type="button" class="btn btn-primary ml-auto">Regenerate</button>
+  </div>
+  <div>
+    <div class="mb-1.5 flex items-center justify-between">
+      <span id="lorem-stats" class="label mb-0">Output</span>
+      <button type="button" data-copy="#lorem-output"></button>
+    </div>
+    <textarea id="lorem-output" rows="14" readonly class="out resize-y font-sans leading-relaxed" aria-labelledby="lorem-stats"></textarea>
+  </div>
+</div>

@@ -1,672 +1,345 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" data-root="">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MicroTools — Fast, Private, Single-Purpose Developer Tools</title>
-  <meta name="description" content="Free, instant, privacy-first developer tools: Luhn validator, JSON formatter, JSON to Dart model generator, password generator, UUID generator, Lorem Ipsum, Unix timestamp converter, Base64 and case converter. Everything runs locally in your browser.">
-  <meta name="theme-color" content="#09090b">
-
-  <!-- Apply saved theme before first paint (default: dark) -->
+  <title>MicroTools: Free, Private Developer Tools (JSON, JWT, Flutter &amp; more)</title>
+  <meta name="description" content="27 free developer tools that run 100% in your browser: JSON formatter, JWT decoder, hash and RSA tools, QR codes, image resizer and Flutter tools. Nothing is uploaded.">
+  <meta name="theme-color" content="#0A0F1E">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MicroTools">
+  <meta property="og:title" content="MicroTools: Free, Private Developer Tools (JSON, JWT, Flutter &amp; more)">
+  <meta property="og:description" content="27 free developer tools that run 100% in your browser: JSON formatter, JWT decoder, hash and RSA tools, QR codes, image resizer and Flutter tools. Nothing is uploaded.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <script>
-    (function () {
-      try {
-        if (localStorage.getItem('mt-theme') === 'light') document.documentElement.classList.remove('dark');
-      } catch (e) {}
-    })();
+    (function () { try { if (localStorage.getItem('mt-theme') === 'light') document.documentElement.classList.remove('dark'); } catch (e) {} })();
+    // Local preview (file:// or localhost): keep empty ad slots visible so the layout can be checked. Live sites collapse them.
+    if (location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) document.documentElement.classList.add('ads-preview');
   </script>
-
   <link rel="stylesheet" href="assets/css/styles.css">
-
-  <!-- Google AdSense — replace ca-pub-9941006419835541 with your publisher ID -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9941006419835541" crossorigin="anonymous"></script>
-
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"MicroTools","description":"Free, private developer tools that run in your browser."}</script>
 </head>
-
-<body class="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
-  <noscript>
-    <div class="bg-amber-500 px-4 py-2 text-center text-sm font-medium text-black">MicroTools requires JavaScript. All processing is local — nothing is uploaded.</div>
-  </noscript>
-
-  <!-- ===================== Header ===================== -->
-  <header class="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
-    <div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-      <a href="#luhn" class="flex items-center gap-2.5" aria-label="MicroTools home">
-        <span class="grid h-8 w-8 place-items-center rounded-lg bg-indigo-600 text-white">
-          <svg class="h-[18px] w-[18px]" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085"/></svg>
-        </span>
+<body>
+  <div class="glow-bg" aria-hidden="true"></div>
+  <script>
+    (function () { var m = {"json":"json-formatter","yaml":"yaml-json-converter","diff":"text-diff-checker","epoch":"unix-timestamp-converter","jwt":"jwt-decoder","hash":"hash-generator","rsa":"rsa-key-generator","password":"password-generator","base64":"base64-encode-decode","url":"url-encoder-decoder","regex":"regex-tester","case":"case-converter","whitespace":"whitespace-remover","lorem":"lorem-ipsum-generator","image-resize":"image-resizer","qr":"qr-code-generator","base64-image":"base64-image-viewer","uuid":"uuid-generator","card-generator":"test-credit-card-generator","luhn":"luhn-validator","dart":"json-to-dart"}; var h = location.hash.slice(1); if (m[h]) location.replace('tools/' + m[h] + '.html'); })();
+  </script>
+  
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm dark:focus:bg-zinc-900">Skip to content</a>
+  <header class="site-header">
+    <div class="mx-auto flex h-16 max-w-[90rem] items-center gap-3 px-4 sm:px-6">
+      <a href="index.html" class="flex items-center gap-2.5" aria-label="MicroTools home">
+        <span class="logo-mark"><svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085"/></svg></span>
         <span class="text-base font-semibold tracking-tight">MicroTools</span>
       </a>
-      <div class="flex items-center gap-2">
-        <nav class="flex items-center gap-1" aria-label="Sections">
-          <a href="index.html" class="section-link" aria-current="page">Tools</a>
-          <a href="flutter/index.html" class="section-link">Flutter</a>
-        </nav>
-        <span class="hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700 md:inline-flex dark:text-emerald-400">🔒 Local-only processing</span>
-        <button id="theme-toggle" type="button" class="grid h-9 w-9 place-items-center rounded-lg border border-zinc-300 text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800" aria-label="Toggle dark mode">
-          <svg class="hidden h-4 w-4 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
-          <svg class="h-4 w-4 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
+      <nav class="ml-4 hidden items-center gap-1 md:flex" aria-label="Main">
+        <a href="index.html" class="header-link" aria-current="page">Tools</a><a href="flutter/index.html" class="header-link">Flutter</a><a href="about.html" class="header-link">About</a>
+      </nav>
+      <div class="ml-auto flex items-center gap-2">
+        <button type="button" class="search-trigger hidden sm:flex" data-palette-open aria-label="Search tools">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg><span class="pr-6">Search tools…</span><span class="kbd">⌘K</span>
         </button>
+        <button type="button" class="icon-btn sm:hidden" data-palette-open aria-label="Search tools"><svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg></button>
+        <button id="theme-toggle" type="button" class="icon-btn" aria-label="Toggle dark mode">
+          <svg class="hidden h-[18px] w-[18px] dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg><svg class="h-[18px] w-[18px] dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
+        </button>
+        <button id="menu-toggle" type="button" class="icon-btn lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg></button>
       </div>
     </div>
   </header>
-
-  <!-- ===================== Privacy notice ===================== -->
-  <div class="border-b border-emerald-500/20 bg-emerald-500/10">
-    <p class="mx-auto max-w-7xl px-4 py-2.5 text-center text-xs font-medium text-emerald-800 sm:px-6 sm:text-sm dark:text-emerald-300">
-      🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.
-    </p>
-  </div>
-
-  <!-- Mobile tool switcher -->
-  <nav id="mobile-nav" class="no-scrollbar sticky top-14 z-20 flex gap-2 overflow-x-auto border-b border-zinc-200 bg-zinc-50/90 px-4 py-2.5 backdrop-blur lg:hidden dark:border-zinc-800 dark:bg-zinc-950/90" aria-label="Tools">
-    <a href="flutter/index.html" class="pill section-pill">Flutter tools →</a>
-  </nav>
-
-  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-8 lg:py-8">
-    <!-- ===================== Sidebar ===================== -->
-    <aside class="hidden lg:block">
-      <nav class="sticky top-20 space-y-1" aria-label="Tools">
-        <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Tools</p>
-        <div id="sidebar-nav" class="space-y-1"></div>
-        <a href="flutter/index.html" class="section-card">
-          <span><span class="block">Flutter tools</span><span class="block text-xs font-normal opacity-75">JSON to Dart models &amp; more</span></span>
-          <span aria-hidden="true">→</span>
-        </a>
+  <div id="mobile-menu" class="fixed inset-0 z-50 bg-zinc-950/40 backdrop-blur-sm lg:hidden" hidden>
+    <div class="ml-auto flex h-full w-[min(20rem,88vw)] animate-fade-in flex-col border-l border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
+      <div class="flex h-16 items-center justify-between border-b border-zinc-200 px-4 dark:border-zinc-800">
+        <span class="text-sm font-semibold">Menu</span>
+        <button type="button" class="icon-btn" data-menu-close aria-label="Close menu"><svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+      <nav class="thin-scroll flex-1 overflow-y-auto p-3" aria-label="All tools">
+        <div class="mb-3 grid grid-cols-3 gap-2 text-center text-sm">
+          <a href="index.html" class="rounded-lg border border-zinc-200 py-2 dark:border-zinc-800">Tools</a><a href="flutter/index.html" class="rounded-lg border border-zinc-200 py-2 dark:border-zinc-800">Flutter</a><a href="about.html" class="rounded-lg border border-zinc-200 py-2 dark:border-zinc-800">About</a>
+        </div>
+        
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Data & JSON</p>
+          <a href="tools/json-formatter.html" class="side-link" data-search="json formatter json pretty print beautify minify validate lint data &amp; json"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg><span class="truncate">JSON Formatter</span></a>
+          <a href="tools/yaml-json-converter.html" class="side-link" data-search="yaml ⇄ json yaml json convert pubspec kubernetes data &amp; json"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg><span class="truncate">YAML ⇄ JSON</span></a>
+          <a href="tools/text-diff-checker.html" class="side-link" data-search="diff checker diff compare text difference merge data &amp; json"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg><span class="truncate">Diff Checker</span></a>
+          <a href="tools/unix-timestamp-converter.html" class="side-link" data-search="epoch converter epoch unix timestamp date time convert data &amp; json"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="truncate">Epoch Converter</span></a>
+        </div>
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Security</p>
+          <a href="tools/jwt-decoder.html" class="side-link" data-search="jwt decoder jwt json web token decode verify bearer security"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"/></svg><span class="truncate">JWT Decoder</span></a>
+          <a href="tools/hash-generator.html" class="side-link" data-search="hash generator hash md5 sha1 sha256 sha512 hmac checksum security"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33"/></svg><span class="truncate">Hash Generator</span></a>
+          <a href="tools/rsa-key-generator.html" class="side-link" data-search="rsa keys (pem) rsa pem public private key encrypt decrypt sign verify openssl security"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg><span class="truncate">RSA Keys (PEM)</span></a>
+          <a href="tools/password-generator.html" class="side-link" data-search="password generator password generator strong random secure security"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg><span class="truncate">Password Generator</span></a>
+        </div>
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Encoding</p>
+          <a href="tools/base64-encode-decode.html" class="side-link" data-search="base64 encode/decode base64 encode decode utf8 encoding"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg><span class="truncate">Base64 Encode/Decode</span></a>
+          <a href="tools/url-encoder-decoder.html" class="side-link" data-search="url encode &amp; parse url encode decode percent query string parse encoding"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg><span class="truncate">URL Encode &amp; Parse</span></a>
+        </div>
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Text</p>
+          <a href="tools/regex-tester.html" class="side-link" data-search="regex tester regex regexp regular expression test match text"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg><span class="truncate">Regex Tester</span></a>
+          <a href="tools/case-converter.html" class="side-link" data-search="case converter case convert uppercase lowercase camelcase title text"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 19.5L7.5 6l4.5 13.5M4.5 15h6m4.5-2.25c0-1.243 1.007-2.25 2.25-2.25s2.25 1.007 2.25 2.25v6.75m0-3.75h-2.625a1.875 1.875 0 100 3.75H19.5"/></svg><span class="truncate">Case Converter</span></a>
+          <a href="tools/whitespace-remover.html" class="side-link" data-search="whitespace remover whitespace remove spaces tabs newlines trim text"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5M8.25 4.5l-3 15m13.5-15l-3 15"/></svg><span class="truncate">Whitespace Remover</span></a>
+          <a href="tools/lorem-ipsum-generator.html" class="side-link" data-search="lorem ipsum lorem ipsum placeholder dummy text text"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/></svg><span class="truncate">Lorem Ipsum</span></a>
+        </div>
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Images</p>
+          <a href="tools/image-resizer.html" class="side-link" data-search="image resizer image resize compress jpeg webp png photo images"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/></svg><span class="truncate">Image Resizer</span></a>
+          <a href="tools/qr-code-generator.html" class="side-link" data-search="qr code generator qr code generator wifi url images"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75z"/></svg><span class="truncate">QR Code Generator</span></a>
+          <a href="tools/base64-image-viewer.html" class="side-link" data-search="base64 image viewer base64 image data uri preview decode images"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg><span class="truncate">Base64 Image Viewer</span></a>
+        </div>
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Testing</p>
+          <a href="tools/uuid-generator.html" class="side-link" data-search="uuid generator uuid guid v4 generate random id testing"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5"/></svg><span class="truncate">UUID Generator</span></a>
+          <a href="tools/test-credit-card-generator.html" class="side-link" data-search="test card generator test credit card number generator visa mastercard amex testing"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zM16.5 12.75h1.5"/></svg><span class="truncate">Test Card Generator</span></a>
+          <a href="tools/luhn-validator.html" class="side-link" data-search="luhn validator luhn credit card validator imei checksum testing"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg><span class="truncate">Luhn Validator</span></a>
+        </div>
+        <div data-side-group class="mt-5 first:mt-0">
+          <p class="side-heading">Flutter</p>
+          <a href="tools/json-to-dart.html" class="side-link" data-search="json to dart json dart model flutter freezed json_serializable equatable class flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg><span class="truncate">JSON to Dart</span></a>
+          <a href="tools/env-to-dart.html" class="side-link" data-search=".env to dart env dotenv dart define flutter config secrets flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg><span class="truncate">.env to Dart</span></a>
+          <a href="tools/flutter-assets-generator.html" class="side-link" data-search="assets to dart flutter assets dart pubspec images svg generator flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg><span class="truncate">Assets to Dart</span></a>
+          <a href="tools/flutter-app-icon-generator.html" class="side-link" data-search="app icon generator flutter app icon launcher android ios mipmap appiconset flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg><span class="truncate">App Icon Generator</span></a>
+          <a href="tools/flutter-color-converter.html" class="side-link" data-search="color to flutter flutter color hex rgb materialcolor swatch flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"/></svg><span class="truncate">Color to Flutter</span></a>
+          <a href="tools/flutter-colorscheme-generator.html" class="side-link" data-search="colorscheme generator flutter material 3 colorscheme theme seed color flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/></svg><span class="truncate">ColorScheme Generator</span></a>
+          <a href="tools/flutter-arb-converter.html" class="side-link" data-search="arb converter flutter arb localization l10n intl translation csv flutter"><svg class="h-4 w-4 shrink-0 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802"/></svg><span class="truncate">ARB Converter</span></a>
+        </div>
       </nav>
-    </aside>
-
-    <main id="main" class="min-w-0 space-y-6">
-      <!-- Top banner ad -->
-      <div class="ad-slot" aria-label="Advertisement">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="2079022863" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      </div>
-
-      <!-- ===================== 1. Luhn ===================== -->
-      <section class="tool-panel" data-tool="luhn" aria-labelledby="h-luhn" hidden>
-        <header class="mb-5">
-          <h1 id="h-luhn" class="text-2xl font-semibold tracking-tight">Luhn Algorithm Validator</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Validate credit card, IMEI and other Luhn (mod 10) numbers as you type.</p>
-        </header>
-        <div class="card space-y-5">
-          <div>
-            <label for="luhn-input" class="label">Card or IMEI number</label>
-            <input id="luhn-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="40" placeholder="e.g. 4111 1111 1111 1111" class="field font-mono text-lg tracking-wider">
-            <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
-              <span>Try:</span>
-              <button type="button" class="chip" data-luhn-sample="4111111111111111">Visa</button>
-              <button type="button" class="chip" data-luhn-sample="5555555555554444">Mastercard</button>
-              <button type="button" class="chip" data-luhn-sample="378282246310005">Amex</button>
-              <button type="button" class="chip" data-luhn-sample="490154203237518">IMEI</button>
-              <button type="button" class="chip" data-luhn-sample="4111111111111112">Invalid</button>
-            </div>
-          </div>
-          <div id="luhn-status" class="status" data-state="idle" role="status" aria-live="polite">Start typing a number to validate it.</div>
-          <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div class="stat"><dt>Detected type</dt><dd id="luhn-type">—</dd></div>
-            <div class="stat"><dt>Digits</dt><dd id="luhn-length">0</dd></div>
-            <div class="stat"><dt>Check digit</dt><dd id="luhn-check">—</dd></div>
-            <div class="stat"><dt>Expected check digit</dt><dd id="luhn-expected">—</dd></div>
-          </dl>
-          <div>
-            <div class="mb-1.5 flex items-center justify-between">
-              <span class="label mb-0">Formatted</span>
-              <button type="button" data-copy="#luhn-formatted"></button>
-            </div>
-            <div id="luhn-formatted" class="out min-h-[2.75rem] break-all"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== Test card generator ===================== -->
-      <section class="tool-panel" data-tool="card-generator" aria-labelledby="h-cardgen" hidden>
-        <header class="mb-5">
-          <h1 id="h-cardgen" class="text-2xl font-semibold tracking-tight">Test Credit Card Number Generator</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Generate Luhn-valid test card numbers with the correct prefix and length for each brand, for testing forms and validation logic.</p>
-        </header>
-        <div class="card space-y-4">
-          <div class="flex flex-wrap items-end gap-3">
-            <div>
-              <label for="cardgen-brand" class="label">Brand</label>
-              <select id="cardgen-brand" class="field w-auto">
-                <option value="visa">Visa</option>
-                <option value="mastercard">Mastercard</option>
-                <option value="amex">American Express</option>
-                <option value="discover">Discover</option>
-                <option value="jcb">JCB</option>
-                <option value="diners">Diners Club</option>
-                <option value="unionpay">UnionPay</option>
-                <option value="mix">Random mix</option>
-              </select>
-            </div>
-            <div>
-              <label for="cardgen-count" class="label">How many</label>
-              <input id="cardgen-count" type="number" min="1" max="100" value="10" class="field w-24 font-mono">
-            </div>
-            <div>
-              <label for="cardgen-format" class="label">Output</label>
-              <select id="cardgen-format" class="field w-auto">
-                <option value="list">List</option>
-                <option value="csv">CSV</option>
-                <option value="json">JSON</option>
-              </select>
-            </div>
-            <button id="cardgen-generate" type="button" class="btn btn-primary ml-auto">Generate</button>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <label class="check"><input id="cardgen-spaced" type="checkbox" checked> Group digits</label>
-            <label class="check"><input id="cardgen-extras" type="checkbox" checked> Include expiry &amp; CVV</label>
-          </div>
-          <div class="flex gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300" role="note">
-            <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
-            <p>For testing only. These numbers pass format and Luhn checks but are not issued cards and cannot be charged. To test a payment gateway, use your provider's official sandbox cards (for example Stripe's <span class="font-mono">4242 4242 4242 4242</span>).</p>
-          </div>
-          <div>
-            <div class="mb-1.5 flex items-center justify-between">
-              <span id="cardgen-summary" class="label mb-0">Output</span>
-              <button type="button" data-copy="#cardgen-output" data-copy-label="Copy all"></button>
-            </div>
-            <textarea id="cardgen-output" rows="12" readonly spellcheck="false" class="out resize-y leading-6" aria-labelledby="cardgen-summary"></textarea>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 2. JSON ===================== -->
-      <section class="tool-panel" data-tool="json" aria-labelledby="h-json" hidden>
-        <header class="mb-5">
-          <h1 id="h-json" class="text-2xl font-semibold tracking-tight">JSON Validator &amp; Formatter</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Paste messy JSON to validate, beautify or minify it. Errors are pinpointed to the exact line and column.</p>
-        </header>
-        <div class="card space-y-4">
-          <div class="flex flex-wrap items-center gap-2">
-            <label for="json-indent" class="sr-only">Indentation</label>
-            <select id="json-indent" class="field w-auto py-2">
-              <option value="2">2 spaces</option>
-              <option value="4">4 spaces</option>
-              <option value="tab">Tabs</option>
-              <option value="min">Minified</option>
-            </select>
-            <button id="json-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
-            <button id="json-clear" type="button" class="btn btn-ghost py-2">Clear</button>
-          </div>
-          <div id="json-status" class="status" data-state="idle" role="status" aria-live="polite">
-            <span id="json-status-text" class="flex-1">Paste or type JSON to validate it.</span>
-            <button id="json-goto" type="button" class="chip hidden">Go to error</button>
-          </div>
-          <div class="grid gap-4 xl:grid-cols-2">
-            <div>
-              <label for="json-input" class="label">Input</label>
-              <textarea id="json-input" rows="18" spellcheck="false" autocomplete="off" placeholder='{"paste": "your JSON here"}' class="field resize-y font-mono text-[13px] leading-6"></textarea>
-            </div>
-            <div class="min-w-0">
-              <div class="mb-1.5 flex items-center justify-between">
-                <span class="label mb-0">Output</span>
-                <button type="button" data-copy="#json-output"></button>
-              </div>
-              <pre id="json-output" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Formatted JSON output"></pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 3. Password ===================== -->
-      <section class="tool-panel" data-tool="password" aria-labelledby="h-password" hidden>
-        <header class="mb-5">
-          <h1 id="h-password" class="text-2xl font-semibold tracking-tight">Strong Password Generator</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Cryptographically secure passwords generated with the Web Crypto API.</p>
-        </header>
-        <div class="card space-y-6">
-          <div>
-            <div class="flex items-stretch gap-2">
-              <div id="pw-output" class="out flex min-h-[3.5rem] flex-1 items-center break-all text-lg tracking-wide" aria-live="polite"></div>
-              <div class="flex flex-col gap-2 sm:flex-row">
-                <button type="button" data-copy="#pw-output"></button>
-                <button id="pw-regen" type="button" class="copy-btn" aria-label="Generate new password">
-                  <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
-                  <span>New</span>
-                </button>
-              </div>
-            </div>
-            <div class="mt-3">
-              <div class="grid grid-cols-4 gap-1.5" aria-hidden="true">
-                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
-                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
-                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
-                <span class="pw-bar h-1.5 rounded-full bg-zinc-200 transition-colors dark:bg-zinc-800"></span>
-              </div>
-              <div class="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
-                <span>Strength: <strong id="pw-strength" class="font-semibold">—</strong></span>
-                <span id="pw-entropy" class="text-zinc-500 dark:text-zinc-400"></span>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="mb-2 flex items-center justify-between">
-              <label for="pw-length" class="label mb-0">Length</label>
-              <span id="pw-length-value" class="rounded-md bg-indigo-600 px-2 py-0.5 font-mono text-xs font-semibold text-white">20</span>
-            </div>
-            <input id="pw-length" type="range" min="8" max="64" value="20" class="w-full accent-indigo-600">
-            <div class="mt-1 flex justify-between font-mono text-[11px] text-zinc-400"><span>8</span><span>64</span></div>
-          </div>
-          <fieldset>
-            <legend class="label">Character sets</legend>
-            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <label class="check"><input type="checkbox" data-pw-set="upper" checked> Uppercase <span class="ml-auto font-mono text-xs text-zinc-400">A–Z</span></label>
-              <label class="check"><input type="checkbox" data-pw-set="lower" checked> Lowercase <span class="ml-auto font-mono text-xs text-zinc-400">a–z</span></label>
-              <label class="check"><input type="checkbox" data-pw-set="numbers" checked> Numbers <span class="ml-auto font-mono text-xs text-zinc-400">0–9</span></label>
-              <label class="check"><input type="checkbox" data-pw-set="symbols" checked> Symbols <span class="ml-auto font-mono text-xs text-zinc-400">!@#$</span></label>
-            </div>
-            <p id="pw-hint" class="mt-2 hidden text-xs text-amber-600 dark:text-amber-400">At least one character set must stay selected.</p>
-          </fieldset>
-        </div>
-      </section>
-
-      <!-- ===================== RSA keys ===================== -->
-      <section class="tool-panel" data-tool="rsa" aria-labelledby="h-rsa" hidden>
-        <header class="mb-5">
-          <h1 id="h-rsa" class="text-2xl font-semibold tracking-tight">RSA Key Pair Generator &amp; Crypto</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Generate RSA public/private keys in PEM format, or paste your own. Encrypt and verify with the public key; decrypt and sign with the private key.</p>
-        </header>
-        <div class="space-y-6">
-          <div class="card space-y-4">
-            <div class="flex flex-wrap items-end gap-3">
-              <div>
-                <label for="rsa-size" class="label">Key size</label>
-                <select id="rsa-size" class="field w-auto">
-                  <option value="2048">2048-bit</option>
-                  <option value="3072">3072-bit</option>
-                  <option value="4096">4096-bit</option>
-                </select>
-              </div>
-              <div>
-                <label for="rsa-hash" class="label">Hash</label>
-                <select id="rsa-hash" class="field w-auto">
-                  <option value="SHA-256">SHA-256</option>
-                  <option value="SHA-384">SHA-384</option>
-                  <option value="SHA-512">SHA-512</option>
-                </select>
-              </div>
-              <div>
-                <label for="rsa-scheme" class="label">Signature scheme</label>
-                <select id="rsa-scheme" class="field w-auto">
-                  <option value="pkcs1">RSASSA-PKCS1-v1_5</option>
-                  <option value="pss">RSA-PSS</option>
-                </select>
-              </div>
-              <button id="rsa-generate" type="button" class="btn btn-primary ml-auto">Generate key pair</button>
-            </div>
-            <div id="rsa-key-status" class="status" data-state="idle" role="status" aria-live="polite">Generate a key pair or paste your own PEM keys.</div>
-            <div class="grid gap-4 lg:grid-cols-2">
-              <div>
-                <div class="mb-1.5 flex items-center justify-between">
-                  <label for="rsa-public" class="label mb-0">Public key (PEM)</label>
-                  <button type="button" data-copy="#rsa-public"></button>
-                </div>
-                <textarea id="rsa-public" rows="9" spellcheck="false" autocomplete="off" placeholder="-----BEGIN PUBLIC KEY-----" class="field resize-y font-mono text-xs leading-5"></textarea>
-              </div>
-              <div>
-                <div class="mb-1.5 flex items-center justify-between">
-                  <label for="rsa-private" class="label mb-0">Private key (PEM)</label>
-                  <button type="button" data-copy="#rsa-private"></button>
-                </div>
-                <textarea id="rsa-private" rows="9" spellcheck="false" autocomplete="off" placeholder="-----BEGIN PRIVATE KEY-----" class="field resize-y font-mono text-xs leading-5"></textarea>
-              </div>
-            </div>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Keys are generated with the Web Crypto API on your device and are never stored or sent anywhere. One key pair is used for both encryption and signing here for convenience; production systems usually keep separate keys for each.</p>
-          </div>
-
-          <div class="card space-y-4">
-            <h2 class="text-base font-semibold">Using the public key</h2>
-            <div class="grid gap-6 lg:grid-cols-2">
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <label for="rsa-enc-input" class="label mb-0">Encrypt message</label>
-                  <span id="rsa-enc-count" class="font-mono text-[11px] text-zinc-400"></span>
-                </div>
-                <textarea id="rsa-enc-input" rows="4" spellcheck="false" placeholder="Secret message" class="field resize-y"></textarea>
-                <div class="flex items-center justify-between">
-                  <span class="label mb-0">Ciphertext (Base64, RSA-OAEP)</span>
-                  <div class="flex gap-2">
-                    <button id="rsa-enc-send" type="button" class="chip">Send to Decrypt ↓</button>
-                    <button type="button" data-copy="#rsa-enc-output"></button>
-                  </div>
-                </div>
-                <textarea id="rsa-enc-output" rows="4" readonly spellcheck="false" class="out resize-y break-all text-xs leading-5" aria-label="Ciphertext"></textarea>
-                <p id="rsa-enc-status" class="text-xs text-zinc-500 dark:text-zinc-400" role="status"></p>
-              </div>
-              <div class="space-y-3">
-                <label for="rsa-ver-message" class="label mb-0">Verify signature: message</label>
-                <textarea id="rsa-ver-message" rows="4" spellcheck="false" placeholder="The signed message" class="field resize-y"></textarea>
-                <label for="rsa-ver-signature" class="label mb-0">Signature (Base64)</label>
-                <textarea id="rsa-ver-signature" rows="4" spellcheck="false" placeholder="Paste the signature" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
-                <div id="rsa-ver-status" class="status" data-state="idle" role="status" aria-live="polite">Enter a message and its signature.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card space-y-4">
-            <h2 class="text-base font-semibold">Using the private key</h2>
-            <div class="grid gap-6 lg:grid-cols-2">
-              <div class="space-y-3">
-                <label for="rsa-dec-input" class="label mb-0">Decrypt message: ciphertext (Base64)</label>
-                <textarea id="rsa-dec-input" rows="4" spellcheck="false" placeholder="Paste RSA-OAEP ciphertext" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
-                <div class="flex items-center justify-between">
-                  <span class="label mb-0">Plaintext</span>
-                  <button type="button" data-copy="#rsa-dec-output"></button>
-                </div>
-                <textarea id="rsa-dec-output" rows="4" readonly class="out resize-y" aria-label="Decrypted plaintext"></textarea>
-                <p id="rsa-dec-status" class="text-xs text-zinc-500 dark:text-zinc-400" role="status"></p>
-              </div>
-              <div class="space-y-3">
-                <label for="rsa-sign-input" class="label mb-0">Sign message</label>
-                <textarea id="rsa-sign-input" rows="4" spellcheck="false" placeholder="Message to sign" class="field resize-y"></textarea>
-                <div class="flex items-center justify-between">
-                  <span class="label mb-0">Signature (Base64)</span>
-                  <div class="flex gap-2">
-                    <button id="rsa-sign-send" type="button" class="chip">Send to Verify ↑</button>
-                    <button type="button" data-copy="#rsa-sign-output"></button>
-                  </div>
-                </div>
-                <textarea id="rsa-sign-output" rows="4" readonly spellcheck="false" class="out resize-y break-all text-xs leading-5" aria-label="Signature"></textarea>
-                <p id="rsa-sign-status" class="text-xs text-zinc-500 dark:text-zinc-400" role="status"></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 4. UUID ===================== -->
-      <section class="tool-panel" data-tool="uuid" aria-labelledby="h-uuid" hidden>
-        <header class="mb-5">
-          <h1 id="h-uuid" class="text-2xl font-semibold tracking-tight">UUID v4 Generator</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">RFC 4122 version 4 UUIDs from a cryptographically secure random source.</p>
-        </header>
-        <div class="card space-y-5">
-          <div class="flex flex-wrap items-end gap-3">
-            <div>
-              <label for="uuid-count" class="label">How many</label>
-              <input id="uuid-count" type="number" min="1" max="1000" value="5" class="field w-28 font-mono">
-            </div>
-            <div class="flex flex-wrap gap-2 pb-1">
-              <button type="button" class="chip" data-uuid-count="1">1</button>
-              <button type="button" class="chip" data-uuid-count="10">10</button>
-              <button type="button" class="chip" data-uuid-count="50">50</button>
-              <button type="button" class="chip" data-uuid-count="100">100</button>
-            </div>
-            <button id="uuid-generate" type="button" class="btn btn-primary ml-auto">Generate</button>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <label class="check"><input id="uuid-upper" type="checkbox"> Uppercase</label>
-            <label class="check"><input id="uuid-hyphens" type="checkbox" checked> Hyphens</label>
-          </div>
-          <div>
-            <div class="mb-1.5 flex items-center justify-between">
-              <span class="label mb-0" id="uuid-summary">Output</span>
-              <button type="button" data-copy="#uuid-output" data-copy-label="Copy all"></button>
-            </div>
-            <textarea id="uuid-output" rows="10" readonly spellcheck="false" class="out resize-y leading-6" aria-labelledby="uuid-summary"></textarea>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 5. Lorem ===================== -->
-      <section class="tool-panel" data-tool="lorem" aria-labelledby="h-lorem" hidden>
-        <header class="mb-5">
-          <h1 id="h-lorem" class="text-2xl font-semibold tracking-tight">Lorem Ipsum Generator</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Realistic placeholder text by paragraphs, sentences or words.</p>
-        </header>
-        <div class="card space-y-5">
-          <div class="flex flex-wrap items-end gap-3">
-            <div>
-              <label for="lorem-count" class="label">Amount</label>
-              <input id="lorem-count" type="number" min="1" max="50" value="3" class="field w-28 font-mono">
-            </div>
-            <div>
-              <label for="lorem-unit" class="label">Unit</label>
-              <select id="lorem-unit" class="field w-auto">
-                <option value="paragraphs">Paragraphs</option>
-                <option value="sentences">Sentences</option>
-                <option value="words">Words</option>
-              </select>
-            </div>
-            <label class="check"><input id="lorem-classic" type="checkbox" checked> Start with “Lorem ipsum…”</label>
-            <button id="lorem-generate" type="button" class="btn btn-primary ml-auto">Regenerate</button>
-          </div>
-          <div>
-            <div class="mb-1.5 flex items-center justify-between">
-              <span id="lorem-stats" class="label mb-0">Output</span>
-              <button type="button" data-copy="#lorem-output"></button>
-            </div>
-            <textarea id="lorem-output" rows="14" readonly class="out resize-y font-sans leading-relaxed" aria-labelledby="lorem-stats"></textarea>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 6. Epoch ===================== -->
-      <section class="tool-panel" data-tool="epoch" aria-labelledby="h-epoch" hidden>
-        <header class="mb-5">
-          <h1 id="h-epoch" class="text-2xl font-semibold tracking-tight">Epoch / Unix Timestamp Converter</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Convert Unix timestamps to human-readable dates and back. Units are auto-detected.</p>
-        </header>
-        <div class="space-y-6">
-          <div class="card">
-            <span class="label">Current Unix time</span>
-            <div class="grid gap-3 sm:grid-cols-2">
-              <div class="flex items-center gap-2">
-                <div id="epoch-now-s" class="out flex-1 text-lg tabular-nums"></div>
-                <button type="button" data-copy="#epoch-now-s"></button>
-              </div>
-              <div class="flex items-center gap-2">
-                <div id="epoch-now-ms" class="out flex-1 text-lg tabular-nums"></div>
-                <button type="button" data-copy="#epoch-now-ms"></button>
-              </div>
-            </div>
-            <p class="mt-2 font-mono text-[11px] text-zinc-400">seconds · milliseconds</p>
-          </div>
-
-          <div class="card space-y-4">
-            <h2 class="text-base font-semibold">Timestamp → Date</h2>
-            <div class="flex flex-wrap gap-2">
-              <input id="epoch-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="e.g. 1700000000" class="field min-w-0 flex-1 font-mono">
-              <label for="epoch-unit" class="sr-only">Unit</label>
-              <select id="epoch-unit" class="field w-auto">
-                <option value="auto">Auto-detect</option>
-                <option value="s">Seconds</option>
-                <option value="ms">Milliseconds</option>
-                <option value="us">Microseconds</option>
-                <option value="ns">Nanoseconds</option>
-              </select>
-              <button id="epoch-use-now" type="button" class="btn btn-ghost">Now</button>
-            </div>
-            <p id="epoch-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
-            <div class="grid gap-3 md:grid-cols-2" id="epoch-results">
-              <div><span class="label">Local time</span><div class="flex items-center gap-2"><div id="epoch-local" class="out min-h-[2.75rem] flex-1 break-words"></div><button type="button" data-copy="#epoch-local"></button></div></div>
-              <div><span class="label">UTC</span><div class="flex items-center gap-2"><div id="epoch-utc" class="out min-h-[2.75rem] flex-1 break-words"></div><button type="button" data-copy="#epoch-utc"></button></div></div>
-              <div><span class="label">ISO 8601</span><div class="flex items-center gap-2"><div id="epoch-iso" class="out min-h-[2.75rem] flex-1 break-all"></div><button type="button" data-copy="#epoch-iso"></button></div></div>
-              <div><span class="label">Relative <span id="epoch-detected" class="normal-case tracking-normal text-zinc-400"></span></span><div class="flex items-center gap-2"><div id="epoch-relative" class="out min-h-[2.75rem] flex-1"></div><button type="button" data-copy="#epoch-relative"></button></div></div>
-            </div>
-          </div>
-
-          <div class="card space-y-4">
-            <h2 class="text-base font-semibold">Date → Timestamp</h2>
-            <div class="flex flex-wrap gap-2">
-              <label for="epoch-date" class="sr-only">Date and time</label>
-              <input id="epoch-date" type="datetime-local" step="1" class="field min-w-0 flex-1 font-mono">
-              <label for="epoch-tz" class="sr-only">Time zone</label>
-              <select id="epoch-tz" class="field w-auto">
-                <option value="local">Local time</option>
-                <option value="utc">UTC</option>
-              </select>
-              <button id="epoch-date-now" type="button" class="btn btn-ghost">Now</button>
-            </div>
-            <div class="grid gap-3 md:grid-cols-3">
-              <div><span class="label">Seconds</span><div class="flex items-center gap-2"><div id="epoch-out-s" class="out min-h-[2.75rem] flex-1 tabular-nums"></div><button type="button" data-copy="#epoch-out-s"></button></div></div>
-              <div><span class="label">Milliseconds</span><div class="flex items-center gap-2"><div id="epoch-out-ms" class="out min-h-[2.75rem] flex-1 tabular-nums"></div><button type="button" data-copy="#epoch-out-ms"></button></div></div>
-              <div><span class="label">ISO 8601 (UTC)</span><div class="flex items-center gap-2"><div id="epoch-out-iso" class="out min-h-[2.75rem] flex-1 break-all"></div><button type="button" data-copy="#epoch-out-iso"></button></div></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 7. Base64 ===================== -->
-      <section class="tool-panel" data-tool="base64" aria-labelledby="h-base64" hidden>
-        <header class="mb-5">
-          <h1 id="h-base64" class="text-2xl font-semibold tracking-tight">Base64 Encoder / Decoder</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Type in either box — the other updates instantly. Full UTF-8 support (emoji, accents, CJK).</p>
-        </header>
-        <div class="card space-y-4">
-          <div class="flex flex-wrap items-center gap-2">
-            <label class="check"><input id="b64-urlsafe" type="checkbox"> URL-safe (RFC 4648 §5, no padding)</label>
-            <button id="b64-clear" type="button" class="btn btn-ghost ml-auto py-2">Clear</button>
-          </div>
-          <div class="grid gap-4 lg:grid-cols-2">
-            <div>
-              <div class="mb-1.5 flex items-center justify-between">
-                <label for="b64-plain" class="label mb-0">Plain text <span id="b64-plain-stats" class="normal-case tracking-normal text-zinc-400"></span></label>
-                <button type="button" data-copy="#b64-plain"></button>
-              </div>
-              <textarea id="b64-plain" rows="12" spellcheck="false" placeholder="Hello, world! 👋" class="field resize-y font-mono text-[13px] leading-6"></textarea>
-            </div>
-            <div>
-              <div class="mb-1.5 flex items-center justify-between">
-                <label for="b64-encoded" class="label mb-0">Base64 <span id="b64-encoded-stats" class="normal-case tracking-normal text-zinc-400"></span></label>
-                <button type="button" data-copy="#b64-encoded"></button>
-              </div>
-              <textarea id="b64-encoded" rows="12" spellcheck="false" placeholder="SGVsbG8sIHdvcmxkISDwn5GL" class="field resize-y break-all font-mono text-[13px] leading-6"></textarea>
-            </div>
-          </div>
-          <p id="b64-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
-        </div>
-      </section>
-
-      <!-- ===================== Base64 image viewer ===================== -->
-      <section class="tool-panel" data-tool="base64-image" aria-labelledby="h-b64img" hidden>
-        <header class="mb-5">
-          <h1 id="h-b64img" class="text-2xl font-semibold tracking-tight">Base64 Image Viewer</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Paste a Base64 string or <code class="font-mono">data:image/…</code> URI to preview the image. The format is detected from the actual bytes, and the image is shown in a sandboxed <code class="font-mono">&lt;img&gt;</code>, so embedded scripts never run.</p>
-        </header>
-        <div class="card space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <label for="b64img-input" class="label mb-0">Base64 or data URI <span id="b64img-length" class="normal-case tracking-normal text-zinc-400"></span></label>
-            <div class="flex gap-2">
-              <button id="b64img-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
-              <button id="b64img-clear" type="button" class="btn btn-ghost py-2">Clear</button>
-            </div>
-          </div>
-          <textarea id="b64img-input" rows="6" spellcheck="false" autocomplete="off" placeholder="iVBORw0KGgoAAAANSUhEUgAA…  or  data:image/png;base64,…" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
-          <div id="b64img-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a Base64 image to preview it.</div>
-          <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div class="stat"><dt>Format</dt><dd id="b64img-format">—</dd></div>
-            <div class="stat"><dt>Dimensions</dt><dd id="b64img-dims">—</dd></div>
-            <div class="stat"><dt>File size</dt><dd id="b64img-size">—</dd></div>
-            <div class="stat"><dt>MIME type</dt><dd id="b64img-mime">—</dd></div>
-          </dl>
-          <div>
-            <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
-              <div class="flex flex-wrap gap-2">
-                <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-label="Preview background">
-                  <button type="button" role="radio" class="seg" data-b64img-bg="checker">Checker</button>
-                  <button type="button" role="radio" class="seg" data-b64img-bg="light">Light</button>
-                  <button type="button" role="radio" class="seg" data-b64img-bg="dark">Dark</button>
-                </div>
-                <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-label="Preview size">
-                  <button type="button" role="radio" class="seg" data-b64img-fit="fit">Fit</button>
-                  <button type="button" role="radio" class="seg" data-b64img-fit="actual">Actual size</button>
-                </div>
-              </div>
-              <a id="b64img-download" class="btn btn-ghost pointer-events-none py-2 opacity-50" aria-disabled="true">Download</a>
-            </div>
-            <div id="b64img-stage" class="preview-stage checker">
-              <img id="b64img-img" alt="Decoded image preview" class="hidden" decoding="async">
-              <p id="b64img-empty" class="text-sm text-zinc-400">The image will appear here.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 8. Case ===================== -->
-      <section class="tool-panel" data-tool="case" aria-labelledby="h-case" hidden>
-        <header class="mb-5">
-          <h1 id="h-case" class="text-2xl font-semibold tracking-tight">Case Converter</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Every format updates live as you type. Click copy on the one you need.</p>
-        </header>
-        <div class="card space-y-5">
-          <div>
-            <div class="mb-1.5 flex items-center justify-between">
-              <label for="case-input" class="label mb-0">Input</label>
-              <span id="case-stats" class="font-mono text-[11px] text-zinc-400"></span>
-            </div>
-            <textarea id="case-input" rows="5" placeholder="Type or paste text here…" class="field resize-y leading-relaxed"></textarea>
-          </div>
-          <div id="case-outputs" class="grid gap-3 md:grid-cols-2"></div>
-        </div>
-      </section>
-
-      <!-- ===================== Whitespace remover ===================== -->
-      <section class="tool-panel" data-tool="whitespace" aria-labelledby="h-ws" hidden>
-        <header class="mb-5">
-          <h1 id="h-ws" class="text-2xl font-semibold tracking-tight">Whitespace Remover</h1>
-          <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Strip spaces, tabs, line breaks and invisible characters from long text, such as keys, tokens or Base64 copied from documents and emails.</p>
-        </header>
-        <div class="card space-y-4">
-          <div class="flex flex-wrap items-center gap-2">
-            <label class="check"><input type="checkbox" data-ws="spaces" checked> Spaces</label>
-            <label class="check"><input type="checkbox" data-ws="tabs" checked> Tabs</label>
-            <label class="check"><input type="checkbox" data-ws="breaks" checked> Line breaks</label>
-            <label class="check"><input type="checkbox" data-ws="invisible" checked> Invisible characters <span class="text-xs text-zinc-400">(non-breaking, zero-width)</span></label>
-            <div class="ml-auto flex gap-2">
-              <button id="ws-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
-              <button id="ws-clear" type="button" class="btn btn-ghost py-2">Clear</button>
-            </div>
-          </div>
-          <div class="grid gap-4 lg:grid-cols-2">
-            <div>
-              <div class="mb-1.5 flex items-center justify-between">
-                <label for="ws-input" class="label mb-0">Input</label>
-                <span id="ws-in-stats" class="font-mono text-[11px] text-zinc-400"></span>
-              </div>
-              <textarea id="ws-input" rows="12" spellcheck="false" autocomplete="off" placeholder="Paste text with spaces, tabs or line breaks…" class="field resize-y break-all font-mono text-[13px] leading-6"></textarea>
-            </div>
-            <div class="min-w-0">
-              <div class="mb-1.5 flex items-center justify-between">
-                <span class="label mb-0">Result <span id="ws-out-stats" class="normal-case tracking-normal text-zinc-400"></span></span>
-                <button type="button" data-copy="#ws-output"></button>
-              </div>
-              <textarea id="ws-output" rows="12" readonly spellcheck="false" class="out resize-y break-all text-[13px] leading-6" aria-label="Result"></textarea>
-            </div>
-          </div>
-          <div id="ws-status" class="status" data-state="idle" role="status" aria-live="polite">Paste text to clean it.</div>
-        </div>
-      </section>
-
-      <!-- In-panel ad slot -->
-      <div class="ad-slot" style="min-height:250px" aria-label="Advertisement">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="1496479640" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      </div>
-    </main>
+    </div>
   </div>
 
-  <!-- ===================== Footer ===================== -->
-  <footer class="border-t border-zinc-200 dark:border-zinc-800">
-    <div class="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6">
-      <div class="ad-slot" aria-label="Advertisement">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="9574369507" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <main id="main">
+    <section class="relative overflow-hidden">
+      <div class="grid-bg absolute inset-0 -z-10" aria-hidden="true"></div>
+      <div class="mx-auto max-w-[90rem] px-4 pb-10 pt-14 text-center sm:px-6 sm:pt-20">
+        <span class="badge badge-safe animate-fade-up"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg> 100% local · nothing is ever uploaded</span>
+        <h1 class="mx-auto mt-5 max-w-3xl animate-fade-up text-4xl font-bold tracking-tight [animation-delay:60ms] sm:text-5xl lg:text-6xl">Developer tools that <span class="gradient-text">never see your data</span></h1>
+        <p class="mx-auto mt-5 max-w-2xl animate-fade-up text-base text-zinc-600 [animation-delay:120ms] dark:text-zinc-400 sm:text-lg">27 fast, free tools for JSON, security, encoding, images and Flutter. No sign-up, no uploads: everything runs right in your browser.</p>
+        <div class="relative mx-auto mt-8 max-w-xl animate-fade-up [animation-delay:180ms]">
+          <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          <input id="home-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools, e.g. json, jwt, flutter…" aria-label="Search tools" class="h-14 w-full rounded-2xl border border-zinc-200 bg-white/90 pl-12 pr-14 text-base shadow-lg shadow-indigo-500/5 transition placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 dark:border-zinc-800 dark:bg-zinc-900/80">
+          <span class="kbd absolute right-4 top-1/2 -translate-y-1/2">/</span>
+        </div>
       </div>
-      <div class="flex flex-col items-center justify-between gap-3 text-center text-xs text-zinc-500 sm:flex-row sm:text-left dark:text-zinc-400">
-        <p class="font-medium text-emerald-700 dark:text-emerald-400">🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.</p>
-        <nav class="flex items-center gap-4" aria-label="Footer">
-          <a href="flutter/index.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">Flutter tools</a>
-          <a href="about.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">About</a>
-          <a href="privacy.html" class="hover:text-zinc-900 dark:hover:text-zinc-100">Privacy Policy</a>
-          <span>&copy; <span id="year"></span> MicroTools</span>
-        </nav>
+    </section>
+    <section class="mx-auto max-w-[90rem] px-4 sm:px-6" aria-label="Tools">
+      <div class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="toolbar" aria-label="Categories">
+        <button type="button" class="cat-chip" data-cat="all" aria-pressed="true">All <span class="count">27</span></button>
+        <button type="button" class="cat-chip" data-cat="data" aria-pressed="false">Data & JSON <span class="count">4</span></button>
+        <button type="button" class="cat-chip" data-cat="security" aria-pressed="false">Security <span class="count">4</span></button>
+        <button type="button" class="cat-chip" data-cat="encoding" aria-pressed="false">Encoding <span class="count">2</span></button>
+        <button type="button" class="cat-chip" data-cat="text" aria-pressed="false">Text <span class="count">4</span></button>
+        <button type="button" class="cat-chip" data-cat="images" aria-pressed="false">Images <span class="count">3</span></button>
+        <button type="button" class="cat-chip" data-cat="testing" aria-pressed="false">Testing <span class="count">3</span></button>
+        <button type="button" class="cat-chip" data-cat="flutter" aria-pressed="false">Flutter <span class="count">7</span></button>
       </div>
+      <div id="home-grid" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <a href="tools/json-formatter.html" class="tool-card group" data-tool-card="json-formatter" data-category="data">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">JSON Formatter</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Validate, beautify and minify JSON with exact error locations.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Data & JSON</span>
+        </a>
+        <a href="tools/yaml-json-converter.html" class="tool-card group" data-tool-card="yaml-json-converter" data-category="data">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">YAML ⇄ JSON</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Convert YAML to JSON and back as you type.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Data & JSON</span>
+        </a>
+        <a href="tools/text-diff-checker.html" class="tool-card group" data-tool-card="text-diff-checker" data-category="data">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Diff Checker</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Compare two texts by line, word or character.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Data & JSON</span>
+        </a>
+        <a href="tools/unix-timestamp-converter.html" class="tool-card group" data-tool-card="unix-timestamp-converter" data-category="data">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Epoch Converter</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Unix timestamps to dates and back, any unit.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Data & JSON</span>
+        </a>
+        <a href="tools/jwt-decoder.html" class="tool-card group" data-tool-card="jwt-decoder" data-category="security">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">JWT Decoder</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Decode JWT claims and verify HS, RS, PS and ES signatures.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Security</span>
+        </a>
+        <a href="tools/hash-generator.html" class="tool-card group" data-tool-card="hash-generator" data-category="security">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Hash Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">MD5, SHA-1/256/384/512 and HMAC for text or files.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Security</span>
+        </a>
+        <a href="tools/rsa-key-generator.html" class="tool-card group" data-tool-card="rsa-key-generator" data-category="security">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">RSA Keys (PEM)</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">RSA keys in PEM; encrypt, decrypt, sign and verify.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Security</span>
+        </a>
+        <a href="tools/password-generator.html" class="tool-card group" data-tool-card="password-generator" data-category="security">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Password Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Strong random passwords with a strength meter.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Security</span>
+        </a>
+        <a href="tools/base64-encode-decode.html" class="tool-card group" data-tool-card="base64-encode-decode" data-category="encoding">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Base64 Encode/Decode</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Encode and decode Base64 with full UTF-8 support.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Encoding</span>
+        </a>
+        <a href="tools/url-encoder-decoder.html" class="tool-card group" data-tool-card="url-encoder-decoder" data-category="encoding">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">URL Encode &amp; Parse</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Percent-encode text and edit URL query parameters.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Encoding</span>
+        </a>
+        <a href="tools/regex-tester.html" class="tool-card group" data-tool-card="regex-tester" data-category="text">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Regex Tester</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Live regex matching, groups and replace preview.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Text</span>
+        </a>
+        <a href="tools/case-converter.html" class="tool-card group" data-tool-card="case-converter" data-category="text">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 19.5L7.5 6l4.5 13.5M4.5 15h6m4.5-2.25c0-1.243 1.007-2.25 2.25-2.25s2.25 1.007 2.25 2.25v6.75m0-3.75h-2.625a1.875 1.875 0 100 3.75H19.5"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Case Converter</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">UPPER, lower, Title, camelCase and Sentence case.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Text</span>
+        </a>
+        <a href="tools/whitespace-remover.html" class="tool-card group" data-tool-card="whitespace-remover" data-category="text">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5M8.25 4.5l-3 15m13.5-15l-3 15"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Whitespace Remover</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Strip spaces, tabs, line breaks and invisible characters.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Text</span>
+        </a>
+        <a href="tools/lorem-ipsum-generator.html" class="tool-card group" data-tool-card="lorem-ipsum-generator" data-category="text">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Lorem Ipsum</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Placeholder text by paragraphs, sentences or words.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Text</span>
+        </a>
+        <a href="tools/image-resizer.html" class="tool-card group" data-tool-card="image-resizer" data-category="images">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Image Resizer</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Resize and compress to JPEG, WebP or PNG, no upload.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Images</span>
+        </a>
+        <a href="tools/qr-code-generator.html" class="tool-card group" data-tool-card="qr-code-generator" data-category="images">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">QR Code Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">QR codes for text, links and Wi-Fi, as PNG or SVG.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Images</span>
+        </a>
+        <a href="tools/base64-image-viewer.html" class="tool-card group" data-tool-card="base64-image-viewer" data-category="images">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Base64 Image Viewer</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Preview Base64 and data: URI images safely.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Images</span>
+        </a>
+        <a href="tools/uuid-generator.html" class="tool-card group" data-tool-card="uuid-generator" data-category="testing">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">UUID Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Generate RFC 4122 version 4 UUIDs in bulk.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Testing</span>
+        </a>
+        <a href="tools/test-credit-card-generator.html" class="tool-card group" data-tool-card="test-credit-card-generator" data-category="testing">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zM16.5 12.75h1.5"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Test Card Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Luhn-valid test card numbers for every major brand.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Testing</span>
+        </a>
+        <a href="tools/luhn-validator.html" class="tool-card group" data-tool-card="luhn-validator" data-category="testing">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Luhn Validator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Check credit card and IMEI numbers as you type.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Testing</span>
+        </a>
+        <a href="tools/json-to-dart.html" class="tool-card group" data-tool-card="json-to-dart" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">JSON to Dart</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">JSON to Dart models: plain, Equatable, json_serializable, freezed.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+        <a href="tools/env-to-dart.html" class="tool-card group" data-tool-card="env-to-dart" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">.env to Dart</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">.env to an obfuscated Dart class or --dart-define setup.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+        <a href="tools/flutter-assets-generator.html" class="tool-card group" data-tool-card="flutter-assets-generator" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Assets to Dart</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Drop your assets folder to get assets.dart and pubspec entries.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+        <a href="tools/flutter-app-icon-generator.html" class="tool-card group" data-tool-card="flutter-app-icon-generator" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">App Icon Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Every Android, iOS and web icon size from one image.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+        <a href="tools/flutter-color-converter.html" class="tool-card group" data-tool-card="flutter-color-converter" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">Color to Flutter</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">HEX, RGB and HSL to Flutter Color code and MaterialColor.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+        <a href="tools/flutter-colorscheme-generator.html" class="tool-card group" data-tool-card="flutter-colorscheme-generator" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">ColorScheme Generator</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">Exact Material 3 schemes from ColorScheme.fromSeed.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+        <a href="tools/flutter-arb-converter.html" class="tool-card group" data-tool-card="flutter-arb-converter" data-category="flutter">
+          <div class="flex items-center justify-between"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802"/></svg></span><svg class="h-4 w-4 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+          <div><h2 class="font-semibold text-zinc-900 dark:text-zinc-100">ARB Converter</h2><p class="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">CSV or JSON to .arb files for gen-l10n, and back.</p></div>
+          <span class="mt-auto text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Flutter</span>
+        </a>
+      </div>
+      <p id="home-empty" class="py-16 text-center text-sm text-zinc-500" hidden>No tools match. Try a different word, or <button type="button" class="font-medium text-indigo-600 dark:text-indigo-400" data-palette-open>browse all tools</button>.</p>
+    </section>
+    <section class="mx-auto mt-12 max-w-[90rem] px-4 sm:px-6"><div class="ad-slot ad-content " aria-label="Advertisement">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="1496479640" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div></section>
+    <section class="mx-auto mt-16 max-w-[90rem] px-4 sm:px-6" aria-labelledby="why">
+      <h2 id="why" class="text-center text-2xl font-bold sm:text-3xl">Why developers use MicroTools</h2>
+      <div class="mt-8 grid gap-4 md:grid-cols-3">
+        <div class="feature"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg></span><h3 class="mt-4 font-semibold">Private by design</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">Every tool runs in your browser. Tokens, keys, JSON and images are processed on your device and never uploaded. You can check it in your browser's Network tab.</p></div>
+        <div class="feature"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></span><h3 class="mt-4 font-semibold">Instant results</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">No servers, no waiting. Results update as you type, and every output has a one-click copy button.</p></div>
+        <div class="feature"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg></span><h3 class="mt-4 font-semibold">Free, no sign-up</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">No accounts, no paywalls and no installs. Supported by unobtrusive ads that never sit on top of the tools.</p></div>
+      </div>
+    </section>
+    <section class="mx-auto mt-16 max-w-[90rem] px-4 sm:px-6">
+      <div class="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-transparent to-violet-500/10 p-8 sm:p-10">
+        <div class="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
+          <div>
+            <h2 class="text-2xl font-bold">Built for Flutter developers</h2>
+            <p class="mt-2 max-w-2xl text-zinc-600 dark:text-zinc-400">JSON to Dart models, Material 3 color schemes that match <span class="font-mono text-sm">ColorScheme.fromSeed</span> exactly, app icons for every platform, ARB localization files and more.</p>
+          </div>
+          <a href="flutter/index.html" class="btn btn-primary px-5">Explore Flutter tools <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="mt-16 border-t border-zinc-200 dark:border-zinc-800">
+    <div class="mx-auto max-w-[90rem] space-y-10 px-4 py-10 sm:px-6">
+      <div class="ad-slot ad-footer " aria-label="Advertisement">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="9574369507" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+      </div>
+      <div class="grid gap-8 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+        <div class="space-y-3">
+          <a href="index.html" class="flex items-center gap-2.5"><span class="logo-mark"><svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085"/></svg></span><span class="font-semibold">MicroTools</span></a>
+          <p class="max-w-sm text-sm font-medium text-emerald-700 dark:text-emerald-400">🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.</p>
+        </div>
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Categories</p>
+          <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400"><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="index.html#category=data">Data & JSON</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="index.html#category=security">Security</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="index.html#category=encoding">Encoding</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="index.html#category=text">Text</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="index.html#category=images">Images</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="index.html#category=testing">Testing</a></li></ul>
+        </div>
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Flutter</p>
+          <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400"><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="tools/json-to-dart.html">JSON to Dart</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="tools/env-to-dart.html">.env to Dart</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="tools/flutter-assets-generator.html">Assets to Dart</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="tools/flutter-app-icon-generator.html">App Icon Generator</a></li><li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="tools/flutter-color-converter.html">Color to Flutter</a></li><li><a class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400" href="flutter/index.html">All Flutter tools →</a></li></ul>
+        </div>
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">MicroTools</p>
+          <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="about.html">About</a></li>
+            <li><a class="hover:text-zinc-900 dark:hover:text-zinc-100" href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="text-xs text-zinc-500">&copy; <span id="year"></span> MicroTools. Free tools, supported by ads.</p>
     </div>
   </footer>
-
-  <div id="sr-announcer" class="sr-only" aria-live="polite"></div>
-
-  <script src="assets/js/core.js"></script>
-  <script src="assets/js/tools.js"></script>
+  <div id="palette" class="fixed inset-0 z-50 flex items-start justify-center bg-zinc-950/50 px-4 pt-[12vh] backdrop-blur-sm" hidden>
+    <div class="w-full max-w-xl animate-scale-in overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900" role="dialog" aria-modal="true" aria-label="Search tools">
+      <div class="flex items-center gap-3 border-b border-zinc-200 px-4 dark:border-zinc-800">
+        <svg class="h-5 w-5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+        <input id="palette-input" type="text" autocomplete="off" spellcheck="false" placeholder="Search 27 tools…" class="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-zinc-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0" role="combobox" aria-expanded="true" aria-controls="palette-list">
+        <span class="kbd">Esc</span>
+      </div>
+      <ul id="palette-list" class="thin-scroll max-h-[50vh] overflow-y-auto p-2" role="listbox"></ul>
+      <div class="flex gap-4 border-t border-zinc-200 px-4 py-2.5 text-[11px] text-zinc-500 dark:border-zinc-800"><span><span class="kbd">↑</span> <span class="kbd">↓</span> to move</span><span><span class="kbd">Enter</span> to open</span></div>
+    </div>
+  </div>
+  <script src="assets/js/pages/home.js"></script>
 </body>
 </html>

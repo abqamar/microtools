@@ -1,0 +1,53 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <label for="env-class" class="label">Class name</label>
+      <input id="env-class" type="text" value="Env" autocomplete="off" spellcheck="false" placeholder="Env" class="field w-44 font-mono">
+    </div>
+    <div>
+      <span class="label" id="env-mode-label">Output</span>
+      <div class="inline-flex flex-wrap gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-labelledby="env-mode-label">
+        <button type="button" role="radio" class="seg" data-env-mode="obfuscated">Obfuscated class</button>
+        <button type="button" role="radio" class="seg" data-env-mode="define">--dart-define</button>
+      </div>
+    </div>
+    <button id="env-sample" type="button" class="btn btn-ghost ml-auto py-2">Load sample</button>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <label class="check"><input id="env-infer" type="checkbox" checked> Infer types (bool, int, double)</label>
+  </div>
+  <div class="flex gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300" role="note">
+    <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+    <p id="env-note"></p>
+  </div>
+  <div id="env-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a .env file to generate Dart code.</div>
+  <div class="grid gap-4 xl:grid-cols-2">
+    <div>
+      <label for="env-input" class="label">.env</label>
+      <textarea id="env-input" rows="18" spellcheck="false" autocomplete="off" placeholder="API_KEY=your-key-here" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Dart <span id="env-filename" class="normal-case tracking-normal text-zinc-400"></span></span>
+        <button type="button" data-copy="#env-output"></button>
+      </div>
+      <pre id="env-output" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Generated Dart code"></pre>
+    </div>
+  </div>
+  <div class="grid gap-4 xl:grid-cols-2">
+    <div id="env-json-wrap" class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">dart_defines.json</span>
+        <button type="button" data-copy="#env-json"></button>
+      </div>
+      <pre id="env-json" class="out max-h-64 overflow-auto whitespace-pre text-xs leading-6" data-raw="" tabindex="0" aria-label="dart_defines.json"></pre>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Setup</span>
+        <button type="button" data-copy="#env-setup"></button>
+      </div>
+      <pre id="env-setup" class="out overflow-x-auto whitespace-pre text-xs leading-6"></pre>
+    </div>
+  </div>
+</div>

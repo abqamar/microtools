@@ -1,0 +1,38 @@
+<div class="card grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
+  <div class="space-y-4">
+    <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-label="QR content type">
+      <button type="button" role="radio" class="seg" data-qr-type="text">Text / URL</button>
+      <button type="button" role="radio" class="seg" data-qr-type="wifi">Wi-Fi</button>
+    </div>
+    <div id="qr-text-wrap">
+      <label for="qr-text" class="label">Text or URL</label>
+      <textarea id="qr-text" rows="4" spellcheck="false" class="field resize-y">https://example.com</textarea>
+    </div>
+    <div id="qr-wifi-wrap" class="grid gap-3 sm:grid-cols-2" hidden>
+      <div><label for="qr-ssid" class="label">Network name (SSID)</label><input id="qr-ssid" type="text" spellcheck="false" class="field" value="MyNetwork"></div>
+      <div><label for="qr-pass" class="label">Password</label><input id="qr-pass" type="text" spellcheck="false" autocomplete="off" class="field font-mono"></div>
+      <div>
+        <label for="qr-enc" class="label">Security</label>
+        <select id="qr-enc" class="field"><option value="WPA">WPA / WPA2 / WPA3</option><option value="WEP">WEP</option><option value="nopass">None (open)</option></select>
+      </div>
+      <label class="check self-end"><input id="qr-hidden" type="checkbox"> Hidden network</label>
+    </div>
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div>
+        <label for="qr-ecc" class="label">Error correction</label>
+        <select id="qr-ecc" class="field"><option value="L">Low (7%)</option><option value="M" selected>Medium (15%)</option><option value="Q">Quartile (25%)</option><option value="H">High (30%)</option></select>
+      </div>
+      <div><label for="qr-size" class="label">Size (px)</label><input id="qr-size" type="number" min="64" max="2048" step="32" value="512" class="field font-mono"></div>
+      <div><label for="qr-fg" class="label">Foreground</label><input id="qr-fg" type="color" value="#000000" class="h-11 w-full cursor-pointer rounded-xl border border-zinc-300 bg-transparent p-1 dark:border-zinc-700"></div>
+      <div><label for="qr-bg" class="label">Background</label><input id="qr-bg" type="color" value="#ffffff" class="h-11 w-full cursor-pointer rounded-xl border border-zinc-300 bg-transparent p-1 dark:border-zinc-700"></div>
+    </div>
+    <div id="qr-status" class="status" data-state="idle" role="status" aria-live="polite"></div>
+  </div>
+  <div class="flex flex-col items-center gap-3">
+    <canvas id="qr-canvas" width="256" height="256" class="h-64 w-64 rounded-xl border border-zinc-200 dark:border-zinc-800" aria-label="QR code preview"></canvas>
+    <div class="flex gap-2">
+      <button id="qr-png" type="button" class="btn btn-primary py-2">Download PNG</button>
+      <button id="qr-svg" type="button" class="btn btn-ghost py-2">Download SVG</button>
+    </div>
+  </div>
+</div>

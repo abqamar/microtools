@@ -1,0 +1,28 @@
+<div class="card space-y-5">
+  <div>
+    <label for="luhn-input" class="label">Card or IMEI number</label>
+    <input id="luhn-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="40" placeholder="e.g. 4111 1111 1111 1111" class="field font-mono text-lg tracking-wider">
+    <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+      <span>Try:</span>
+      <button type="button" class="chip" data-luhn-sample="4111111111111111">Visa</button>
+      <button type="button" class="chip" data-luhn-sample="5555555555554444">Mastercard</button>
+      <button type="button" class="chip" data-luhn-sample="378282246310005">Amex</button>
+      <button type="button" class="chip" data-luhn-sample="490154203237518">IMEI</button>
+      <button type="button" class="chip" data-luhn-sample="4111111111111112">Invalid</button>
+    </div>
+  </div>
+  <div id="luhn-status" class="status" data-state="idle" role="status" aria-live="polite">Start typing a number to validate it.</div>
+  <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div class="stat"><dt>Detected type</dt><dd id="luhn-type">—</dd></div>
+    <div class="stat"><dt>Digits</dt><dd id="luhn-length">0</dd></div>
+    <div class="stat"><dt>Check digit</dt><dd id="luhn-check">—</dd></div>
+    <div class="stat"><dt>Expected check digit</dt><dd id="luhn-expected">—</dd></div>
+  </dl>
+  <div>
+    <div class="mb-1.5 flex items-center justify-between">
+      <span class="label mb-0">Formatted</span>
+      <button type="button" data-copy="#luhn-formatted"></button>
+    </div>
+    <div id="luhn-formatted" class="out min-h-[2.75rem] break-all"></div>
+  </div>
+</div>

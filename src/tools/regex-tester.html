@@ -1,0 +1,43 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div class="min-w-[16rem] flex-1">
+      <label for="regex-pattern" class="label">Pattern</label>
+      <div class="flex items-center gap-1 font-mono">
+        <span class="text-zinc-400">/</span>
+        <input id="regex-pattern" type="text" spellcheck="false" autocomplete="off" value="(\w+)@(\w+)\.com" class="field font-mono">
+        <span class="text-zinc-400">/</span>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-1.5" role="group" aria-label="Flags">
+      <label class="check px-2.5 py-2 font-mono" title="global: find all matches"><input type="checkbox" data-regex-flag="g" checked> g</label>
+      <label class="check px-2.5 py-2 font-mono" title="ignore case"><input type="checkbox" data-regex-flag="i"> i</label>
+      <label class="check px-2.5 py-2 font-mono" title="multiline: ^ and $ match at line breaks"><input type="checkbox" data-regex-flag="m"> m</label>
+      <label class="check px-2.5 py-2 font-mono" title="dotAll: . matches line breaks"><input type="checkbox" data-regex-flag="s"> s</label>
+      <label class="check px-2.5 py-2 font-mono" title="unicode"><input type="checkbox" data-regex-flag="u"> u</label>
+    </div>
+  </div>
+  <div>
+    <label for="regex-text" class="label">Test string</label>
+    <textarea id="regex-text" rows="6" spellcheck="false" class="field resize-y font-mono text-[13px] leading-6">Contact ada@example.com or grace@navy.com for details.
+Invalid: bob@site.org</textarea>
+  </div>
+  <div id="regex-status" class="status" data-state="idle" role="status" aria-live="polite"></div>
+  <div>
+    <span class="label">Matches highlighted</span>
+    <pre id="regex-highlight" class="out max-h-64 min-h-[3rem] overflow-auto whitespace-pre-wrap break-words text-[13px] leading-6"></pre>
+  </div>
+  <div id="regex-groups" class="overflow-x-auto"></div>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div>
+      <label for="regex-replace" class="label">Replace with <span class="normal-case tracking-normal text-zinc-400">($1, $2, $&lt;name&gt;)</span></label>
+      <input id="regex-replace" type="text" spellcheck="false" value="$1 at $2" class="field font-mono">
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Result</span>
+        <button type="button" data-copy="#regex-replaced"></button>
+      </div>
+      <pre id="regex-replaced" class="out max-h-48 min-h-[2.75rem] overflow-auto whitespace-pre-wrap break-words text-[13px] leading-6"></pre>
+    </div>
+  </div>
+</div>

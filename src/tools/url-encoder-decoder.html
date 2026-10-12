@@ -1,0 +1,48 @@
+<div class="space-y-6">
+  <div class="card space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 class="text-base font-semibold">Encode / decode</h2>
+      <select id="url-enc-mode" class="field w-auto py-2" aria-label="Encoding mode">
+        <option value="component">Component (encodeURIComponent)</option>
+        <option value="full">Full URL (encodeURI)</option>
+      </select>
+    </div>
+    <div class="grid gap-4 lg:grid-cols-2">
+      <div>
+        <div class="mb-1.5 flex items-center justify-between">
+          <label for="url-plain" class="label mb-0">Decoded</label>
+          <button type="button" data-copy="#url-plain"></button>
+        </div>
+        <textarea id="url-plain" rows="5" spellcheck="false" placeholder="name=Ada Lovelace&amp;city=Zürich" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+      </div>
+      <div>
+        <div class="mb-1.5 flex items-center justify-between">
+          <label for="url-encoded" class="label mb-0">Encoded</label>
+          <button type="button" data-copy="#url-encoded"></button>
+        </div>
+        <textarea id="url-encoded" rows="5" spellcheck="false" placeholder="name%3DAda%20Lovelace%26city%3DZ%C3%BCrich" class="field resize-y break-all font-mono text-[13px] leading-6"></textarea>
+      </div>
+    </div>
+    <p id="url-enc-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
+  </div>
+  <div class="card space-y-4">
+    <h2 class="text-base font-semibold">Parse a URL</h2>
+    <input id="url-input" type="text" spellcheck="false" autocomplete="off" placeholder="https://example.com/search?q=flutter&amp;page=2#results" class="field font-mono">
+    <p id="url-parse-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
+    <dl id="url-parts" class="grid grid-cols-2 gap-3 sm:grid-cols-4"></dl>
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Query parameters</span>
+        <button id="url-add-param" type="button" class="chip">+ Add parameter</button>
+      </div>
+      <div id="url-params" class="space-y-2"></div>
+    </div>
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Rebuilt URL</span>
+        <button type="button" data-copy="#url-rebuilt"></button>
+      </div>
+      <div id="url-rebuilt" class="out min-h-[2.75rem] break-all"></div>
+    </div>
+  </div>
+</div>

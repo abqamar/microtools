@@ -1,0 +1,29 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <span class="label" id="hash-src-label">Input</span>
+      <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-labelledby="hash-src-label">
+        <button type="button" role="radio" class="seg" data-hash-src="text">Text</button>
+        <button type="button" role="radio" class="seg" data-hash-src="file">File</button>
+      </div>
+    </div>
+    <div>
+      <label for="hash-encoding" class="label">Output</label>
+      <select id="hash-encoding" class="field w-auto">
+        <option value="hex">Hex (lowercase)</option>
+        <option value="HEX">Hex (uppercase)</option>
+        <option value="base64">Base64</option>
+      </select>
+    </div>
+    <label class="check"><input id="hash-hmac" type="checkbox"> HMAC</label>
+    <input id="hash-key" type="text" spellcheck="false" autocomplete="off" placeholder="HMAC secret key" class="field w-56 font-mono" hidden aria-label="HMAC secret key">
+  </div>
+  <textarea id="hash-text" rows="5" spellcheck="false" placeholder="Text to hash" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+  <div id="hash-file-wrap" class="dropzone" data-drag="false" hidden>
+    <p class="text-sm font-medium">Drop a file here</p>
+    <p class="text-xs text-zinc-500 dark:text-zinc-400">or <button id="hash-pick" type="button" class="font-medium text-indigo-600 underline underline-offset-2 dark:text-indigo-400">choose a file</button>. It is read locally and never uploaded.</p>
+    <p id="hash-file-name" class="font-mono text-xs text-zinc-500"></p>
+    <input id="hash-file" type="file" hidden>
+  </div>
+  <div id="hash-results" class="space-y-2"></div>
+</div>

@@ -1,0 +1,30 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-center gap-2">
+    <label for="json-indent" class="sr-only">Indentation</label>
+    <select id="json-indent" class="field w-auto py-2">
+      <option value="2">2 spaces</option>
+      <option value="4">4 spaces</option>
+      <option value="tab">Tabs</option>
+      <option value="min">Minified</option>
+    </select>
+    <button id="json-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+    <button id="json-clear" type="button" class="btn btn-ghost py-2">Clear</button>
+  </div>
+  <div id="json-status" class="status" data-state="idle" role="status" aria-live="polite">
+    <span id="json-status-text" class="flex-1">Paste or type JSON to validate it.</span>
+    <button id="json-goto" type="button" class="chip hidden">Go to error</button>
+  </div>
+  <div class="grid gap-4 xl:grid-cols-2">
+    <div>
+      <label for="json-input" class="label">Input</label>
+      <textarea id="json-input" rows="18" spellcheck="false" autocomplete="off" placeholder='{"paste": "your JSON here"}' class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Output</span>
+        <button type="button" data-copy="#json-output"></button>
+      </div>
+      <pre id="json-output" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Formatted JSON output"></pre>
+    </div>
+  </div>
+</div>

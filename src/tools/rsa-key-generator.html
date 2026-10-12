@@ -1,0 +1,106 @@
+<div class="space-y-6">
+  <div class="card space-y-4">
+    <div class="flex flex-wrap items-end gap-3">
+      <div>
+        <label for="rsa-size" class="label">Key size</label>
+        <select id="rsa-size" class="field w-auto">
+          <option value="2048">2048-bit</option>
+          <option value="3072">3072-bit</option>
+          <option value="4096">4096-bit</option>
+        </select>
+      </div>
+      <div>
+        <label for="rsa-hash" class="label">Hash</label>
+        <select id="rsa-hash" class="field w-auto">
+          <option value="SHA-256">SHA-256</option>
+          <option value="SHA-384">SHA-384</option>
+          <option value="SHA-512">SHA-512</option>
+        </select>
+      </div>
+      <div>
+        <label for="rsa-scheme" class="label">Signature scheme</label>
+        <select id="rsa-scheme" class="field w-auto">
+          <option value="pkcs1">RSASSA-PKCS1-v1_5</option>
+          <option value="pss">RSA-PSS</option>
+        </select>
+      </div>
+      <button id="rsa-generate" type="button" class="btn btn-primary ml-auto">Generate key pair</button>
+    </div>
+    <div id="rsa-key-status" class="status" data-state="idle" role="status" aria-live="polite">Generate a key pair or paste your own PEM keys.</div>
+    <div class="grid gap-4 lg:grid-cols-2">
+      <div>
+        <div class="mb-1.5 flex items-center justify-between">
+          <label for="rsa-public" class="label mb-0">Public key (PEM)</label>
+          <button type="button" data-copy="#rsa-public"></button>
+        </div>
+        <textarea id="rsa-public" rows="9" spellcheck="false" autocomplete="off" placeholder="-----BEGIN PUBLIC KEY-----" class="field resize-y font-mono text-xs leading-5"></textarea>
+      </div>
+      <div>
+        <div class="mb-1.5 flex items-center justify-between">
+          <label for="rsa-private" class="label mb-0">Private key (PEM)</label>
+          <button type="button" data-copy="#rsa-private"></button>
+        </div>
+        <textarea id="rsa-private" rows="9" spellcheck="false" autocomplete="off" placeholder="-----BEGIN PRIVATE KEY-----" class="field resize-y font-mono text-xs leading-5"></textarea>
+      </div>
+    </div>
+    <p class="text-xs text-zinc-500 dark:text-zinc-400">Keys are generated with the Web Crypto API on your device and are never stored or sent anywhere. One key pair is used for both encryption and signing here for convenience; production systems usually keep separate keys for each.</p>
+  </div>
+
+  <div class="card space-y-4">
+    <h2 class="text-base font-semibold">Using the public key</h2>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <label for="rsa-enc-input" class="label mb-0">Encrypt message</label>
+          <span id="rsa-enc-count" class="font-mono text-[11px] text-zinc-400"></span>
+        </div>
+        <textarea id="rsa-enc-input" rows="4" spellcheck="false" placeholder="Secret message" class="field resize-y"></textarea>
+        <div class="flex items-center justify-between">
+          <span class="label mb-0">Ciphertext (Base64, RSA-OAEP)</span>
+          <div class="flex gap-2">
+            <button id="rsa-enc-send" type="button" class="chip">Send to Decrypt ↓</button>
+            <button type="button" data-copy="#rsa-enc-output"></button>
+          </div>
+        </div>
+        <textarea id="rsa-enc-output" rows="4" readonly spellcheck="false" class="out resize-y break-all text-xs leading-5" aria-label="Ciphertext"></textarea>
+        <p id="rsa-enc-status" class="text-xs text-zinc-500 dark:text-zinc-400" role="status"></p>
+      </div>
+      <div class="space-y-3">
+        <label for="rsa-ver-message" class="label mb-0">Verify signature: message</label>
+        <textarea id="rsa-ver-message" rows="4" spellcheck="false" placeholder="The signed message" class="field resize-y"></textarea>
+        <label for="rsa-ver-signature" class="label mb-0">Signature (Base64)</label>
+        <textarea id="rsa-ver-signature" rows="4" spellcheck="false" placeholder="Paste the signature" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
+        <div id="rsa-ver-status" class="status" data-state="idle" role="status" aria-live="polite">Enter a message and its signature.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card space-y-4">
+    <h2 class="text-base font-semibold">Using the private key</h2>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div class="space-y-3">
+        <label for="rsa-dec-input" class="label mb-0">Decrypt message: ciphertext (Base64)</label>
+        <textarea id="rsa-dec-input" rows="4" spellcheck="false" placeholder="Paste RSA-OAEP ciphertext" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
+        <div class="flex items-center justify-between">
+          <span class="label mb-0">Plaintext</span>
+          <button type="button" data-copy="#rsa-dec-output"></button>
+        </div>
+        <textarea id="rsa-dec-output" rows="4" readonly class="out resize-y" aria-label="Decrypted plaintext"></textarea>
+        <p id="rsa-dec-status" class="text-xs text-zinc-500 dark:text-zinc-400" role="status"></p>
+      </div>
+      <div class="space-y-3">
+        <label for="rsa-sign-input" class="label mb-0">Sign message</label>
+        <textarea id="rsa-sign-input" rows="4" spellcheck="false" placeholder="Message to sign" class="field resize-y"></textarea>
+        <div class="flex items-center justify-between">
+          <span class="label mb-0">Signature (Base64)</span>
+          <div class="flex gap-2">
+            <button id="rsa-sign-send" type="button" class="chip">Send to Verify ↑</button>
+            <button type="button" data-copy="#rsa-sign-output"></button>
+          </div>
+        </div>
+        <textarea id="rsa-sign-output" rows="4" readonly spellcheck="false" class="out resize-y break-all text-xs leading-5" aria-label="Signature"></textarea>
+        <p id="rsa-sign-status" class="text-xs text-zinc-500 dark:text-zinc-400" role="status"></p>
+      </div>
+    </div>
+  </div>
+</div>

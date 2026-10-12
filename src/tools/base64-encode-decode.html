@@ -1,0 +1,23 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-center gap-2">
+    <label class="check"><input id="b64-urlsafe" type="checkbox"> URL-safe (RFC 4648 §5, no padding)</label>
+    <button id="b64-clear" type="button" class="btn btn-ghost ml-auto py-2">Clear</button>
+  </div>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <label for="b64-plain" class="label mb-0">Plain text <span id="b64-plain-stats" class="normal-case tracking-normal text-zinc-400"></span></label>
+        <button type="button" data-copy="#b64-plain"></button>
+      </div>
+      <textarea id="b64-plain" rows="12" spellcheck="false" placeholder="Hello, world! 👋" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <label for="b64-encoded" class="label mb-0">Base64 <span id="b64-encoded-stats" class="normal-case tracking-normal text-zinc-400"></span></label>
+        <button type="button" data-copy="#b64-encoded"></button>
+      </div>
+      <textarea id="b64-encoded" rows="12" spellcheck="false" placeholder="SGVsbG8sIHdvcmxkISDwn5GL" class="field resize-y break-all font-mono text-[13px] leading-6"></textarea>
+    </div>
+  </div>
+  <p id="b64-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
+</div>

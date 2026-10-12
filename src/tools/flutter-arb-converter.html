@@ -1,0 +1,32 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div class="inline-flex flex-wrap gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-label="Conversion">
+      <button type="button" role="radio" class="seg" data-arb-mode="csv">CSV → ARB</button>
+      <button type="button" role="radio" class="seg" data-arb-mode="json">JSON → ARB</button>
+      <button type="button" role="radio" class="seg" data-arb-mode="arb">ARB → CSV</button>
+    </div>
+    <div id="arb-prefix-wrap"><label for="arb-prefix" class="label">File prefix</label><input id="arb-prefix" type="text" value="app" spellcheck="false" class="field w-28 font-mono"></div>
+    <div id="arb-template-wrap"><label for="arb-template" class="label">Template locale</label><select id="arb-template" class="field w-auto"></select></div>
+    <div id="arb-locale-wrap" hidden><label for="arb-locale" class="label">Locale</label><input id="arb-locale" type="text" value="en" spellcheck="false" class="field w-24 font-mono"></div>
+    <div class="ml-auto flex gap-2">
+      <button id="arb-pick" type="button" class="btn btn-ghost py-2" hidden>Choose .arb files</button>
+      <button id="arb-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+    </div>
+    <input id="arb-files" type="file" accept=".arb,.json,application/json" multiple hidden>
+  </div>
+  <div>
+    <label for="arb-input" id="arb-input-label" class="label">CSV</label>
+    <textarea id="arb-input" rows="10" spellcheck="false" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+  </div>
+  <div id="arb-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a CSV with a key column and one column per locale.</div>
+  <div class="min-w-0">
+    <div class="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+      <select id="arb-file-select" class="field w-auto py-1.5 font-mono text-xs" aria-label="Output file"></select>
+      <div class="flex gap-2">
+        <button id="arb-download" type="button" class="chip">Download</button>
+        <button type="button" data-copy="#arb-output"></button>
+      </div>
+    </div>
+    <pre id="arb-output" class="out max-h-[28rem] min-h-[6rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0"></pre>
+  </div>
+</div>

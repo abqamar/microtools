@@ -1,0 +1,44 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <label for="dart-class" class="label">Root class name</label>
+      <input id="dart-class" type="text" value="User" autocomplete="off" spellcheck="false" placeholder="Root" class="field w-44 font-mono">
+    </div>
+    <div>
+      <span class="label" id="dart-style-label">Style</span>
+      <div class="inline-flex flex-wrap gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-labelledby="dart-style-label">
+        <button type="button" role="radio" class="seg" data-dart-style="plain">Plain</button>
+        <button type="button" role="radio" class="seg" data-dart-style="equatable">Equatable</button>
+        <button type="button" role="radio" class="seg" data-dart-style="json_serializable">json_serializable</button>
+        <button type="button" role="radio" class="seg" data-dart-style="freezed">freezed</button>
+      </div>
+    </div>
+    <button id="dart-sample" type="button" class="btn btn-ghost ml-auto py-2">Load sample</button>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <label class="check"><input id="dart-nullable" type="checkbox"> Make all fields nullable</label>
+    <label class="check" id="dart-copywith-wrap"><input id="dart-copywith" type="checkbox" checked> copyWith()</label>
+    <label class="check" id="dart-tostring-wrap"><input id="dart-tostring" type="checkbox"> <span id="dart-tostring-text">toString()</span></label>
+  </div>
+  <div id="dart-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a JSON object to generate Dart models.</div>
+  <div class="grid gap-4 xl:grid-cols-2">
+    <div>
+      <label for="dart-input" class="label">JSON</label>
+      <textarea id="dart-input" rows="20" spellcheck="false" autocomplete="off" placeholder='{"id": 1, "name": "Ada"}' class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Dart <span id="dart-filename" class="normal-case tracking-normal text-zinc-400"></span></span>
+        <button type="button" data-copy="#dart-output"></button>
+      </div>
+      <pre id="dart-output" class="out h-[30.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Generated Dart code"></pre>
+    </div>
+  </div>
+  <div>
+    <div class="mb-1.5 flex items-center justify-between">
+      <span class="label mb-0">Setup</span>
+      <button type="button" data-copy="#dart-setup" id="dart-setup-copy"></button>
+    </div>
+    <pre id="dart-setup" class="out overflow-x-auto whitespace-pre text-xs leading-6"></pre>
+  </div>
+</div>

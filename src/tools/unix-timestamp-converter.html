@@ -1,0 +1,58 @@
+<div class="space-y-6">
+  <div class="card">
+    <span class="label">Current Unix time</span>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <div class="flex items-center gap-2">
+        <div id="epoch-now-s" class="out flex-1 text-lg tabular-nums"></div>
+        <button type="button" data-copy="#epoch-now-s"></button>
+      </div>
+      <div class="flex items-center gap-2">
+        <div id="epoch-now-ms" class="out flex-1 text-lg tabular-nums"></div>
+        <button type="button" data-copy="#epoch-now-ms"></button>
+      </div>
+    </div>
+    <p class="mt-2 font-mono text-[11px] text-zinc-400">seconds · milliseconds</p>
+  </div>
+
+  <div class="card space-y-4">
+    <h2 class="text-base font-semibold">Timestamp → Date</h2>
+    <div class="flex flex-wrap gap-2">
+      <input id="epoch-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="e.g. 1700000000" class="field min-w-0 flex-1 font-mono">
+      <label for="epoch-unit" class="sr-only">Unit</label>
+      <select id="epoch-unit" class="field w-auto">
+        <option value="auto">Auto-detect</option>
+        <option value="s">Seconds</option>
+        <option value="ms">Milliseconds</option>
+        <option value="us">Microseconds</option>
+        <option value="ns">Nanoseconds</option>
+      </select>
+      <button id="epoch-use-now" type="button" class="btn btn-ghost">Now</button>
+    </div>
+    <p id="epoch-error" class="hidden text-sm text-rose-600 dark:text-rose-400" role="alert"></p>
+    <div class="grid gap-3 md:grid-cols-2" id="epoch-results">
+      <div><span class="label">Local time</span><div class="flex items-center gap-2"><div id="epoch-local" class="out min-h-[2.75rem] flex-1 break-words"></div><button type="button" data-copy="#epoch-local"></button></div></div>
+      <div><span class="label">UTC</span><div class="flex items-center gap-2"><div id="epoch-utc" class="out min-h-[2.75rem] flex-1 break-words"></div><button type="button" data-copy="#epoch-utc"></button></div></div>
+      <div><span class="label">ISO 8601</span><div class="flex items-center gap-2"><div id="epoch-iso" class="out min-h-[2.75rem] flex-1 break-all"></div><button type="button" data-copy="#epoch-iso"></button></div></div>
+      <div><span class="label">Relative <span id="epoch-detected" class="normal-case tracking-normal text-zinc-400"></span></span><div class="flex items-center gap-2"><div id="epoch-relative" class="out min-h-[2.75rem] flex-1"></div><button type="button" data-copy="#epoch-relative"></button></div></div>
+    </div>
+  </div>
+
+  <div class="card space-y-4">
+    <h2 class="text-base font-semibold">Date → Timestamp</h2>
+    <div class="flex flex-wrap gap-2">
+      <label for="epoch-date" class="sr-only">Date and time</label>
+      <input id="epoch-date" type="datetime-local" step="1" class="field min-w-0 flex-1 font-mono">
+      <label for="epoch-tz" class="sr-only">Time zone</label>
+      <select id="epoch-tz" class="field w-auto">
+        <option value="local">Local time</option>
+        <option value="utc">UTC</option>
+      </select>
+      <button id="epoch-date-now" type="button" class="btn btn-ghost">Now</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-3">
+      <div><span class="label">Seconds</span><div class="flex items-center gap-2"><div id="epoch-out-s" class="out min-h-[2.75rem] flex-1 tabular-nums"></div><button type="button" data-copy="#epoch-out-s"></button></div></div>
+      <div><span class="label">Milliseconds</span><div class="flex items-center gap-2"><div id="epoch-out-ms" class="out min-h-[2.75rem] flex-1 tabular-nums"></div><button type="button" data-copy="#epoch-out-ms"></button></div></div>
+      <div><span class="label">ISO 8601 (UTC)</span><div class="flex items-center gap-2"><div id="epoch-out-iso" class="out min-h-[2.75rem] flex-1 break-all"></div><button type="button" data-copy="#epoch-out-iso"></button></div></div>
+    </div>
+  </div>
+</div>

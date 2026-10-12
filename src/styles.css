@@ -1,53 +1,95 @@
-/* Source for assets/css/styles.css. Edit this file, then run `npm run build` (or keep `npm run watch` running). */
+/* Source for assets/css/styles.css. Edit this file, then run `npm run build`. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html { -webkit-tap-highlight-color: transparent; }
   html.dark { color-scheme: dark; }
+  body { @apply min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100; }
   ::selection { @apply bg-indigo-500/30; }
+  /* Utilities like `grid`/`flex` would otherwise override the hidden attribute. */
+  [hidden] { display: none !important; }
+  :focus-visible { @apply outline-none ring-2 ring-indigo-500/60 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950; }
+  h1, h2, h3 { @apply tracking-tight; }
 }
+
 @layer components {
-  .card { @apply rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none; }
+  /* ---------- Site shell ---------- */
+  .glow-bg { @apply pointer-events-none fixed inset-0 -z-10 overflow-hidden; }
+  .glow-bg::before, .glow-bg::after { content: ''; @apply absolute h-[38rem] w-[38rem] rounded-full blur-3xl motion-safe:animate-drift; }
+  .glow-bg::before { @apply -left-48 -top-56 bg-indigo-400/20 dark:bg-indigo-500/15; }
+  .glow-bg::after { @apply -right-48 -top-40 bg-violet-400/20 [animation-delay:-12s] dark:bg-violet-600/15; }
+  .grid-bg { background-image: linear-gradient(to right, rgb(17 26 46 / .05) 1px, transparent 1px), linear-gradient(to bottom, rgb(17 26 46 / .05) 1px, transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(ellipse at top, black 30%, transparent 70%); }
+  .dark .grid-bg { background-image: linear-gradient(to right, rgb(255 255 255 / .04) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / .04) 1px, transparent 1px); }
+
+  .site-header { @apply sticky top-0 z-40 border-b border-zinc-200/70 bg-white/75 backdrop-blur-xl dark:border-zinc-800/70 dark:bg-zinc-950/70; }
+  .logo-mark { @apply grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/25; }
+  .header-link { @apply rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/70 dark:hover:text-zinc-100; }
+  .header-link[aria-current="page"] { @apply text-zinc-900 dark:text-white; }
+  .icon-btn { @apply grid h-9 w-9 place-items-center rounded-lg border border-zinc-200 text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white; }
+  .search-trigger { @apply flex h-9 items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50/80 px-3 text-sm text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-200; }
+  .kbd { @apply rounded border border-zinc-300 bg-white px-1.5 py-0.5 font-sans text-[10px] font-semibold text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400; }
+  .gradient-text { @apply bg-gradient-to-r from-indigo-500 via-indigo-400 to-violet-500 bg-clip-text text-transparent dark:from-indigo-400 dark:via-indigo-300 dark:to-violet-400; }
+
+  .badge { @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium; }
+  .badge-safe { @apply border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300; }
+  .badge-cat { @apply border-zinc-200 bg-white/60 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400; }
+
+  /* Home grid */
+  .cat-chip { @apply inline-flex shrink-0 items-center gap-1.5 rounded-full border border-zinc-200 bg-white/70 px-3.5 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-100; }
+  .cat-chip[aria-pressed="true"] { @apply border-transparent bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-500/25 dark:text-white; }
+  .cat-chip .count { @apply rounded-full bg-zinc-100 px-1.5 text-[11px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400; }
+  .cat-chip[aria-pressed="true"] .count { @apply bg-white/20 text-white; }
+  .tool-card { @apply relative flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white/80 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/10 dark:border-zinc-800 dark:bg-zinc-900/60 dark:shadow-none dark:hover:border-indigo-500/50 dark:hover:bg-zinc-900; }
+  .tool-icon { @apply grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-indigo-500/15 to-violet-500/15 text-indigo-600 ring-1 ring-inset ring-indigo-500/20 transition group-hover:from-indigo-500 group-hover:to-violet-500 group-hover:text-white dark:text-indigo-300; }
+  .tool-icon-lg { @apply h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/25 ring-0; }
+  .feature { @apply rounded-2xl border border-zinc-200 bg-white/70 p-6 dark:border-zinc-800 dark:bg-zinc-900/50; }
+
+  /* Tool pages */
+  .crumbs { @apply flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400; }
+  .crumbs a { @apply transition hover:text-zinc-900 dark:hover:text-zinc-100; }
+  .side-heading { @apply mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500; }
+  .side-link { @apply flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/70 dark:hover:text-zinc-100; }
+  .side-link[aria-current="page"] { @apply bg-indigo-50 font-medium text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300; }
+
+  /* Quick search (⌘K) */
+  .palette-item { @apply flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300; }
+  .palette-item[aria-selected="true"] { @apply bg-indigo-50 text-indigo-900 dark:bg-indigo-500/15 dark:text-white; }
+
+  /* ---------- Tool UI components (used by the tool fragments) ---------- */
+  .card { @apply rounded-2xl border border-zinc-200 bg-white/90 p-5 shadow-sm backdrop-blur sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/70 dark:shadow-none; }
   .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400; }
-  .field { @apply w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder-zinc-600; }
-  .field[data-state="valid"] { @apply border-emerald-500 ring-2 ring-emerald-500/25 focus:border-emerald-500 focus:ring-emerald-500/40; }
-  .field[data-state="invalid"] { @apply border-rose-500 ring-2 ring-rose-500/25 focus:border-rose-500 focus:ring-rose-500/40; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 disabled:cursor-not-allowed disabled:opacity-50; }
-  .btn-primary { @apply bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-700; }
-  .btn-ghost { @apply border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800; }
-  .chip { @apply rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition hover:border-indigo-500 hover:text-indigo-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300; }
-  .copy-btn { @apply inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-600 transition hover:border-indigo-500 hover:text-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300; }
-  .copy-btn[data-copied="true"] { @apply border-emerald-500 text-emerald-600 dark:border-emerald-500 dark:text-emerald-400; }
+  .field { @apply w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 placeholder-zinc-400 shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 dark:border-zinc-700 dark:bg-zinc-950/60 dark:text-zinc-100 dark:placeholder-zinc-600 dark:shadow-none; }
+  .field[data-state="valid"] { @apply border-emerald-500 ring-4 ring-emerald-500/10 focus:border-emerald-500 focus:ring-emerald-500/20; }
+  .field[data-state="invalid"] { @apply border-rose-500 ring-4 ring-rose-500/10 focus:border-rose-500 focus:ring-rose-500/20; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-500/25 hover:shadow-lg hover:shadow-indigo-500/30 hover:brightness-110; }
+  .btn-ghost { @apply border border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-zinc-600 dark:hover:bg-zinc-800; }
+  .chip { @apply rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition hover:border-indigo-500 hover:text-indigo-600 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300; }
+  .copy-btn { @apply inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-600 transition hover:border-indigo-500 hover:text-indigo-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300; }
+  .copy-btn[data-copied="true"] { @apply animate-pop border-emerald-500 text-emerald-600 dark:border-emerald-500 dark:text-emerald-400; }
   .copy-btn[data-copied="false"] { @apply border-rose-500 text-rose-600 dark:border-rose-500 dark:text-rose-400; }
-  .out { @apply w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 font-mono text-sm text-zinc-800 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200; }
-  .stat { @apply rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-950; }
-  .stat dt { @apply text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-500; }
+  .out { @apply w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 font-mono text-sm text-zinc-800 dark:border-zinc-800 dark:bg-zinc-950/70 dark:text-zinc-200; }
+  .stat { @apply rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-950/60; }
+  .stat dt { @apply text-[11px] font-semibold uppercase tracking-wider text-zinc-500; }
   .stat dd { @apply mt-0.5 truncate font-mono text-sm text-zinc-900 dark:text-zinc-100; }
-  .status { @apply flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition-colors; }
-  .status[data-state="idle"] { @apply border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400; }
+  .status { @apply flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition-colors duration-300; }
+  .status[data-state="idle"] { @apply border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400; }
   .status[data-state="valid"] { @apply border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400; }
   .status[data-state="invalid"] { @apply border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-400; }
-  .nav-link { @apply flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/70 dark:hover:text-zinc-100; }
-  .nav-link[aria-current="page"] { @apply bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300; }
-  .pill { @apply shrink-0 whitespace-nowrap rounded-full border border-zinc-300 px-3.5 py-1.5 text-xs font-medium text-zinc-600 transition dark:border-zinc-700 dark:text-zinc-300; }
-  .pill[aria-current="page"] { @apply border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500; }
-  .section-link { @apply rounded-lg px-2.5 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100; }
-  .section-link[aria-current="page"] { @apply bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100; }
-  .section-pill { @apply border-indigo-500/40 text-indigo-700 dark:border-indigo-400/40 dark:text-indigo-300; }
-  .section-card { @apply mt-6 flex items-center justify-between gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/5 px-3 py-2.5 text-sm font-medium text-indigo-700 transition hover:bg-indigo-500/10 dark:text-indigo-300; }
-  .dropzone { @apply flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50 px-6 py-10 text-center transition-colors dark:border-zinc-700 dark:bg-zinc-950; }
+  .seg { @apply rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800; }
+  .seg[aria-checked="true"] { @apply bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-sm hover:bg-transparent dark:text-white; }
+  .check:has(input:disabled) { @apply cursor-not-allowed opacity-50; }
+  .check { @apply flex cursor-pointer select-none items-center gap-2.5 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2.5 text-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-zinc-700; }
+  .check input { @apply h-4 w-4 accent-indigo-600; }
+  .dropzone { @apply flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50/70 px-6 py-10 text-center transition-colors dark:border-zinc-700 dark:bg-zinc-950/40; }
   .dropzone[data-drag="true"] { @apply border-indigo-500 bg-indigo-500/10 dark:border-indigo-400; }
   .preview-stage { @apply flex min-h-[16rem] items-center justify-center overflow-auto rounded-xl border border-zinc-200 p-4 dark:border-zinc-800; }
-  .preview-stage.checker { background: repeating-conic-gradient(#e4e4e7 0% 25%, #ffffff 0% 50%) 50% / 20px 20px; }
-  .dark .preview-stage.checker { background: repeating-conic-gradient(#27272a 0% 25%, #18181b 0% 50%) 50% / 20px 20px; }
+  .preview-stage.checker { background: repeating-conic-gradient(#e6eaf3 0% 25%, #ffffff 0% 50%) 50% / 20px 20px; }
+  .dark .preview-stage.checker { background: repeating-conic-gradient(#1b2440 0% 25%, #111a2e 0% 50%) 50% / 20px 20px; }
   .preview-stage.light { @apply bg-white; }
   .preview-stage.dark-bg { @apply bg-zinc-950; }
-  .seg { @apply rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 dark:text-zinc-300 dark:hover:bg-zinc-800; }
-  .seg[aria-checked="true"] { @apply bg-indigo-600 text-white hover:bg-indigo-600 dark:bg-indigo-500 dark:text-white dark:hover:bg-indigo-500; }
-  .check:has(input:disabled) { @apply cursor-not-allowed opacity-50; }
-  .check { @apply flex cursor-pointer select-none items-center gap-2.5 rounded-xl border border-zinc-200 px-3 py-2.5 text-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:hover:border-zinc-700; }
-  .check input { @apply h-4 w-4 accent-indigo-600; }
   .j-key { @apply text-sky-700 dark:text-sky-300; }
   .j-str { @apply text-emerald-700 dark:text-emerald-300; }
   .j-num { @apply text-amber-700 dark:text-amber-300; }
@@ -58,21 +100,40 @@
   .json-caret { @apply font-bold text-rose-600 dark:text-rose-400; }
 }
 
-/* Ad slots: clean striped placeholder until AdSense fills the <ins> */
+/* ---------- Ads ----------
+   Every slot reserves its space so the page does not jump when an ad loads,
+   and collapses completely if AdSense has nothing to show. */
 .ad-slot {
-  @apply relative flex w-full items-center justify-center overflow-hidden rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700;
-  min-height: 90px;
-  background: repeating-linear-gradient(135deg, rgb(244 244 245) 0 12px, rgb(250 250 250) 12px 24px);
+  @apply relative mx-auto flex w-full items-center justify-center overflow-hidden rounded-2xl border border-dashed border-zinc-200 bg-zinc-100/40 dark:border-zinc-800 dark:bg-zinc-900/30;
 }
-.dark .ad-slot { background: repeating-linear-gradient(135deg, rgb(24 24 27) 0 12px, rgb(19 19 22) 12px 24px); }
 .ad-slot::before {
   content: 'Advertisement';
-  @apply pointer-events-none absolute text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-600;
+  @apply pointer-events-none absolute left-3 top-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-600;
 }
 .ad-slot ins.adsbygoogle { position: relative; z-index: 1; width: 100%; }
-.ad-slot:has(ins[data-ad-status="filled"]) { @apply border-transparent; background: none; }
+.ad-slot:has(ins[data-ad-status="filled"]) { @apply border-transparent bg-transparent; }
 .ad-slot:has(ins[data-ad-status="filled"])::before { display: none; }
+.ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }
+/* Local preview only (html.ads-preview): show where ads go even when AdSense sends nothing.
+   AdSense sets min-height:0 !important inline on empty slots, so the label itself carries the height. */
+.ads-preview .ad-slot:has(ins[data-ad-status="unfilled"]) { display: block; }
+.ads-preview .ad-slot ins[data-ad-status="unfilled"] { display: none !important; } /* Google leaves a blank white frame behind */
+.ads-preview .ad-slot:not(:has(ins[data-ad-status="filled"]))::after {
+  content: 'Ad space · ads appear on your live, approved domain';
+  height: var(--ad-h);
+  @apply grid place-items-center px-4 text-center text-xs text-zinc-400 dark:text-zinc-500;
+}
+.ad-content { --ad-h: 280px; }
+.ad-rail { --ad-h: 600px; }
+.ad-footer { --ad-h: 100px; }
+.ad-content { min-height: 280px; }
+.ad-rail { min-height: 600px; }
+.ad-footer { min-height: 100px; }
 
-.tool-panel[hidden] { display: none !important; }
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+.thin-scroll { scrollbar-width: thin; scrollbar-color: rgb(98 112 143 / .35) transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

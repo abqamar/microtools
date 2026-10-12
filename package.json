@@ -1,13 +1,19 @@
 {
   "name": "microtools",
   "private": true,
-  "description": "Privacy-first single-purpose developer tools. Static site; npm is only used to build the CSS.",
+  "description": "Privacy-first developer tools. Static site; npm builds the pages, scripts, stylesheet and vendored libraries.",
   "scripts": {
-    "build": "tailwindcss -i ./src/styles.css -o ./assets/css/styles.css --minify",
-    "watch": "tailwindcss -i ./src/styles.css -o ./assets/css/styles.css --watch"
+    "build": "node scripts/build.mjs",
+    "watch:css": "tailwindcss -i ./src/styles.css -o ./assets/css/styles.css --watch",
+    "vendor": "esbuild src/vendor/qrcode.js src/vendor/yaml.js src/vendor/diff.js src/vendor/mcu.js --bundle --minify --format=iife --legal-comments=eof --outdir=assets/js/vendor"
   },
   "devDependencies": {
+    "@material/material-color-utilities": "0.4.0",
     "@tailwindcss/typography": "0.5.20",
+    "diff": "9.0.0",
+    "esbuild": "0.28.2",
+    "js-yaml": "5.4.3",
+    "qrcode-generator": "2.0.4",
     "tailwindcss": "3.4.17"
   }
 }

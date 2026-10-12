@@ -1,0 +1,41 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <label for="jwt-input" class="label mb-0">Token</label>
+    <div class="flex gap-2">
+      <button id="jwt-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+      <button id="jwt-clear" type="button" class="btn btn-ghost py-2">Clear</button>
+    </div>
+  </div>
+  <textarea id="jwt-input" rows="4" spellcheck="false" autocomplete="off" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
+  <div id="jwt-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a JWT to decode it.</div>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Header</span>
+        <button type="button" data-copy="#jwt-header"></button>
+      </div>
+      <pre id="jwt-header" class="out max-h-64 min-h-[5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0"></pre>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Payload</span>
+        <button type="button" data-copy="#jwt-payload"></button>
+      </div>
+      <pre id="jwt-payload" class="out max-h-64 min-h-[5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0"></pre>
+    </div>
+  </div>
+  <dl id="jwt-claims" class="grid grid-cols-1 gap-3 sm:grid-cols-3"></dl>
+  <div class="space-y-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
+    <h2 class="text-sm font-semibold">Verify signature <span id="jwt-alg" class="font-mono text-xs font-normal text-zinc-400"></span></h2>
+    <div id="jwt-secret-wrap" class="space-y-2">
+      <label for="jwt-secret" class="label mb-0">Secret</label>
+      <input id="jwt-secret" type="text" spellcheck="false" autocomplete="off" placeholder="your-256-bit-secret" class="field font-mono">
+      <label class="check w-fit"><input id="jwt-secret-b64" type="checkbox"> Secret is Base64-encoded</label>
+    </div>
+    <div id="jwt-key-wrap" class="space-y-2" hidden>
+      <label for="jwt-key" class="label mb-0">Public key (PEM)</label>
+      <textarea id="jwt-key" rows="5" spellcheck="false" autocomplete="off" placeholder="-----BEGIN PUBLIC KEY-----" class="field resize-y font-mono text-xs leading-5"></textarea>
+    </div>
+    <div id="jwt-verify" class="status" data-state="idle" role="status" aria-live="polite">Enter the secret or key to verify the signature.</div>
+  </div>
+</div>

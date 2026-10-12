@@ -1,0 +1,29 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-center gap-2">
+    <label class="check"><input type="checkbox" data-ws="spaces" checked> Spaces</label>
+    <label class="check"><input type="checkbox" data-ws="tabs" checked> Tabs</label>
+    <label class="check"><input type="checkbox" data-ws="breaks" checked> Line breaks</label>
+    <label class="check"><input type="checkbox" data-ws="invisible" checked> Invisible characters <span class="text-xs text-zinc-400">(non-breaking, zero-width)</span></label>
+    <div class="ml-auto flex gap-2">
+      <button id="ws-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+      <button id="ws-clear" type="button" class="btn btn-ghost py-2">Clear</button>
+    </div>
+  </div>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <label for="ws-input" class="label mb-0">Input</label>
+        <span id="ws-in-stats" class="font-mono text-[11px] text-zinc-400"></span>
+      </div>
+      <textarea id="ws-input" rows="12" spellcheck="false" autocomplete="off" placeholder="Paste text with spaces, tabs or line breaks…" class="field resize-y break-all font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Result <span id="ws-out-stats" class="normal-case tracking-normal text-zinc-400"></span></span>
+        <button type="button" data-copy="#ws-output"></button>
+      </div>
+      <textarea id="ws-output" rows="12" readonly spellcheck="false" class="out resize-y break-all text-[13px] leading-6" aria-label="Result"></textarea>
+    </div>
+  </div>
+  <div id="ws-status" class="status" data-state="idle" role="status" aria-live="polite">Paste text to clean it.</div>
+</div>

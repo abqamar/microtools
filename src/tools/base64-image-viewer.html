@@ -1,0 +1,37 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <label for="b64img-input" class="label mb-0">Base64 or data URI <span id="b64img-length" class="normal-case tracking-normal text-zinc-400"></span></label>
+    <div class="flex gap-2">
+      <button id="b64img-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+      <button id="b64img-clear" type="button" class="btn btn-ghost py-2">Clear</button>
+    </div>
+  </div>
+  <textarea id="b64img-input" rows="6" spellcheck="false" autocomplete="off" placeholder="iVBORw0KGgoAAAANSUhEUgAA…  or  data:image/png;base64,…" class="field resize-y break-all font-mono text-xs leading-5"></textarea>
+  <div id="b64img-status" class="status" data-state="idle" role="status" aria-live="polite">Paste a Base64 image to preview it.</div>
+  <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div class="stat"><dt>Format</dt><dd id="b64img-format">—</dd></div>
+    <div class="stat"><dt>Dimensions</dt><dd id="b64img-dims">—</dd></div>
+    <div class="stat"><dt>File size</dt><dd id="b64img-size">—</dd></div>
+    <div class="stat"><dt>MIME type</dt><dd id="b64img-mime">—</dd></div>
+  </dl>
+  <div>
+    <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex flex-wrap gap-2">
+        <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-label="Preview background">
+          <button type="button" role="radio" class="seg" data-b64img-bg="checker">Checker</button>
+          <button type="button" role="radio" class="seg" data-b64img-bg="light">Light</button>
+          <button type="button" role="radio" class="seg" data-b64img-bg="dark">Dark</button>
+        </div>
+        <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-label="Preview size">
+          <button type="button" role="radio" class="seg" data-b64img-fit="fit">Fit</button>
+          <button type="button" role="radio" class="seg" data-b64img-fit="actual">Actual size</button>
+        </div>
+      </div>
+      <a id="b64img-download" class="btn btn-ghost pointer-events-none py-2 opacity-50" aria-disabled="true">Download</a>
+    </div>
+    <div id="b64img-stage" class="preview-stage checker">
+      <img id="b64img-img" alt="Decoded image preview" class="hidden" decoding="async">
+      <p id="b64img-empty" class="text-sm text-zinc-400">The image will appear here.</p>
+    </div>
+  </div>
+</div>

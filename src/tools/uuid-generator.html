@@ -1,0 +1,26 @@
+<div class="card space-y-5">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <label for="uuid-count" class="label">How many</label>
+      <input id="uuid-count" type="number" min="1" max="1000" value="5" class="field w-28 font-mono">
+    </div>
+    <div class="flex flex-wrap gap-2 pb-1">
+      <button type="button" class="chip" data-uuid-count="1">1</button>
+      <button type="button" class="chip" data-uuid-count="10">10</button>
+      <button type="button" class="chip" data-uuid-count="50">50</button>
+      <button type="button" class="chip" data-uuid-count="100">100</button>
+    </div>
+    <button id="uuid-generate" type="button" class="btn btn-primary ml-auto">Generate</button>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <label class="check"><input id="uuid-upper" type="checkbox"> Uppercase</label>
+    <label class="check"><input id="uuid-hyphens" type="checkbox" checked> Hyphens</label>
+  </div>
+  <div>
+    <div class="mb-1.5 flex items-center justify-between">
+      <span class="label mb-0" id="uuid-summary">Output</span>
+      <button type="button" data-copy="#uuid-output" data-copy-label="Copy all"></button>
+    </div>
+    <textarea id="uuid-output" rows="10" readonly spellcheck="false" class="out resize-y leading-6" aria-labelledby="uuid-summary"></textarea>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-center gap-2">
+    <label for="yaml-indent" class="sr-only">Indentation</label>
+    <select id="yaml-indent" class="field w-auto py-2"><option value="2">2 spaces</option><option value="4">4 spaces</option></select>
+    <button id="yaml-sample" type="button" class="btn btn-ghost ml-auto py-2">Load sample</button>
+  </div>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <label for="yaml-yaml" class="label mb-0">YAML</label>
+        <button type="button" data-copy="#yaml-yaml"></button>
+      </div>
+      <textarea id="yaml-yaml" rows="18" spellcheck="false" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div>
+      <div class="mb-1.5 flex items-center justify-between">
+        <label for="yaml-json" class="label mb-0">JSON</label>
+        <button type="button" data-copy="#yaml-json"></button>
+      </div>
+      <textarea id="yaml-json" rows="18" spellcheck="false" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+  </div>
+  <div id="yaml-status" class="status" data-state="idle" role="status" aria-live="polite">Paste YAML or JSON to convert it.</div>
+</div>

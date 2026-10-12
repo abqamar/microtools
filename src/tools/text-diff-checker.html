@@ -1,0 +1,29 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <span class="label" id="diff-mode-label">Compare by</span>
+      <div class="inline-flex gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-labelledby="diff-mode-label">
+        <button type="button" role="radio" class="seg" data-diff-mode="lines">Lines</button>
+        <button type="button" role="radio" class="seg" data-diff-mode="words">Words</button>
+        <button type="button" role="radio" class="seg" data-diff-mode="chars">Characters</button>
+      </div>
+    </div>
+    <label class="check"><input id="diff-ignore-ws" type="checkbox"> Ignore whitespace</label>
+    <div class="ml-auto flex gap-2">
+      <button id="diff-swap" type="button" class="btn btn-ghost py-2">Swap</button>
+      <button id="diff-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+    </div>
+  </div>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div>
+      <label for="diff-a" class="label">Original</label>
+      <textarea id="diff-a" rows="10" spellcheck="false" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+    <div>
+      <label for="diff-b" class="label">Changed</label>
+      <textarea id="diff-b" rows="10" spellcheck="false" class="field resize-y font-mono text-[13px] leading-6"></textarea>
+    </div>
+  </div>
+  <div id="diff-status" class="status" data-state="idle" role="status" aria-live="polite">Paste two texts to compare.</div>
+  <pre id="diff-output" class="out max-h-[32rem] min-h-[6rem] overflow-auto whitespace-pre-wrap break-words text-[13px] leading-6" tabindex="0" aria-label="Differences"></pre>
+</div>

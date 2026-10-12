@@ -1,0 +1,47 @@
+<div class="card space-y-4">
+  <div class="flex flex-wrap items-end gap-3">
+    <div>
+      <label for="assets-class" class="label">Class name</label>
+      <input id="assets-class" type="text" value="Assets" autocomplete="off" spellcheck="false" placeholder="Assets" class="field w-40 font-mono">
+    </div>
+    <div>
+      <label for="assets-prefix" class="label">Path prefix</label>
+      <input id="assets-prefix" type="text" autocomplete="off" spellcheck="false" placeholder="none" class="field w-36 font-mono">
+    </div>
+    <div>
+      <span class="label" id="assets-style-label">Style</span>
+      <div class="inline-flex flex-wrap gap-1 rounded-xl border border-zinc-300 p-1 dark:border-zinc-700" role="radiogroup" aria-labelledby="assets-style-label">
+        <button type="button" role="radio" class="seg" data-assets-style="flat">Flat</button>
+        <button type="button" role="radio" class="seg" data-assets-style="nested">Nested by folder</button>
+      </div>
+    </div>
+    <div class="ml-auto flex gap-2">
+      <button id="assets-sample" type="button" class="btn btn-ghost py-2">Load sample</button>
+      <button id="assets-clear" type="button" class="btn btn-ghost py-2">Clear</button>
+    </div>
+  </div>
+  <div id="assets-drop" class="dropzone" data-drag="false">
+    <svg class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/></svg>
+    <p class="text-sm font-medium">Drop your <span class="font-mono">assets</span> folder here</p>
+    <p class="text-xs text-zinc-500 dark:text-zinc-400">or <button id="assets-pick" type="button" class="font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-500 dark:text-indigo-400">choose a folder</button> · PNG, JPG, GIF, WebP, BMP, SVG</p>
+    <p class="text-xs text-zinc-400 dark:text-zinc-500">Only file names are read. Images are never opened or uploaded.</p>
+    <input id="assets-picker" type="file" webkitdirectory multiple hidden>
+  </div>
+  <div id="assets-status" class="status" data-state="idle" role="status" aria-live="polite">Drop a folder to generate your assets class.</div>
+  <div class="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">Dart <span id="assets-filename" class="normal-case tracking-normal text-zinc-400"></span></span>
+        <button type="button" data-copy="#assets-output"></button>
+      </div>
+      <pre id="assets-output" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="Generated Dart code"></pre>
+    </div>
+    <div class="min-w-0">
+      <div class="mb-1.5 flex items-center justify-between">
+        <span class="label mb-0">pubspec.yaml</span>
+        <button type="button" data-copy="#assets-pubspec"></button>
+      </div>
+      <pre id="assets-pubspec" class="out h-[27.5rem] overflow-auto whitespace-pre text-[13px] leading-6" data-raw="" tabindex="0" aria-label="pubspec.yaml assets section"></pre>
+    </div>
+  </div>
+</div>
