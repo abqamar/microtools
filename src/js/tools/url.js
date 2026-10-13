@@ -38,7 +38,7 @@ export function initUrl() {
     params.forEach((p, i) => {
       const row = document.createElement('div');
       row.className = 'flex gap-2';
-      row.innerHTML = '<input type="text" spellcheck="false" class="field w-2/5 font-mono" aria-label="Parameter name"><input type="text" spellcheck="false" class="field flex-1 font-mono" aria-label="Parameter value"><button type="button" class="chip" aria-label="Remove parameter">✕</button>';
+      row.innerHTML = '<input type="text" spellcheck="false" class="field w-2/5 font-mono" aria-label="Parameter name"><input type="text" spellcheck="false" class="field flex-1 font-mono" aria-label="Parameter value"><button type="button" class="chip" aria-label="Remove parameter"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>';
       const [k, v, del] = row.children;
       k.value = p.key; v.value = p.value;
       k.addEventListener('input', () => { p.key = k.value; rebuild(); });

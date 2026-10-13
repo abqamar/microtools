@@ -17,7 +17,8 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: { zinc: navy, indigo: brand },
+      // zinc-400/500 come from CSS variables (src/styles.css) so muted text meets WCAG AA contrast in both themes.
+      colors: { zinc: { ...navy, 400: 'var(--zinc-400)', 500: 'var(--zinc-500)' }, indigo: brand },
       fontFamily: {
         sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Inter', 'Roboto', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'JetBrains Mono', 'Menlo', 'Consolas', 'monospace']

@@ -26,6 +26,14 @@
   <script>
     (function () { var m = {"json":"json-formatter","yaml":"yaml-json-converter","diff":"text-diff-checker","epoch":"unix-timestamp-converter","jwt":"jwt-decoder","hash":"hash-generator","rsa":"rsa-key-generator","password":"password-generator","base64":"base64-encode-decode","url":"url-encoder-decoder","regex":"regex-tester","case":"case-converter","whitespace":"whitespace-remover","lorem":"lorem-ipsum-generator","image-resize":"image-resizer","qr":"qr-code-generator","base64-image":"base64-image-viewer","uuid":"uuid-generator","card-generator":"test-credit-card-generator","luhn":"luhn-validator","dart":"json-to-dart"}; var h = location.hash.slice(1); if (m[h]) location.replace('tools/' + m[h] + '.html'); })();
   </script>
+  <script>
+    (function () {
+      var d = document.documentElement;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('motion');
+      setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.remove('motion'); }, 2500);
+    })();
+  </script>
   
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm dark:focus:bg-zinc-900">Skip to content</a>
   <header class="site-header">
@@ -113,21 +121,27 @@
   </div>
 
   <main id="main">
-    <section class="relative overflow-hidden">
+    <section class="relative overflow-hidden" id="hero">
       <div class="grid-bg absolute inset-0 -z-10" aria-hidden="true"></div>
-      <div class="mx-auto max-w-[90rem] px-4 pb-10 pt-14 text-center sm:px-6 sm:pt-20">
-        <span class="badge badge-safe animate-fade-up"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg> 100% local · nothing is ever uploaded</span>
-        <h1 class="mx-auto mt-5 max-w-3xl animate-fade-up text-4xl font-bold tracking-tight [animation-delay:60ms] sm:text-5xl lg:text-6xl">Developer tools that <span class="gradient-text">never see your data</span></h1>
-        <p class="mx-auto mt-5 max-w-2xl animate-fade-up text-base text-zinc-600 [animation-delay:120ms] dark:text-zinc-400 sm:text-lg">27 fast, free tools for JSON, security, encoding, images and Flutter. No sign-up, no uploads: everything runs right in your browser.</p>
-        <div class="relative mx-auto mt-8 max-w-xl animate-fade-up [animation-delay:180ms]">
-          <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-          <input id="home-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools, e.g. json, jwt, flutter…" aria-label="Search tools" class="h-14 w-full rounded-2xl border border-zinc-200 bg-white/90 pl-12 pr-14 text-base shadow-lg shadow-indigo-500/5 transition placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 dark:border-zinc-800 dark:bg-zinc-900/80">
-          <span class="kbd absolute right-4 top-1/2 -translate-y-1/2">/</span>
+      <div class="pointer-events-none absolute inset-0 -z-10 hidden lg:block" data-float-layer aria-hidden="true"><span class="float-wrap" data-float style="left:7%;top:18%"><span class="float-icon"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg></span></span><span class="float-wrap" data-float style="left:14%;top:62%"><span class="float-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"/></svg></span></span><span class="float-wrap" data-float style="left:4%;top:84%"><span class="float-icon"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75z"/></svg></span></span><span class="float-wrap" data-float style="left:18%;top:44%"><span class="float-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33"/></svg></span></span><span class="float-wrap" data-float style="left:86%;top:20%"><span class="float-icon"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg></span></span><span class="float-wrap" data-float style="left:92%;top:58%"><span class="float-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/></svg></span></span><span class="float-wrap" data-float style="left:80%;top:82%"><span class="float-icon"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/></svg></span></span><span class="float-wrap" data-float style="left:81%;top:40%"><span class="float-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg></span></span></div>
+      <div class="mx-auto max-w-[90rem] px-4 pb-12 pt-14 text-center sm:px-6 sm:pt-24">
+        <span class="badge badge-safe" data-reveal><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg> 100% local · nothing is ever uploaded</span>
+        <h1 class="mx-auto mt-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl"><span data-word class="">Developer</span> <span data-word class="">tools</span> <span data-word class="">that</span> <span data-word class="gradient-text">never</span> <span data-word class="gradient-text">see</span> <span data-word class="gradient-text">your</span> <span data-word class="gradient-text">data</span></h1>
+        <p class="mx-auto mt-6 max-w-2xl text-base text-zinc-600 dark:text-zinc-400 sm:text-lg" data-reveal>27 fast, free tools for JSON, security, encoding, images and Flutter. No sign-up, no uploads: everything runs right in your browser.</p>
+        <div class="relative mx-auto mt-9 max-w-xl" data-reveal>
+          <div class="search-glow" aria-hidden="true"></div>
+          <svg class="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          <input id="home-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools, e.g. json, jwt, flutter…" aria-label="Search tools" class="relative h-14 w-full rounded-2xl border border-zinc-200 bg-white/90 pl-12 pr-14 text-base shadow-lg shadow-indigo-500/5 transition placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 dark:border-zinc-800 dark:bg-zinc-900/90">
+          <span class="kbd absolute right-4 top-1/2 z-10 -translate-y-1/2">/</span>
         </div>
+        <dl class="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-y-6 sm:grid-cols-4" data-reveal>
+          <div class="flex flex-col-reverse"><dt class="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500">free tools</dt><dd class="stat-num"><span data-count="27">27</span></dd></div><div class="flex flex-col-reverse"><dt class="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500">categories</dt><dd class="stat-num"><span data-count="7">7</span></dd></div><div class="flex flex-col-reverse"><dt class="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500">bytes uploaded</dt><dd class="stat-num"><span data-count="0">0</span></dd></div><div class="flex flex-col-reverse"><dt class="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500">cost, forever</dt><dd class="stat-num">$<span data-count="0">0</span></dd></div>
+        </dl>
       </div>
     </section>
     <section class="mx-auto max-w-[90rem] px-4 sm:px-6" aria-label="Tools">
-      <div class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="toolbar" aria-label="Categories">
+      <div class="chip-track no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="toolbar" aria-label="Categories">
+        <span class="chip-pill" id="chip-pill" aria-hidden="true"></span>
         <button type="button" class="cat-chip" data-cat="all" aria-pressed="true">All <span class="count">27</span></button>
         <button type="button" class="cat-chip" data-cat="data" aria-pressed="false">Data & JSON <span class="count">4</span></button>
         <button type="button" class="cat-chip" data-cat="security" aria-pressed="false">Security <span class="count">4</span></button>
@@ -276,22 +290,37 @@
       </div>
       <p id="home-empty" class="py-16 text-center text-sm text-zinc-500" hidden>No tools match. Try a different word, or <button type="button" class="font-medium text-indigo-600 dark:text-indigo-400" data-palette-open>browse all tools</button>.</p>
     </section>
-    <section class="mx-auto mt-12 max-w-[90rem] px-4 sm:px-6"><div class="ad-slot ad-content " aria-label="Advertisement">
+    <section class="mx-auto mt-12 max-w-[90rem] px-4 sm:px-6"><div class="ad-slot ad-content ">
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="1496479640" data-ad-format="auto" data-full-width-responsive="true"></ins>
       </div></section>
-    <section class="mx-auto mt-16 max-w-[90rem] px-4 sm:px-6" aria-labelledby="why">
-      <h2 id="why" class="text-center text-2xl font-bold sm:text-3xl">Why developers use MicroTools</h2>
-      <div class="mt-8 grid gap-4 md:grid-cols-3">
-        <div class="feature"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg></span><h3 class="mt-4 font-semibold">Private by design</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">Every tool runs in your browser. Tokens, keys, JSON and images are processed on your device and never uploaded. You can check it in your browser's Network tab.</p></div>
-        <div class="feature"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></span><h3 class="mt-4 font-semibold">Instant results</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">No servers, no waiting. Results update as you type, and every output has a one-click copy button.</p></div>
-        <div class="feature"><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg></span><h3 class="mt-4 font-semibold">Free, no sign-up</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">No accounts, no paywalls and no installs. Supported by unobtrusive ads that never sit on top of the tools.</p></div>
+    <section id="how" class="mx-auto mt-24 max-w-4xl px-4 sm:px-6" aria-labelledby="how-title">
+      <div class="text-center">
+        <p class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" data-reveal>How it works</p>
+        <h2 id="how-title" class="mt-2 text-3xl font-bold sm:text-4xl" data-reveal>Three steps. <span class="gradient-text">Zero servers.</span></h2>
+      </div>
+      <div class="relative mt-14 grid grid-cols-[2.5rem_1fr] gap-x-6 sm:gap-x-10">
+        <div class="how-track" aria-hidden="true"><span class="how-progress" id="how-progress"></span></div>
+        <ol class="space-y-14">
+          <li class="how-step" data-step><span class="how-num" aria-hidden="true">1</span><h3 class="text-xl font-semibold">Paste, type or drop</h3><p class="mt-2 max-w-xl leading-relaxed text-zinc-600 dark:text-zinc-400">Bring a JSON payload, a token, an image or a whole assets folder. Nothing is sent anywhere as you do.</p><span class="how-chip">{ "token": "eyJhbGci…" }</span></li>
+          <li class="how-step" data-step><span class="how-num" aria-hidden="true">2</span><h3 class="text-xl font-semibold">Processed on your device</h3><p class="mt-2 max-w-xl leading-relaxed text-zinc-600 dark:text-zinc-400">Your browser does the work with built-in APIs like Web Crypto and Canvas. The page makes no network requests with your data.</p><span class="how-chip">0 requests · 0 bytes uploaded</span></li>
+          <li class="how-step" data-step><span class="how-num" aria-hidden="true">3</span><h3 class="text-xl font-semibold">Copy the result</h3><p class="mt-2 max-w-xl leading-relaxed text-zinc-600 dark:text-zinc-400">Every output has a one-click copy button, and settings you choose are remembered on this device only.</p><span class="how-chip">Copied to clipboard</span></li>
+        </ol>
       </div>
     </section>
-    <section class="mx-auto mt-16 max-w-[90rem] px-4 sm:px-6">
-      <div class="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-transparent to-violet-500/10 p-8 sm:p-10">
-        <div class="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
+    <section class="mx-auto mt-24 max-w-[90rem] px-4 sm:px-6" aria-labelledby="why">
+      <h2 id="why" class="text-center text-3xl font-bold sm:text-4xl" data-reveal>Why developers use MicroTools</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
+        <div class="feature" data-reveal data-feature><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg></span><h3 class="mt-4 font-semibold">Private by design</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">Every tool runs in your browser. Tokens, keys, JSON and images are processed on your device and never uploaded. You can check it in your browser's Network tab.</p></div>
+        <div class="feature" data-reveal data-feature><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></span><h3 class="mt-4 font-semibold">Instant results</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">No servers, no waiting. Results update as you type, and every output has a one-click copy button.</p></div>
+        <div class="feature" data-reveal data-feature><span class="tool-icon"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg></span><h3 class="mt-4 font-semibold">Free, no sign-up</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">No accounts, no paywalls and no installs. Supported by unobtrusive ads that never sit on top of the tools.</p></div>
+      </div>
+    </section>
+    <section class="mx-auto mt-24 max-w-[90rem] px-4 sm:px-6">
+      <div class="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-transparent to-violet-500/10 p-8 sm:p-12" id="flutter-band" data-reveal>
+        <div class="band-orb" data-parallax aria-hidden="true"></div>
+        <div class="relative grid items-center gap-6 lg:grid-cols-[1fr_auto]">
           <div>
-            <h2 class="text-2xl font-bold">Built for Flutter developers</h2>
+            <h2 class="text-2xl font-bold sm:text-3xl">Built for Flutter developers</h2>
             <p class="mt-2 max-w-2xl text-zinc-600 dark:text-zinc-400">JSON to Dart models, Material 3 color schemes that match <span class="font-mono text-sm">ColorScheme.fromSeed</span> exactly, app icons for every platform, ARB localization files and more.</p>
           </div>
           <a href="flutter/index.html" class="btn btn-primary px-5">Explore Flutter tools <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></a>
@@ -302,13 +331,13 @@
   
   <footer class="mt-16 border-t border-zinc-200 dark:border-zinc-800">
     <div class="mx-auto max-w-[90rem] space-y-10 px-4 py-10 sm:px-6">
-      <div class="ad-slot ad-footer " aria-label="Advertisement">
+      <div class="ad-slot ad-footer ">
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9941006419835541" data-ad-slot="9574369507" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
       </div>
       <div class="grid gap-8 md:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div class="space-y-3">
           <a href="index.html" class="flex items-center gap-2.5"><span class="logo-mark"><svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085"/></svg></span><span class="font-semibold">MicroTools</span></a>
-          <p class="max-w-sm text-sm font-medium text-emerald-700 dark:text-emerald-400">🔒 100% Secure: All processing happens locally in your browser. Your data is never sent to a server.</p>
+          <p class="flex max-w-sm gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-400"><svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg><span>100% Secure: All processing happens locally in your browser. Your data is never sent to a server.</span></p>
         </div>
         <div>
           <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Categories</p>

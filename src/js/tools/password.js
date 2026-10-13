@@ -51,10 +51,10 @@ export function initPassword() {
   const hint = $('#pw-hint');
 
   const LEVELS = [
-    { max: 45, label: 'Weak', bars: 1, color: 'bg-rose-500', text: 'text-rose-600 dark:text-rose-400' },
-    { max: 64, label: 'Fair', bars: 2, color: 'bg-amber-500', text: 'text-amber-600 dark:text-amber-400' },
-    { max: 90, label: 'Strong', bars: 3, color: 'bg-lime-500', text: 'text-lime-600 dark:text-lime-400' },
-    { max: Infinity, label: 'Very strong', bars: 4, color: 'bg-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' }
+    { max: 45, label: 'Weak', bars: 1, color: 'bg-rose-500', text: 'text-rose-700 dark:text-rose-400' },
+    { max: 64, label: 'Fair', bars: 2, color: 'bg-amber-500', text: 'text-amber-700 dark:text-amber-400' },
+    { max: 90, label: 'Strong', bars: 3, color: 'bg-lime-500', text: 'text-lime-700 dark:text-lime-400' },
+    { max: Infinity, label: 'Very strong', bars: 4, color: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-400' }
   ];
   const BAR_COLORS = LEVELS.map((l) => l.color);
   const IDLE_BAR = ['bg-zinc-200', 'dark:bg-zinc-800'];

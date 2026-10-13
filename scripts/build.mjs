@@ -111,7 +111,7 @@ function sideGroups(root, current) {
 
 function adSlot(kind, extra = '') {
   const formats = { content: 'auto', rail: 'auto', footer: 'horizontal' };
-  return `<div class="ad-slot ad-${kind} ${extra}" aria-label="Advertisement">
+  return `<div class="ad-slot ad-${kind} ${extra}">
         <ins class="adsbygoogle" style="display:block" data-ad-client="${SITE.adClient}" data-ad-slot="${SITE.adSlots[kind]}" data-ad-format="${formats[kind]}" data-full-width-responsive="true"></ins>
       </div>`;
 }
@@ -124,7 +124,7 @@ function footer(root) {
       <div class="grid gap-8 md:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div class="space-y-3">
           <a href="${root}index.html" class="flex items-center gap-2.5"><span class="logo-mark">${icon(ICONS.logo, 'h-[18px] w-[18px]')}</span><span class="font-semibold">${SITE.name}</span></a>
-          <p class="max-w-sm text-sm font-medium text-emerald-700 dark:text-emerald-400">${PRIVACY}</p>
+          <p class="flex max-w-sm gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-400">${icon(ICONS.lock, 'mt-0.5 h-4 w-4 shrink-0')}<span>${PRIVACY.replace(/^\S+\s/, '')}</span></p>
         </div>
         <div>
           <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Categories</p>
@@ -190,23 +190,41 @@ function legacyRedirect(prefix, ids) {
 function homePage() {
   const root = '';
   const chips = [['all', 'All', TOOLS.length], ...CATEGORIES.map((c) => [c.id, c.name, toolsIn(c.id).length])];
+  // Each headline word animates on its own (see src/js/pages/home.js).
+  const words = (text, cls = '') => text.split(' ').map((w) => `<span data-word class="${cls}">${w}</span>`).join(' ');
+  // Tool icons that drift around the hero on wide screens.
+  const floaters = [['json-formatter', 7, 18], ['jwt-decoder', 14, 62], ['qr-code-generator', 4, 84], ['hash-generator', 18, 44],
+    ['json-to-dart', 86, 20], ['flutter-colorscheme-generator', 92, 58], ['image-resizer', 80, 82], ['regex-tester', 81, 40]]
+    .map(([slug, x, y], i) => `<span class="float-wrap" data-float style="left:${x}%;top:${y}%"><span class="float-icon">${icon(TOOLS.find((t) => t.slug === slug).icon, i % 2 ? 'h-5 w-5' : 'h-6 w-6')}</span></span>`).join('');
+  const stats = [[TOOLS.length, '', 'free tools'], [CATEGORIES.length, '', 'categories'], [0, '', 'bytes uploaded'], [0, '$', 'cost, forever']];
+  const steps = [
+    ['Paste, type or drop', 'Bring a JSON payload, a token, an image or a whole assets folder. Nothing is sent anywhere as you do.', '{ "token": "eyJhbGci…" }'],
+    ['Processed on your device', 'Your browser does the work with built-in APIs like Web Crypto and Canvas. The page makes no network requests with your data.', '0 requests · 0 bytes uploaded'],
+    ['Copy the result', 'Every output has a one-click copy button, and settings you choose are remembered on this device only.', 'Copied to clipboard']
+  ];
   const body = `
   <main id="main">
-    <section class="relative overflow-hidden">
+    <section class="relative overflow-hidden" id="hero">
       <div class="grid-bg absolute inset-0 -z-10" aria-hidden="true"></div>
-      <div class="mx-auto max-w-[90rem] px-4 pb-10 pt-14 text-center sm:px-6 sm:pt-20">
-        <span class="badge badge-safe animate-fade-up">${icon(ICONS.lock, 'h-3.5 w-3.5')} 100% local · nothing is ever uploaded</span>
-        <h1 class="mx-auto mt-5 max-w-3xl animate-fade-up text-4xl font-bold tracking-tight [animation-delay:60ms] sm:text-5xl lg:text-6xl">Developer tools that <span class="gradient-text">never see your data</span></h1>
-        <p class="mx-auto mt-5 max-w-2xl animate-fade-up text-base text-zinc-600 [animation-delay:120ms] dark:text-zinc-400 sm:text-lg">${TOOLS.length} fast, free tools for JSON, security, encoding, images and Flutter. No sign-up, no uploads: everything runs right in your browser.</p>
-        <div class="relative mx-auto mt-8 max-w-xl animate-fade-up [animation-delay:180ms]">
-          ${icon(ICONS.search, 'pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400')}
-          <input id="home-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools, e.g. json, jwt, flutter…" aria-label="Search tools" class="h-14 w-full rounded-2xl border border-zinc-200 bg-white/90 pl-12 pr-14 text-base shadow-lg shadow-indigo-500/5 transition placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 dark:border-zinc-800 dark:bg-zinc-900/80">
-          <span class="kbd absolute right-4 top-1/2 -translate-y-1/2">/</span>
+      <div class="pointer-events-none absolute inset-0 -z-10 hidden lg:block" data-float-layer aria-hidden="true">${floaters}</div>
+      <div class="mx-auto max-w-[90rem] px-4 pb-12 pt-14 text-center sm:px-6 sm:pt-24">
+        <span class="badge badge-safe" data-reveal>${icon(ICONS.lock, 'h-3.5 w-3.5')} 100% local · nothing is ever uploaded</span>
+        <h1 class="mx-auto mt-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">${words('Developer tools that')} ${words('never see your data', 'gradient-text')}</h1>
+        <p class="mx-auto mt-6 max-w-2xl text-base text-zinc-600 dark:text-zinc-400 sm:text-lg" data-reveal>${TOOLS.length} fast, free tools for JSON, security, encoding, images and Flutter. No sign-up, no uploads: everything runs right in your browser.</p>
+        <div class="relative mx-auto mt-9 max-w-xl" data-reveal>
+          <div class="search-glow" aria-hidden="true"></div>
+          ${icon(ICONS.search, 'pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-zinc-400')}
+          <input id="home-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools, e.g. json, jwt, flutter…" aria-label="Search tools" class="relative h-14 w-full rounded-2xl border border-zinc-200 bg-white/90 pl-12 pr-14 text-base shadow-lg shadow-indigo-500/5 transition placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 dark:border-zinc-800 dark:bg-zinc-900/90">
+          <span class="kbd absolute right-4 top-1/2 z-10 -translate-y-1/2">/</span>
         </div>
+        <dl class="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-y-6 sm:grid-cols-4" data-reveal>
+          ${stats.map(([n, prefix, label]) => `<div class="flex flex-col-reverse"><dt class="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500">${label}</dt><dd class="stat-num">${prefix}<span data-count="${n}">${n}</span></dd></div>`).join('')}
+        </dl>
       </div>
     </section>
     <section class="mx-auto max-w-[90rem] px-4 sm:px-6" aria-label="Tools">
-      <div class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="toolbar" aria-label="Categories">
+      <div class="chip-track no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0" role="toolbar" aria-label="Categories">
+        <span class="chip-pill" id="chip-pill" aria-hidden="true"></span>
         ${chips.map(([id, name, n]) => `<button type="button" class="cat-chip" data-cat="${id}" aria-pressed="${id === 'all'}">${name} <span class="count">${n}</span></button>`).join('\n        ')}
       </div>
       <div id="home-grid" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -215,20 +233,33 @@ function homePage() {
       <p id="home-empty" class="py-16 text-center text-sm text-zinc-500" hidden>No tools match. Try a different word, or <button type="button" class="font-medium text-indigo-600 dark:text-indigo-400" data-palette-open>browse all tools</button>.</p>
     </section>
     <section class="mx-auto mt-12 max-w-[90rem] px-4 sm:px-6">${adSlot('content')}</section>
-    <section class="mx-auto mt-16 max-w-[90rem] px-4 sm:px-6" aria-labelledby="why">
-      <h2 id="why" class="text-center text-2xl font-bold sm:text-3xl">Why developers use ${SITE.name}</h2>
-      <div class="mt-8 grid gap-4 md:grid-cols-3">
+    <section id="how" class="mx-auto mt-24 max-w-4xl px-4 sm:px-6" aria-labelledby="how-title">
+      <div class="text-center">
+        <p class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" data-reveal>How it works</p>
+        <h2 id="how-title" class="mt-2 text-3xl font-bold sm:text-4xl" data-reveal>Three steps. <span class="gradient-text">Zero servers.</span></h2>
+      </div>
+      <div class="relative mt-14 grid grid-cols-[2.5rem_1fr] gap-x-6 sm:gap-x-10">
+        <div class="how-track" aria-hidden="true"><span class="how-progress" id="how-progress"></span></div>
+        <ol class="space-y-14">
+          ${steps.map(([h, p, chip], i) => `<li class="how-step" data-step><span class="how-num" aria-hidden="true">${i + 1}</span><h3 class="text-xl font-semibold">${h}</h3><p class="mt-2 max-w-xl leading-relaxed text-zinc-600 dark:text-zinc-400">${p}</p><span class="how-chip">${chip}</span></li>`).join('\n          ')}
+        </ol>
+      </div>
+    </section>
+    <section class="mx-auto mt-24 max-w-[90rem] px-4 sm:px-6" aria-labelledby="why">
+      <h2 id="why" class="text-center text-3xl font-bold sm:text-4xl" data-reveal>Why developers use ${SITE.name}</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
         ${[[ICONS.lock, 'Private by design', 'Every tool runs in your browser. Tokens, keys, JSON and images are processed on your device and never uploaded. You can check it in your browser\'s Network tab.'],
            [ICONS.bolt, 'Instant results', 'No servers, no waiting. Results update as you type, and every output has a one-click copy button.'],
            [ICONS.gift, 'Free, no sign-up', 'No accounts, no paywalls and no installs. Supported by unobtrusive ads that never sit on top of the tools.']]
-          .map(([ic, h, p]) => `<div class="feature"><span class="tool-icon">${icon(ic, 'h-5 w-5')}</span><h3 class="mt-4 font-semibold">${h}</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">${p}</p></div>`).join('\n        ')}
+          .map(([ic, h, p]) => `<div class="feature" data-reveal data-feature><span class="tool-icon">${icon(ic, 'h-5 w-5')}</span><h3 class="mt-4 font-semibold">${h}</h3><p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">${p}</p></div>`).join('\n        ')}
       </div>
     </section>
-    <section class="mx-auto mt-16 max-w-[90rem] px-4 sm:px-6">
-      <div class="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-transparent to-violet-500/10 p-8 sm:p-10">
-        <div class="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
+    <section class="mx-auto mt-24 max-w-[90rem] px-4 sm:px-6">
+      <div class="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-transparent to-violet-500/10 p-8 sm:p-12" id="flutter-band" data-reveal>
+        <div class="band-orb" data-parallax aria-hidden="true"></div>
+        <div class="relative grid items-center gap-6 lg:grid-cols-[1fr_auto]">
           <div>
-            <h2 class="text-2xl font-bold">Built for Flutter developers</h2>
+            <h2 class="text-2xl font-bold sm:text-3xl">Built for Flutter developers</h2>
             <p class="mt-2 max-w-2xl text-zinc-600 dark:text-zinc-400">JSON to Dart models, Material 3 color schemes that match <span class="font-mono text-sm">ColorScheme.fromSeed</span> exactly, app icons for every platform, ARB localization files and more.</p>
           </div>
           <a href="flutter/index.html" class="btn btn-primary px-5">Explore Flutter tools ${icon(ICONS.arrow, 'h-4 w-4')}</a>
@@ -236,11 +267,22 @@ function homePage() {
       </div>
     </section>
   </main>`;
+  // Motion runs only with JavaScript and without "reduce motion". If home.js never marks the page ready,
+  // the hidden starting states are removed after 2.5 s so content can never stay invisible.
+  const motionGate = `
+  <script>
+    (function () {
+      var d = document.documentElement;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('motion');
+      setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.remove('motion'); }, 2500);
+    })();
+  </script>`;
   const legacy = TOOLS.filter((t) => t.oldPage === 'index').map((t) => [t.oldId, t.slug]).concat([['dart', 'json-to-dart']]);
   return page({
     title: `${SITE.name}: Free, Private Developer Tools (JSON, JWT, Flutter & more)`,
     description: `${TOOLS.length} free developer tools that run 100% in your browser: JSON formatter, JWT decoder, hash and RSA tools, QR codes, image resizer and Flutter tools. Nothing is uploaded.`,
-    root, pagePath: '', active: 'home', body, script: 'home', preScript: legacyRedirect('', legacy),
+    root, pagePath: '', active: 'home', body, script: 'home', preScript: legacyRedirect('', legacy) + motionGate,
     jsonLd: { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, description: 'Free, private developer tools that run in your browser.' }
   });
 }

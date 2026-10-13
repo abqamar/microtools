@@ -1,4 +1,4 @@
-import { $, $$, debounce, escapeText, loadVendor } from '../lib/core.js';
+import { $, $$, debounce, escapeText, loadVendor, prefersDarkText, relativeLuminance } from '../lib/core.js';
 import { highlightDart } from './dart.js';
 import { parseColorInput } from './flutter-color.js';
 
@@ -71,6 +71,15 @@ export function schemeMock(s) {
   </div>`;
 }
 
+const channels = (argb) => [(argb >> 16) & 255, (argb >> 8) & 255, argb & 255];
+/** The tile's paired text colour, or black/white when that pair is not readable (e.g. outline on surface). */
+function tileText(bg, fg) {
+  const [lb, lf] = [relativeLuminance(...channels(bg)), relativeLuminance(...channels(fg))];
+  const ratio = (Math.max(lb, lf) + 0.05) / (Math.min(lb, lf) + 0.05);
+  if (ratio >= 4.5) return argbCss(fg);
+  return prefersDarkText(...channels(bg)) ? '#000000' : '#ffffff';
+}
+
 export function initColorScheme() {
   const el = (id) => $(`#scheme-${id}`);
   let codeMode = 'seed';
@@ -87,7 +96,7 @@ export function initColorScheme() {
     const light = computeScheme(seed, variant, false), dark = computeScheme(seed, variant, true);
     for (const [id, s] of [['light', light], ['dark', dark]]) {
       el(`mock-${id}`).innerHTML = schemeMock(s);
-      el(id).innerHTML = SCHEME_TILES.map(([bg, fg]) => `<div class="min-w-0 overflow-hidden rounded-lg p-2 font-mono text-[10px] leading-tight" style="background:${argbCss(s[bg])};color:${argbCss(s[fg])}" title="${bg}"><div class="truncate font-sans text-[11px] font-medium">${bg}</div>${argbCss(s[bg]).toUpperCase()}</div>`).join('');
+      el(id).innerHTML = SCHEME_TILES.map(([bg, fg]) => `<div class="min-w-0 overflow-hidden rounded-lg p-2 font-mono text-[10px] leading-tight" style="background:${argbCss(s[bg])};color:${tileText(s[bg], s[fg])}" title="${bg}"><div class="truncate font-sans text-[11px] font-medium">${bg}</div>${argbCss(s[bg]).toUpperCase()}</div>`).join('');
     }
     const code = schemeCode(seed, variant, light, dark, codeMode);
     el('code').innerHTML = highlightDart(code);

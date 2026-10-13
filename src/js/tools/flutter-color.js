@@ -1,4 +1,4 @@
-import { $, debounce, escapeText, hydrateCopyButtons } from '../lib/core.js';
+import { $, debounce, escapeText, hydrateCopyButtons, prefersDarkText } from '../lib/core.js';
 import { dartFieldName, highlightDart } from './dart.js';
 
 /* =========================================================
@@ -109,7 +109,7 @@ export function initFlutterColor() {
     const base = { ...color, a: 255 };
     const shades = materialSwatch(base);
     el('shades').innerHTML = shades.map(({ shade, color: s }) => {
-      const light = (0.299 * s.r + 0.587 * s.g + 0.114 * s.b) > 150;
+      const light = prefersDarkText(s.r, s.g, s.b);
       return `<div class="flex h-14 flex-col justify-end rounded-lg p-1.5 font-mono text-[10px] ${light ? 'text-black' : 'text-white'}" style="background:#${hex2(s.r)}${hex2(s.g)}${hex2(s.b)}">${shade}</div>`;
     }).join('');
     const name = dartFieldName(el('name').value.trim() || 'brand');

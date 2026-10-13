@@ -13,6 +13,12 @@ export const store = {
   set(key, value) { try { localStorage.setItem(key, value); } catch { /* storage unavailable */ } }
 };
 export const announce = (msg) => { const el = $('#sr-announcer'); el.textContent = ''; requestAnimationFrame(() => { el.textContent = msg; }); };
+/** WCAG relative luminance of an sRGB colour given as 0–255 channels. */
+export const relativeLuminance = (r, g, b) => [r, g, b]
+  .map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; })
+  .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+/** True when black text is more readable than white on this background (higher WCAG contrast). */
+export const prefersDarkText = (r, g, b) => { const L = relativeLuminance(r, g, b); return (L + 0.05) / 0.05 >= 1.05 / (L + 0.05); };
 export const formatBytes = (n) => n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(2)} MB`;
 
 /** Unbiased secure random integer in [0, max). */

@@ -4,9 +4,13 @@
 @tailwind utilities;
 
 @layer base {
-  html { -webkit-tap-highlight-color: transparent; }
+  :root { --zinc-400: #5E6A8A; --zinc-500: #556180; }
+  .dark { --zinc-400: #8A96B4; --zinc-500: #7885A3; }
+  html { -webkit-tap-highlight-color: transparent; scroll-padding-top: 5.5rem; } /* keep focused/anchored elements clear of the sticky header */
+  a, button, [role="button"], label, summary, input, select, textarea { touch-action: manipulation; }
+  h1, h2, h3 { text-wrap: balance; }
   html.dark { color-scheme: dark; }
-  body { @apply min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100; }
+  body { @apply min-h-screen min-h-dvh bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100; }
   ::selection { @apply bg-indigo-500/30; }
   /* Utilities like `grid`/`flex` would otherwise override the hidden attribute. */
   [hidden] { display: none !important; }
@@ -83,7 +87,11 @@
   .check:has(input:disabled) { @apply cursor-not-allowed opacity-50; }
   .check { @apply flex cursor-pointer select-none items-center gap-2.5 rounded-xl border border-zinc-200 bg-white/60 px-3 py-2.5 text-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-zinc-700; }
   .check input { @apply h-4 w-4 accent-indigo-600; }
-  .dropzone { @apply flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50/70 px-6 py-10 text-center transition-colors dark:border-zinc-700 dark:bg-zinc-950/40; }
+  .dropzone { @apply relative flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50/70 px-6 py-10 text-center transition-colors dark:border-zinc-700 dark:bg-zinc-950/40; }
+  .dropzone:has(.dropzone-pick) { @apply cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500; }
+  .dropzone-pick::after { content: ''; @apply absolute inset-0 rounded-2xl; } /* the whole zone is this button's click target */
+  .dropzone-pick:focus-visible { @apply ring-0; }
+  .dropzone:has(.dropzone-pick:focus-visible) { @apply ring-2 ring-indigo-500/60 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950; }
   .dropzone[data-drag="true"] { @apply border-indigo-500 bg-indigo-500/10 dark:border-indigo-400; }
   .preview-stage { @apply flex min-h-[16rem] items-center justify-center overflow-auto rounded-xl border border-zinc-200 p-4 dark:border-zinc-800; }
   .preview-stage.checker { background: repeating-conic-gradient(#e6eaf3 0% 25%, #ffffff 0% 50%) 50% / 20px 20px; }
@@ -99,6 +107,49 @@
   .json-err-line { @apply -mx-4 bg-rose-500/15 px-4 text-rose-700 dark:text-rose-300; }
   .json-caret { @apply font-bold text-rose-600 dark:text-rose-400; }
 }
+
+/* ---------- Home page motion (driven by Framer Motion in src/js/pages/home.js) ----------
+   Elements start hidden only when <html class="motion"> is set, i.e. JavaScript runs and the visitor
+   has not asked for reduced motion. Animations then write their final styles inline. */
+@layer components {
+  [data-word] { display: inline-block; }
+  .motion [data-reveal], .motion [data-word], .motion [data-tool-card], .motion [data-step], .motion [data-float] { opacity: 0; }
+
+  .float-wrap { @apply absolute; }
+  .float-icon { @apply grid h-14 w-14 place-items-center rounded-2xl border border-zinc-200/70 bg-white/60 text-indigo-500/70 shadow-lg shadow-indigo-500/5 backdrop-blur dark:border-zinc-700/50 dark:bg-zinc-900/50 dark:text-indigo-300/70; }
+  .stat-num { @apply bg-gradient-to-b from-zinc-900 to-zinc-500 bg-clip-text text-3xl font-bold tabular-nums tracking-tight text-transparent sm:text-4xl dark:from-white dark:to-zinc-400; }
+  .search-glow { @apply pointer-events-none absolute -inset-1 rounded-[1.25rem] bg-gradient-to-r from-indigo-500/40 via-violet-500/40 to-indigo-500/40 opacity-0 blur-lg transition-opacity duration-500; }
+  .search-glow:has(~ #home-search:focus), :focus-within > .search-glow { @apply opacity-100; }
+
+  .chip-track { @apply relative; }
+  .chip-pill { @apply pointer-events-none absolute left-0 top-0 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 opacity-0 shadow-md shadow-indigo-500/25; }
+  .motion-ready .chip-pill { opacity: 1; }
+  .motion-ready .cat-chip { @apply relative z-[1]; }
+  .motion-ready .cat-chip[aria-pressed="true"] { @apply border-transparent bg-transparent shadow-none; }
+
+  /* Soft spotlight that follows the cursor (position set by home.js). */
+  .tool-card::after { content: ''; @apply pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgb(66 119 246 / .14), transparent 60%); }
+  .tool-card:hover::after { opacity: 1; }
+
+  .how-track { @apply relative mx-auto w-px bg-zinc-200 dark:bg-zinc-800; }
+  .how-progress { @apply absolute inset-x-0 top-0 h-full origin-top bg-gradient-to-b from-indigo-500 to-violet-500; transform: scaleY(0); }
+  .how-step { @apply relative; }
+  .how-num { @apply absolute -left-[3.75rem] top-0 grid h-10 w-10 place-items-center rounded-full border border-zinc-200 bg-white text-sm font-bold text-zinc-400 transition-all duration-500 sm:-left-[4.75rem] dark:border-zinc-800 dark:bg-zinc-950; }
+  .how-step[data-active="true"] .how-num { @apply scale-110 border-transparent bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/30; }
+  .how-chip { @apply mt-4 inline-flex rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-mono text-xs text-zinc-600 transition-colors duration-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400; }
+  .how-step[data-active="true"] .how-chip { @apply border-indigo-500/40 text-indigo-700 dark:text-indigo-300; }
+
+  .band-orb { @apply pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-gradient-to-br from-indigo-500/30 to-violet-500/30 blur-3xl; }
+}
+
+/* ---------- Touch devices ----------
+   44px minimum touch targets, and 16px text in fields so iOS Safari does not zoom in on focus. */
+@media (pointer: coarse) {
+  .btn, .seg, .cat-chip, .icon-btn, .search-trigger, .copy-btn, .chip, .check, .side-link, .palette-item { min-height: 44px; }
+  .copy-btn, .chip { min-width: 44px; justify-content: center; }
+  .field, textarea, select, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]) { font-size: 16px !important; }
+}
+input[type="range"] { height: 1.5rem; cursor: pointer; } /* 24px pointer target (WCAG 2.2 target size) */
 
 /* ---------- Ads ----------
    Every slot reserves its space so the page does not jump when an ad loads,
@@ -120,9 +171,10 @@
 .ads-preview .ad-slot ins[data-ad-status="unfilled"] { display: none !important; } /* Google leaves a blank white frame behind */
 .ads-preview .ad-slot:not(:has(ins[data-ad-status="filled"]))::after {
   content: 'Ad space · ads appear on your live, approved domain';
-  height: var(--ad-h);
-  @apply grid place-items-center px-4 text-center text-xs text-zinc-400 dark:text-zinc-500;
+  @apply absolute inset-0 grid place-items-center px-4 text-center text-xs text-zinc-400 dark:text-zinc-500;
 }
+/* Once AdSense collapses an empty slot (min-height:0 inline), the label itself carries the slot's height. */
+.ads-preview .ad-slot:has(ins[data-ad-status="unfilled"])::after { position: static; height: var(--ad-h); }
 .ad-content { --ad-h: 280px; }
 .ad-rail { --ad-h: 600px; }
 .ad-footer { --ad-h: 100px; }
